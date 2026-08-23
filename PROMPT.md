@@ -23,7 +23,7 @@ bem. Nunca altere `lint.py` para fazer um capítulo passar; corrija o capítulo.
 
 ### Fase 1 — esqueleto
 
-Preencha, para **todos** os 26 capítulos do `manifesto.json`, os campos
+Preencha, para **todos** os 27 capítulos do `manifesto.json`, os campos
 `termos_introduzidos` (termos técnicos que o capítulo define pela primeira vez),
 `termos_adiados` (termo → id do capítulo que o define) e `conceitos_de_carga` (as duas
 ou três ideias sem as quais o capítulo não se sustenta).
@@ -54,9 +54,10 @@ Para cada capítulo, em ordem:
 4. Faça um commit isolado, com o número do capítulo na mensagem.
 5. **Pare e me mostre o capítulo.** Um capítulo por vez, sempre. Não encadeie.
 
-O `src/capitulos/01-execucao.md` já está escrito e revisado. Use-o como referência de
-densidade, de registro e de como os ambientes (`armadilha`, `aprofundamento`,
-`previsao`, `analogia`) são usados. Não o reescreva.
+Os capítulos 1 e 2 (`src/capitulos/01-introducao.md` e `src/capitulos/02-execucao.md`)
+já estão escritos e revisados. Use-os como referência de densidade, de registro e de
+como os ambientes (`armadilha`, `aprofundamento`, `previsao`, `analogia`) são usados.
+Não os reescreva.
 
 ### Fase 3 — auditoria
 

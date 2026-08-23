@@ -1,8 +1,8 @@
 [
   {
-    "n": 0,
-    "id": "00-introducao",
-    "titulo": "Introdução: a linguagem, a plataforma e as versões",
+    "n": 1,
+    "id": "01-introducao",
+    "titulo": "A linguagem, a plataforma e as versões",
     "apendice": false,
     "termos_introduzidos": [
       "linguagem de programacao",
@@ -17,9 +17,9 @@
       "LTS"
     ],
     "termos_adiados": {
-      "bytecode": "01-execucao",
-      "JVM": "01-execucao",
-      "arquivo-fonte compacto": "01-execucao"
+      "bytecode": "02-execucao",
+      "JVM": "02-execucao",
+      "arquivo-fonte compacto": "02-execucao"
     },
     "conceitos_de_carga": [
       "código-fonte",
@@ -28,8 +28,8 @@
     ]
   },
   {
-    "n": 1,
-    "id": "01-execucao",
+    "n": 2,
+    "id": "02-execucao",
     "titulo": "Hello world e como o Java executa",
     "apendice": false,
     "termos_introduzidos": [
@@ -47,12 +47,12 @@
       "erro de execucao"
     ],
     "termos_adiados": {
-      "public": "05-classes",
-      "static": "05-classes",
-      "String[] args": "04-referencias",
-      "return": "03-fluxo",
-      "int": "02-valores",
-      "palavra-chave class": "05-classes"
+      "public": "06-classes",
+      "static": "06-classes",
+      "String[] args": "05-referencias",
+      "return": "04-fluxo",
+      "int": "03-valores",
+      "palavra-chave class": "06-classes"
     },
     "conceitos_de_carga": [
       "classpath",
@@ -61,8 +61,8 @@
     ]
   },
   {
-    "n": 2,
-    "id": "02-valores",
+    "n": 3,
+    "id": "03-valores",
     "titulo": "Variáveis, primitivos e operadores",
     "apendice": false,
     "termos_introduzidos": [
@@ -93,8 +93,8 @@
     ]
   },
   {
-    "n": 3,
-    "id": "03-fluxo",
+    "n": 4,
+    "id": "04-fluxo",
     "titulo": "Fluxo de controle e decomposição",
     "apendice": false,
     "termos_introduzidos": [
@@ -119,8 +119,8 @@
     ]
   },
   {
-    "n": 4,
-    "id": "04-referencias",
+    "n": 5,
+    "id": "05-referencias",
     "titulo": "Referências, objetos, String e arrays",
     "apendice": false,
     "termos_introduzidos": [
@@ -142,8 +142,8 @@
       "String[] args"
     ],
     "termos_adiados": {
-      "excecao": "11-excecoes",
-      "palavra-chave class": "05-classes"
+      "excecao": "12-excecoes",
+      "palavra-chave class": "06-classes"
     },
     "conceitos_de_carga": [
       "referência",
@@ -152,8 +152,8 @@
     ]
   },
   {
-    "n": 5,
-    "id": "05-classes",
+    "n": 6,
+    "id": "06-classes",
     "titulo": "Classes, construtores e encapsulamento",
     "apendice": false,
     "termos_introduzidos": [
@@ -176,8 +176,8 @@
       "IllegalArgumentException"
     ],
     "termos_adiados": {
-      "excecao": "11-excecoes",
-      "interface": "07-interfaces"
+      "excecao": "12-excecoes",
+      "interface": "08-interfaces"
     },
     "conceitos_de_carga": [
       "encapsulamento",
@@ -186,8 +186,8 @@
     ]
   },
   {
-    "n": 6,
-    "id": "06-heranca",
+    "n": 7,
+    "id": "07-heranca",
     "titulo": "Herança, polimorfismo e composição",
     "apendice": false,
     "termos_introduzidos": [
@@ -209,8 +209,8 @@
       "delegacao"
     ],
     "termos_adiados": {
-      "interface": "07-interfaces",
-      "excecao": "11-excecoes"
+      "interface": "08-interfaces",
+      "excecao": "12-excecoes"
     },
     "conceitos_de_carga": [
       "polimorfismo",
@@ -219,8 +219,8 @@
     ]
   },
   {
-    "n": 7,
-    "id": "07-interfaces",
+    "n": 8,
+    "id": "08-interfaces",
     "titulo": "Interfaces e abstração",
     "apendice": false,
     "termos_introduzidos": [
@@ -233,7 +233,7 @@
       "acoplamento"
     ],
     "termos_adiados": {
-      "generics": "14-generics"
+      "generics": "15-generics"
     },
     "conceitos_de_carga": [
       "contrato",
@@ -242,8 +242,8 @@
     ]
   },
   {
-    "n": 8,
-    "id": "08-equals",
+    "n": 9,
+    "id": "09-equals",
     "titulo": "O contrato equals/hashCode/toString",
     "apendice": false,
     "termos_introduzidos": [
@@ -257,7 +257,7 @@
       "toString"
     ],
     "termos_adiados": {
-      "HashMap": "15-colecoes"
+      "HashMap": "16-colecoes"
     },
     "conceitos_de_carga": [
       "contrato de equals",
@@ -266,8 +266,8 @@
     ]
   },
   {
-    "n": 9,
-    "id": "09-records",
+    "n": 10,
+    "id": "10-records",
     "titulo": "Records e semântica de valor",
     "apendice": false,
     "termos_introduzidos": [
@@ -278,7 +278,7 @@
       "construtor compacto"
     ],
     "termos_adiados": {
-      "pattern matching": "10-sealed"
+      "pattern matching": "11-sealed"
     },
     "conceitos_de_carga": [
       "semântica de valor",
@@ -287,8 +287,8 @@
     ]
   },
   {
-    "n": 10,
-    "id": "10-sealed",
+    "n": 11,
+    "id": "11-sealed",
     "titulo": "Sealed types, enums e pattern matching",
     "apendice": false,
     "termos_introduzidos": [
@@ -310,8 +310,8 @@
     ]
   },
   {
-    "n": 11,
-    "id": "11-excecoes",
+    "n": 12,
+    "id": "12-excecoes",
     "titulo": "Exceções",
     "apendice": false,
     "termos_introduzidos": [
@@ -327,7 +327,7 @@
       "propagacao"
     ],
     "termos_adiados": {
-      "try-with-resources": "19-io"
+      "try-with-resources": "20-io"
     },
     "conceitos_de_carga": [
       "propagação",
@@ -336,8 +336,8 @@
     ]
   },
   {
-    "n": 12,
-    "id": "12-build",
+    "n": 13,
+    "id": "13-build",
     "titulo": "Maven e Gradle",
     "apendice": false,
     "termos_introduzidos": [
@@ -351,7 +351,7 @@
       "jar"
     ],
     "termos_adiados": {
-      "JUnit": "13-junit"
+      "JUnit": "14-junit"
     },
     "conceitos_de_carga": [
       "dependência transitiva",
@@ -360,8 +360,8 @@
     ]
   },
   {
-    "n": 13,
-    "id": "13-junit",
+    "n": 14,
+    "id": "14-junit",
     "titulo": "JUnit 5 e o hábito de testar",
     "apendice": false,
     "termos_introduzidos": [
@@ -373,7 +373,7 @@
       "teste de regressao"
     ],
     "termos_adiados": {
-      "lambda": "16-lambdas"
+      "lambda": "17-lambdas"
     },
     "conceitos_de_carga": [
       "teste unitário",
@@ -382,8 +382,8 @@
     ]
   },
   {
-    "n": 14,
-    "id": "14-generics",
+    "n": 15,
+    "id": "15-generics",
     "titulo": "Generics e type erasure",
     "apendice": false,
     "termos_introduzidos": [
@@ -396,8 +396,8 @@
       "wildcard"
     ],
     "termos_adiados": {
-      "List": "15-colecoes",
-      "Map": "15-colecoes"
+      "List": "16-colecoes",
+      "Map": "16-colecoes"
     },
     "conceitos_de_carga": [
       "parâmetro de tipo",
@@ -406,8 +406,8 @@
     ]
   },
   {
-    "n": 15,
-    "id": "15-colecoes",
+    "n": 16,
+    "id": "16-colecoes",
     "titulo": "Coleções: array vs. List, Set, Map",
     "apendice": false,
     "termos_introduzidos": [
@@ -425,8 +425,8 @@
       "colecao imutavel"
     ],
     "termos_adiados": {
-      "lambda": "16-lambdas",
-      "stream": "17-streams"
+      "lambda": "17-lambdas",
+      "stream": "18-streams"
     },
     "conceitos_de_carga": [
       "ordem de iteração",
@@ -435,8 +435,8 @@
     ]
   },
   {
-    "n": 16,
-    "id": "16-lambdas",
+    "n": 17,
+    "id": "17-lambdas",
     "titulo": "Lambdas e interfaces funcionais",
     "apendice": false,
     "termos_introduzidos": [
@@ -453,7 +453,7 @@
       "literal de classe"
     ],
     "termos_adiados": {
-      "stream": "17-streams"
+      "stream": "18-streams"
     },
     "conceitos_de_carga": [
       "interface funcional",
@@ -462,8 +462,8 @@
     ]
   },
   {
-    "n": 17,
-    "id": "17-streams",
+    "n": 18,
+    "id": "18-streams",
     "titulo": "Streams e Optional",
     "apendice": false,
     "termos_introduzidos": [
@@ -483,8 +483,8 @@
     ]
   },
   {
-    "n": 18,
-    "id": "18-time",
+    "n": 19,
+    "id": "19-time",
     "titulo": "java.time: datas sem armadilha",
     "apendice": false,
     "termos_introduzidos": [
@@ -506,8 +506,8 @@
     ]
   },
   {
-    "n": 19,
-    "id": "19-io",
+    "n": 20,
+    "id": "20-io",
     "titulo": "I/O, NIO.2, argumentos e jar executável",
     "apendice": false,
     "termos_introduzidos": [
@@ -527,8 +527,8 @@
     ]
   },
   {
-    "n": 20,
-    "id": "20-concorrencia",
+    "n": 21,
+    "id": "21-concorrencia",
     "titulo": "Concorrência: executors e virtual threads",
     "apendice": false,
     "termos_introduzidos": [
@@ -550,8 +550,8 @@
     ]
   },
   {
-    "n": 21,
-    "id": "21-reflection",
+    "n": 22,
+    "id": "22-reflection",
     "titulo": "Annotations, reflection e proxies",
     "apendice": false,
     "termos_introduzidos": [
@@ -569,8 +569,8 @@
     ]
   },
   {
-    "n": 22,
-    "id": "22-di",
+    "n": 23,
+    "id": "23-di",
     "titulo": "Injeção de dependência na unha",
     "apendice": false,
     "termos_introduzidos": [
@@ -588,8 +588,8 @@
     ]
   },
   {
-    "n": 23,
-    "id": "23-projeto",
+    "n": 24,
+    "id": "24-projeto",
     "titulo": "Projeto integrador de terminal",
     "apendice": false,
     "termos_introduzidos": [

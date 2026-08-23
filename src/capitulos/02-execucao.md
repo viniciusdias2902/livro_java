@@ -48,10 +48,10 @@ A palavra `void`, escrita antes do nome, declara que `main` não devolve nada a
 quem o chamou. Um método pode produzir um resultado e entregá-lo ao ponto que
 o chamou, para que a execução continue dali com esse resultado em mãos; `void`
 é a marca de que este método não entrega resultado nenhum. Como um método
-devolve, e o que muda no código de quem chama, é assunto do capítulo 3.
+devolve, e o que muda no código de quem chama, é assunto do capítulo 4.
 
 A linha do meio é uma chamada. `IO.println` é um método pronto: vem com o
-Java, dentro da biblioteca padrão que a introdução apresentou, e está
+Java, dentro da biblioteca padrão que o capítulo 1 apresentou, e está
 disponível em qualquer arquivo como este sem nenhuma linha extra. Ele recebe
 um argumento — o valor escrito entre os parênteses, entregue ao método no
 momento da chamada — e escreve esse valor na saída padrão, seguido de uma
@@ -70,12 +70,12 @@ este. Antes da
 versão 25, o mesmo programa exigia linhas de moldura em volta do método, e
 praticamente todo material publicado até hoje — livros, cursos, respostas em
 fórum — mostra essas linhas. O recurso que as dispensa percorreu o caminho de
-prévia descrito na introdução e foi finalizado na versão 25; dela em diante, o
+prévia descrito no capítulo 1 e foi finalizado na versão 25; dela em diante, o
 compilador fornece a moldura quando ela não está escrita. O que essa moldura
 declara — e por que ela deixa de ser dispensável assim que um programa passa
-de um arquivo — é o capítulo 5. Há também uma segunda forma de escrever
+de um arquivo — é o capítulo 6. Há também uma segunda forma de escrever
 `main`, que recebe o que foi digitado no terminal depois do nome do programa;
-essa forma é o capítulo 4.
+essa forma é o capítulo 5.
 
 Duas linhas de um arquivo-fonte podem nunca chegar ao programa. Tudo o que vem
 depois de `//` até o fim da linha, e tudo o que estiver entre `/*` e `*/`, é
@@ -86,7 +86,7 @@ comentários, é um lugar razoável para elas.
 
 ## A versão do JDK decide se o arquivo compila
 
-O calendário de versões da introdução cobra aqui sua primeira consequência
+O calendário de versões do capítulo 1 cobra aqui sua primeira consequência
 prática. O arquivo-fonte compacto só existe, como recurso finalizado, da
 versão 25 em diante. Em um JDK anterior, o compilador recusa a primeira linha
 do arquivo — e a recusa não menciona `main` nem `IO`, o que a torna difícil de
@@ -114,9 +114,9 @@ OpenJDK Runtime Environment Corretto-26.0.2.10.1 (build 26.0.2+10-FR)
 OpenJDK 64-Bit Server VM Corretto-26.0.2.10.1 (build 26.0.2+10-FR, mixed mode, sharing)
 ```
 
-A leitura é a que a introdução ensinou: o número da primeira linha precisa ser
+A leitura é a que o capítulo 1 ensinou: o número da primeira linha precisa ser
 25 ou maior, e o resto identifica a distribuição — um Corretto, nesta máquina
-— sem mudar nada do que este livro faz. Do capítulo 5 em diante, quando os
+— sem mudar nada do que este livro faz. Do capítulo 6 em diante, quando os
 arquivos passam a trazer a moldura escrita por extenso, o livro roda também em
 JDKs mais antigos; até lá, não.
 
@@ -134,24 +134,23 @@ $ java Locadora
 Locadora aberta.
 ```
 
-`javac` é o compilador de Java: o compilador da introdução, agora com nome e
+`javac` é o compilador de Java: o compilador do capítulo 1, agora com nome e
 comando próprios. Ele lê o texto de `Locadora.java`, confere se aquilo é Java
 válido e grava o resultado da tradução em um arquivo novo, o `Locadora.class`.
 O conteúdo desse arquivo não é texto Java nem código de máquina de processador
-algum. É bytecode: a forma intermediária que a introdução prometeu nomear — um
+algum. É bytecode: a forma intermediária que o capítulo 1 prometeu nomear — um
 formato projetado para ser lido por um programa, não por um processador de
-silício. A extensão `.class` vem do nome de uma declaração que o capítulo 5
+silício. A extensão `.class` vem do nome de uma declaração que o capítulo 6
 apresenta.
 
 O programa que lê bytecode e o executa é a JVM, a máquina virtual Java — a
-outra peça que a introdução deixou sem nome. O comando `java` inicia uma JVM,
+outra peça que o capítulo 1 deixou sem nome. O comando `java` inicia uma JVM,
 entrega a ela o bytecode indicado e sai do caminho: dali em diante, quem está
 rodando é o programa. As duas ferramentas — `javac`, que traduz, e `java`, que
 executa — vêm juntas no JDK, ao lado da biblioteca padrão onde mora
 `IO.println`.
 
-A tradução em duas etapas é o mecanismo por trás da promessa feita na
-introdução. O `Locadora.class` gerado aqui roda sem alteração em qualquer
+A tradução em duas etapas é o mecanismo por trás da promessa feita no capítulo 1. O `Locadora.class` gerado aqui roda sem alteração em qualquer
 máquina que tenha uma JVM da mesma versão ou mais nova — x86 ou ARM, Windows,
 Linux ou macOS. O que se instala em cada máquina é a JVM certa para ela; o
 bytecode entregue é o mesmo em todas. Um compilador que traduzisse direto para
@@ -267,7 +266,7 @@ vem depois dele. O formato da mensagem merece memória: `could not find or
 load` quase nunca quer dizer que o código não existe. Quer dizer que ele não
 está em nenhum dos lugares da lista. Procurar o defeito dentro do fonte, nesse
 caso, é procurar onde não está — e essa confusão responde por boa parte das
-primeiras horas perdidas de quem começa. A partir do capítulo 12, quem monta o
+primeiras horas perdidas de quem começa. A partir do capítulo 13, quem monta o
 classpath deixa de ser quem digita o comando e passa a ser a ferramenta de
 construção do projeto; até lá, ele é digitado à mão, e digitá-lo à mão algumas
 vezes é o que torna compreensível o que a ferramenta fará depois.

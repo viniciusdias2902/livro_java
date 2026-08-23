@@ -1,4 +1,4 @@
-# Introdução: a linguagem, a plataforma e as versões
+# A linguagem, a plataforma e as versões
 
 ```
 89 c8
@@ -73,8 +73,7 @@ genérica dada até aqui. O compilador de Java não traduz o código-fonte para 
 código de máquina de um processador específico. Traduz para uma forma
 intermediária, e quem executa essa forma é um programa instalado em cada
 máquina. O nome da forma intermediária e o nome do programa que a executa abrem
-o capítulo 1, junto com os comandos que os manipulam. O que importa nesta
-introdução é a consequência: o mesmo programa Java, compilado uma vez, roda em
+o capítulo 2, junto com os comandos que os manipulam. O que importa neste capítulo é a consequência: o mesmo programa Java, compilado uma vez, roda em
 x86 e em ARM, em Windows, em Linux e em macOS. O que muda de uma máquina para
 outra é a peça instalada nela, não o programa.
 
@@ -112,7 +111,7 @@ Microsoft Build of OpenJDK são distribuições. A linguagem, a biblioteca padr�
 e o comportamento dos programas são os mesmos em todas, porque o código de
 origem é o mesmo; o que muda é quem publica correções, por quanto tempo e sob
 quais termos de licença. Para este livro, qualquer distribuição serve. Os
-exemplos do capítulo 1 mostram um Corretto por acaso da máquina em que foram
+exemplos do capítulo 2 mostram um Corretto por acaso da máquina em que foram
 executados, e nada mudaria com outra.
 
 ## Como as versões funcionam
@@ -158,7 +157,7 @@ OpenJDK Runtime Environment Temurin-21.0.8+9 (build 21.0.8+9-LTS)
 OpenJDK 64-Bit Server VM Temurin-21.0.8+9 (build 21.0.8+9-LTS, mixed mode)
 ```
 
-Três perguntas, todas respondíveis com o que esta introdução apresentou: essa
+Três perguntas, todas respondíveis com o que este capítulo apresentou: essa
 instalação ainda recebe correções? O primeiro programa deste livro funciona
 nela? E o que precisa acontecer para que funcione?
 
@@ -166,8 +165,8 @@ nela? E o que precisa acontecer para que funcione?
 
 A primeira resposta é sim: 21 é a LTS de setembro de 2023, e a própria saída
 mostra a correção 21.0.8 publicada em julho de 2025 — a versão segue mantida. A
-segunda resposta é não: o programa do capítulo 1 usa o recurso finalizado na
-25, e um JDK 21 o recusa; o capítulo 1 mostra essa recusa por extenso. A
+segunda resposta é não: o programa do capítulo 2 usa o recurso finalizado na
+25, e um JDK 21 o recusa; o capítulo 2 mostra essa recusa por extenso. A
 terceira: instalar um JDK da versão 25 ou mais nova. Atualizar, aqui, não
 transforma a instalação existente — é uma segunda instalação, e o comando
 `java` do terminal precisa passar a apontar para ela. Uma máquina com JDK em
@@ -201,7 +200,7 @@ máquinas antigas e em material antigo. 1.8 e 8 são a mesma versão.
    compilado roda em um processador x86 e em um ARM, dizendo qual peça muda de
    uma máquina para a outra e qual permanece a mesma.
 
-## Ficha da introdução
+## Ficha do capítulo
 
 | Termo | Definição |
 | --- | --- |

@@ -47,10 +47,10 @@ como "coisa do mundo real".
   linhas e o nome do conceito. Nada de aprofundamento é cobrado em teste.
 - **Armadilha** (`<div class="armadilha">`) é comportamento contraintuitivo que produz
   bug silencioso. Cai nos testes.
-- **Domínio contínuo:** locadora de livros, do capítulo 5 ao 23. Sem `Foo` e `Bar`.
+- **Domínio contínuo:** locadora de livros, do capítulo 6 ao 24. Sem `Foo` e `Bar`.
 - **Estrutura:** abre com o problema concreto, fecha com seção de prática e ficha de
   referência. Ambas obrigatórias, verificadas pelo lint.
-- Java 25. Capítulos 1 a 4 usam arquivo-fonte compacto nos exercícios.
+- Java 25. Capítulos 2 a 5 usam arquivo-fonte compacto nos exercícios.
 
 ## Fluxo de trabalho
 
