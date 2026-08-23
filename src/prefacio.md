@@ -85,8 +85,9 @@ pergunta e deslizar para a resposta desperdiça o instrumento.
 
 Esta caixa marca comportamento da linguagem que parece uma coisa e faz outra,
 produzindo defeito silencioso: o programa roda, não avisa, e o resultado está
-errado. É o conteúdo mais importante do livro para a vida prática, e por isso
-é cobrado nos exercícios.
+errado. Na vida prática, é dessa família que saem os defeitos que atravessam
+testes e chegam a quem usa o programa, e por isso a caixa é cobrada nos
+exercícios.
 
 </div>
 
