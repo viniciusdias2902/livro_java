@@ -109,8 +109,10 @@ def checar_prosa(man, ordem, introduz, erros):
             )
 
         # 3. termo usado antes de introduzido
+        # hífen conta como parte da palavra: "long-term" não é o termo "long"
         for termo, dono in introduz.items():
-            if ordem[dono] > ordem[cap["id"]] and re.search(rf"\b{re.escape(termo)}\b", baixo):
+            padrao_termo = rf"(?<![\w-]){re.escape(termo)}(?![\w-])"
+            if ordem[dono] > ordem[cap["id"]] and re.search(padrao_termo, baixo):
                 erros.append(
                     f"[{cap['id']}] usa '{termo}', que só é introduzido em {dono} "
                     f"(adie explicitamente em termos_adiados ou reordene)"

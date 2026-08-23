@@ -125,15 +125,15 @@ entrou espera a versão seguinte. O número da versão, portanto, mede posição
 calendário, não tamanho de mudança: a distância entre a 24 e a 25 pode ser
 maior ou menor do que entre a 23 e a 24.
 
-Novidade de linguagem raramente estreia pronta. Entra primeiro como prévia:
-disponível para teste, sujeita a mudar de forma, desligada a menos que se peça
-para ligá-la. Depois de uma ou mais rodadas de prévia, a novidade é finalizada
+Novidade de linguagem raramente estreia pronta. Entra primeiro como prévia —
+*preview*, o nome que aparece na documentação em inglês: disponível para
+teste, sujeita a mudar de forma, desligada a menos que se peça para ligá-la. Depois de uma ou mais rodadas de prévia, a novidade é finalizada
 e passa a valer sem pedido nenhum. O primeiro programa deste livro usa um
 recurso que percorreu esse caminho e foi finalizado na versão 25 — e essa é a
 razão de o livro exigir a versão que exige.
 
-A cada dois anos, a versão de setembro recebe a marca LTS — sigla em
-inglês para suporte de longo prazo. Uma versão LTS continua recebendo correções
+A cada dois anos, a versão de setembro recebe a marca LTS, de *long-term
+support* — suporte de longo prazo. Uma versão LTS continua recebendo correções
 de erros e de segurança por anos; uma versão comum para de recebê-las seis
 meses depois de lançada, quando a seguinte chega. São LTS as versões 11 (2018),
 17 (2021), 21 (2023) e 25 (2025) — e também a 8, de 2014, anterior ao
@@ -213,7 +213,7 @@ máquinas antigas e em material antigo. 1.8 e 8 são a mesma versão.
 | JDK | conjunto instalável que reúne o compilador, o executor da forma intermediária e a biblioteca padrão |
 | OpenJDK | projeto de código aberto onde o JDK é desenvolvido |
 | distribuição | empacotamento do OpenJDK publicado e mantido por uma empresa |
-| prévia | novidade disponível para teste, sujeita a mudança, desligada a menos que se peça |
+| prévia (*preview*) | novidade disponível para teste, sujeita a mudança, desligada a menos que se peça |
 | LTS | versão com correções por anos; as demais recebem correções por seis meses |
 
 | Versão LTS | Lançamento |
