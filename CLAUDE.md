@@ -47,10 +47,8 @@ como "coisa do mundo real".
   linhas e o nome do conceito. Nada de aprofundamento é cobrado em teste.
 - **Armadilha** (`<div class="armadilha">`) é comportamento contraintuitivo que produz
   bug silencioso. Cai nos testes.
-- **Domínio contínuo:** uma biblioteca (acervo, leitores, empréstimos, multas), do
-  capítulo 6 ao 24. Sem `Foo` e `Bar`. Para não colidir com o domínio, a biblioteca
-  padrão do Java é sempre chamada de "biblioteca padrão", por extenso; "a biblioteca",
-  sozinha, é sempre o sistema construído no livro.
+- **Domínio contínuo:** um mercadinho de bairro (produtos, preços, estoque, lotes e
+  validades, vendas, caderneta de fiado), do capítulo 6 ao 24. Sem `Foo` e `Bar`.
 - **Estrutura:** abre com o problema concreto, fecha com seção de prática e ficha de
   referência. Ambas obrigatórias, verificadas pelo lint.
 - Java 25. Capítulos 2 a 5 usam arquivo-fonte compacto nos exercícios.

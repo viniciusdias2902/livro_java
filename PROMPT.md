@@ -47,8 +47,7 @@ Só comece depois que eu aprovar o esqueleto.
 
 Para cada capítulo, em ordem:
 
-1. Releia o capítulo anterior por inteiro, para manter continuidade do domínio (a
-   biblioteca) e não redefinir o que já foi definido.
+1. Releia o capítulo anterior por inteiro, para manter continuidade do domínio (o mercadinho de bairro) e não redefinir o que já foi definido.
 2. Escreva o capítulo no arquivo correspondente em `src/capitulos/`.
 3. Rode `python3 lint.py` e corrija as violações.
 4. Faça um commit isolado, com o número do capítulo na mensagem.
@@ -87,7 +86,7 @@ uma ficha de referência em tabela.
 
 Estas construções reprovam o capítulo:
 
-- "Você quer construir a biblioteca." → desejo atribuído ao leitor.
+- "Você quer construir o mercadinho." → desejo atribuído ao leitor.
 - "Trate isso como cerimônia obrigatória por enquanto." → adiamento sem prazo; nomeie o
   capítulo.
 - "Sem classe, sem `public static`, sem `String[] args`." → três termos não definidos em
