@@ -1,0 +1,635 @@
+[
+  {
+    "n": 1,
+    "id": "01-execucao",
+    "titulo": "Hello world e como o Java executa",
+    "apendice": false,
+    "termos_introduzidos": [
+      "metodo",
+      "void",
+      "main",
+      "IO.println",
+      "argumento",
+      "saida padrao",
+      "compilador",
+      "bytecode",
+      "JVM",
+      "JDK",
+      "classpath",
+      "arquivo-fonte compacto",
+      "erro de compilacao",
+      "erro de execucao"
+    ],
+    "termos_adiados": {
+      "class": "05-classes",
+      "public": "05-classes",
+      "static": "05-classes",
+      "String[] args": "04-referencias",
+      "return": "03-fluxo",
+      "int": "02-valores"
+    },
+    "conceitos_de_carga": [
+      "classpath",
+      "bytecode",
+      "erro de compilação"
+    ]
+  },
+  {
+    "n": 2,
+    "id": "02-valores",
+    "titulo": "Variáveis, primitivos e operadores",
+    "apendice": false,
+    "termos_introduzidos": [
+      "tipo",
+      "variavel",
+      "int",
+      "long",
+      "double",
+      "boolean",
+      "char",
+      "primitivo",
+      "literal",
+      "atribuicao",
+      "expressao",
+      "operador",
+      "casting",
+      "promocao",
+      "overflow",
+      "ponto flutuante",
+      "var",
+      "inferencia de tipo"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "primitivo",
+      "promoção",
+      "overflow"
+    ]
+  },
+  {
+    "n": 3,
+    "id": "03-fluxo",
+    "titulo": "Fluxo de controle e decomposição",
+    "apendice": false,
+    "termos_introduzidos": [
+      "if",
+      "condicao",
+      "curto-circuito",
+      "operador ternario",
+      "switch expression",
+      "laco",
+      "escopo",
+      "return",
+      "parametro",
+      "assinatura",
+      "sobrecarga",
+      "recursao"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "escopo",
+      "sobrecarga",
+      "switch expression"
+    ]
+  },
+  {
+    "n": 4,
+    "id": "04-referencias",
+    "titulo": "Referências, objetos, String e arrays",
+    "apendice": false,
+    "termos_introduzidos": [
+      "objeto",
+      "referencia",
+      "new",
+      "heap",
+      "identidade",
+      "null",
+      "NullPointerException",
+      "String",
+      "equals",
+      "concatenacao",
+      "imutabilidade",
+      "array",
+      "indice",
+      "ArrayIndexOutOfBoundsException",
+      "laco for-each",
+      "String[] args"
+    ],
+    "termos_adiados": {
+      "class": "05-classes",
+      "excecao": "11-excecoes"
+    },
+    "conceitos_de_carga": [
+      "referência",
+      "identidade",
+      "imutabilidade"
+    ]
+  },
+  {
+    "n": 5,
+    "id": "05-classes",
+    "titulo": "Classes, construtores e encapsulamento",
+    "apendice": false,
+    "termos_introduzidos": [
+      "class",
+      "campo",
+      "instancia",
+      "this",
+      "construtor",
+      "public",
+      "private",
+      "modificador de acesso",
+      "encapsulamento",
+      "invariante",
+      "modificador final",
+      "static",
+      "membro estatico",
+      "pacote",
+      "import",
+      "throw",
+      "IllegalArgumentException"
+    ],
+    "termos_adiados": {
+      "excecao": "11-excecoes",
+      "interface": "07-interfaces"
+    },
+    "conceitos_de_carga": [
+      "encapsulamento",
+      "invariante",
+      "construtor"
+    ]
+  },
+  {
+    "n": 6,
+    "id": "06-heranca",
+    "titulo": "Herança, polimorfismo e composição",
+    "apendice": false,
+    "termos_introduzidos": [
+      "heranca",
+      "extends",
+      "superclasse",
+      "subclasse",
+      "Object",
+      "sobrescrita",
+      "anotacao",
+      "super",
+      "polimorfismo",
+      "despacho dinamico",
+      "instanceof",
+      "upcast",
+      "downcast",
+      "ClassCastException",
+      "composicao",
+      "delegacao"
+    ],
+    "termos_adiados": {
+      "interface": "07-interfaces",
+      "excecao": "11-excecoes"
+    },
+    "conceitos_de_carga": [
+      "polimorfismo",
+      "sobrescrita",
+      "composição"
+    ]
+  },
+  {
+    "n": 7,
+    "id": "07-interfaces",
+    "titulo": "Interfaces e abstração",
+    "apendice": false,
+    "termos_introduzidos": [
+      "interface",
+      "implements",
+      "contrato",
+      "classe abstrata",
+      "metodo abstrato",
+      "metodo default",
+      "acoplamento"
+    ],
+    "termos_adiados": {
+      "generics": "14-generics"
+    },
+    "conceitos_de_carga": [
+      "contrato",
+      "acoplamento",
+      "classe abstrata"
+    ]
+  },
+  {
+    "n": 8,
+    "id": "08-equals",
+    "titulo": "O contrato equals/hashCode/toString",
+    "apendice": false,
+    "termos_introduzidos": [
+      "contrato de equals",
+      "reflexividade",
+      "simetria",
+      "transitividade",
+      "hashCode",
+      "codigo de hash",
+      "colisao de hash",
+      "toString"
+    ],
+    "termos_adiados": {
+      "HashMap": "15-colecoes"
+    },
+    "conceitos_de_carga": [
+      "contrato de equals",
+      "hashCode",
+      "toString"
+    ]
+  },
+  {
+    "n": 9,
+    "id": "09-records",
+    "titulo": "Records e semântica de valor",
+    "apendice": false,
+    "termos_introduzidos": [
+      "record",
+      "componente de record",
+      "semantica de valor",
+      "construtor canonico",
+      "construtor compacto"
+    ],
+    "termos_adiados": {
+      "pattern matching": "10-sealed"
+    },
+    "conceitos_de_carga": [
+      "semântica de valor",
+      "construtor compacto",
+      "imutabilidade"
+    ]
+  },
+  {
+    "n": 10,
+    "id": "10-sealed",
+    "titulo": "Sealed types, enums e pattern matching",
+    "apendice": false,
+    "termos_introduzidos": [
+      "enum",
+      "constante de enum",
+      "sealed",
+      "permits",
+      "non-sealed",
+      "pattern matching",
+      "padrao de tipo",
+      "padrao de registro",
+      "exaustividade"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "exaustividade",
+      "pattern matching",
+      "enum"
+    ]
+  },
+  {
+    "n": 11,
+    "id": "11-excecoes",
+    "titulo": "Exceções",
+    "apendice": false,
+    "termos_introduzidos": [
+      "excecao",
+      "try",
+      "catch",
+      "finally",
+      "throws",
+      "checked",
+      "unchecked",
+      "RuntimeException",
+      "stack trace",
+      "propagacao"
+    ],
+    "termos_adiados": {
+      "try-with-resources": "19-io"
+    },
+    "conceitos_de_carga": [
+      "propagação",
+      "checked",
+      "stack trace"
+    ]
+  },
+  {
+    "n": 12,
+    "id": "12-build",
+    "titulo": "Maven e Gradle",
+    "apendice": false,
+    "termos_introduzidos": [
+      "Maven",
+      "Gradle",
+      "coordenada",
+      "artefato",
+      "repositorio",
+      "dependencia transitiva",
+      "convencao de diretorios",
+      "jar"
+    ],
+    "termos_adiados": {
+      "JUnit": "13-junit"
+    },
+    "conceitos_de_carga": [
+      "dependência transitiva",
+      "classpath",
+      "convenção de diretórios"
+    ]
+  },
+  {
+    "n": 13,
+    "id": "13-junit",
+    "titulo": "JUnit 5 e o hábito de testar",
+    "apendice": false,
+    "termos_introduzidos": [
+      "JUnit",
+      "teste unitario",
+      "assercao",
+      "assertEquals",
+      "fixture",
+      "teste de regressao"
+    ],
+    "termos_adiados": {
+      "lambda": "16-lambdas"
+    },
+    "conceitos_de_carga": [
+      "teste unitário",
+      "asserção",
+      "fixture"
+    ]
+  },
+  {
+    "n": 14,
+    "id": "14-generics",
+    "titulo": "Generics e type erasure",
+    "apendice": false,
+    "termos_introduzidos": [
+      "generics",
+      "parametro de tipo",
+      "argumento de tipo",
+      "metodo generico",
+      "type erasure",
+      "invariancia",
+      "wildcard"
+    ],
+    "termos_adiados": {
+      "List": "15-colecoes",
+      "Map": "15-colecoes"
+    },
+    "conceitos_de_carga": [
+      "parâmetro de tipo",
+      "type erasure",
+      "invariância"
+    ]
+  },
+  {
+    "n": 15,
+    "id": "15-colecoes",
+    "titulo": "Coleções: array vs. List, Set, Map",
+    "apendice": false,
+    "termos_introduzidos": [
+      "Collection",
+      "List",
+      "ArrayList",
+      "LinkedList",
+      "Set",
+      "HashSet",
+      "Map",
+      "HashMap",
+      "TreeMap",
+      "iterador",
+      "ordem de iteracao",
+      "colecao imutavel"
+    ],
+    "termos_adiados": {
+      "lambda": "16-lambdas",
+      "stream": "17-streams"
+    },
+    "conceitos_de_carga": [
+      "ordem de iteração",
+      "hashCode",
+      "coleção imutável"
+    ]
+  },
+  {
+    "n": 16,
+    "id": "16-lambdas",
+    "titulo": "Lambdas e interfaces funcionais",
+    "apendice": false,
+    "termos_introduzidos": [
+      "lambda",
+      "interface funcional",
+      "referencia de metodo",
+      "Function",
+      "Predicate",
+      "Consumer",
+      "Supplier",
+      "Comparator",
+      "captura de variavel",
+      "efetivamente final",
+      "literal de classe"
+    ],
+    "termos_adiados": {
+      "stream": "17-streams"
+    },
+    "conceitos_de_carga": [
+      "interface funcional",
+      "captura de variável",
+      "efetivamente final"
+    ]
+  },
+  {
+    "n": 17,
+    "id": "17-streams",
+    "titulo": "Streams e Optional",
+    "apendice": false,
+    "termos_introduzidos": [
+      "stream",
+      "operacao intermediaria",
+      "operacao terminal",
+      "avaliacao preguicosa",
+      "Collectors",
+      "reduce",
+      "Optional"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "operação terminal",
+      "avaliação preguiçosa",
+      "Optional"
+    ]
+  },
+  {
+    "n": 18,
+    "id": "18-time",
+    "titulo": "java.time: datas sem armadilha",
+    "apendice": false,
+    "termos_introduzidos": [
+      "LocalDate",
+      "LocalDateTime",
+      "Instant",
+      "Duration",
+      "Period",
+      "ZoneId",
+      "fuso horario",
+      "ChronoUnit",
+      "DateTimeFormatter"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "Instant",
+      "fuso horário",
+      "imutabilidade"
+    ]
+  },
+  {
+    "n": 19,
+    "id": "19-io",
+    "titulo": "I/O, NIO.2, argumentos e jar executável",
+    "apendice": false,
+    "termos_introduzidos": [
+      "Path",
+      "Files",
+      "charset",
+      "try-with-resources",
+      "AutoCloseable",
+      "manifest",
+      "jar executavel"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "try-with-resources",
+      "charset",
+      "jar executável"
+    ]
+  },
+  {
+    "n": 20,
+    "id": "20-concorrencia",
+    "titulo": "Concorrência: executors e virtual threads",
+    "apendice": false,
+    "termos_introduzidos": [
+      "thread",
+      "condicao de corrida",
+      "atomicidade",
+      "visibilidade entre threads",
+      "synchronized",
+      "volatile",
+      "ExecutorService",
+      "Future",
+      "virtual thread"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "condição de corrida",
+      "visibilidade entre threads",
+      "virtual thread"
+    ]
+  },
+  {
+    "n": 21,
+    "id": "21-reflection",
+    "titulo": "Annotations, reflection e proxies",
+    "apendice": false,
+    "termos_introduzidos": [
+      "anotacao propria",
+      "retencao",
+      "reflexao",
+      "proxy dinamico",
+      "InvocationHandler"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "retenção",
+      "reflexão",
+      "proxy dinâmico"
+    ]
+  },
+  {
+    "n": 22,
+    "id": "22-di",
+    "titulo": "Injeção de dependência na unha",
+    "apendice": false,
+    "termos_introduzidos": [
+      "injecao de dependencia",
+      "inversao de controle",
+      "grafo de objetos",
+      "container",
+      "singleton"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "injeção de dependência",
+      "inversão de controle",
+      "grafo de objetos"
+    ]
+  },
+  {
+    "n": 23,
+    "id": "23-projeto",
+    "titulo": "Projeto integrador de terminal",
+    "apendice": false,
+    "termos_introduzidos": [
+      "camada de dominio",
+      "camada de infraestrutura"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "camada de domínio",
+      "invariante",
+      "teste unitário"
+    ]
+  },
+  {
+    "n": null,
+    "id": "A1-javafx-basico",
+    "titulo": "JavaFX: janela, cena e o thread de UI",
+    "apendice": true,
+    "termos_introduzidos": [
+      "JavaFX",
+      "Application",
+      "Stage",
+      "Scene",
+      "grafo de cena",
+      "thread de aplicacao JavaFX",
+      "Platform.runLater"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "grafo de cena",
+      "thread de aplicação JavaFX"
+    ]
+  },
+  {
+    "n": null,
+    "id": "A2-javafx-eventos",
+    "titulo": "JavaFX: eventos, properties e binding",
+    "apendice": true,
+    "termos_introduzidos": [
+      "EventHandler",
+      "property",
+      "ObservableValue",
+      "ChangeListener",
+      "binding",
+      "ObservableList"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "property",
+      "binding",
+      "EventHandler"
+    ]
+  },
+  {
+    "n": null,
+    "id": "A3-javafx-dominio",
+    "titulo": "JavaFX: ligando a tela ao domínio",
+    "apendice": true,
+    "termos_introduzidos": [
+      "modelo de apresentacao",
+      "TableView"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "modelo de apresentação",
+      "injeção de dependência"
+    ]
+  }
+]

@@ -1,0 +1,90 @@
+/* Modus Vivendi — paleta de Protesilaos Stavrou (CC0).
+   Aplicada sobre o tema "coal" do mdBook. Selecione "Coal" no seletor de temas. */
+
+:root {
+  --mv-bg-main: #000000;  --mv-bg-dim: #1e1e1e;  --mv-bg-inactive: #303030;
+  --mv-bg-active: #535353; --mv-fg-main: #ffffff; --mv-fg-dim: #989898;
+  --mv-fg-alt: #c6daff;   --mv-border: #646464;
+  --mv-red: #ff5f59;      --mv-red-cooler: #ff7f86; --mv-red-faint: #ff9580;
+  --mv-green: #44bc44;    --mv-green-cooler: #00c06f; --mv-green-faint: #88ca9f;
+  --mv-yellow: #d0bc00;   --mv-yellow-warmer: #fec43f; --mv-yellow-faint: #d2b580;
+  --mv-blue: #2fafff;     --mv-blue-warmer: #79a8ff; --mv-blue-cooler: #00bcff;
+  --mv-blue-faint: #82b0ec;
+  --mv-magenta: #feacd0;  --mv-magenta-warmer: #f78fe7; --mv-magenta-cooler: #b6a0ff;
+  --mv-magenta-faint: #caa6df;
+  --mv-cyan: #00d3d0;     --mv-cyan-cooler: #6ae4b9; --mv-cyan-faint: #9ac8e0;
+  --mv-bg-red-nuanced: #3a0c14; --mv-bg-yellow-nuanced: #381d0f;
+  --mv-bg-cyan-nuanced: #042837; --mv-bg-magenta-nuanced: #2f0c3f;
+}
+
+html.coal {
+  --bg: var(--mv-bg-main);
+  --fg: var(--mv-fg-main);
+  --sidebar-bg: var(--mv-bg-dim);
+  --sidebar-fg: var(--mv-fg-main);
+  --sidebar-non-existant: var(--mv-fg-dim);
+  --sidebar-active: var(--mv-blue-cooler);
+  --sidebar-spacer: var(--mv-border);
+  --scrollbar: var(--mv-bg-active);
+  --icons: var(--mv-fg-dim);
+  --icons-hover: var(--mv-fg-main);
+  --links: var(--mv-blue-warmer);
+  --inline-code-color: var(--mv-cyan-cooler);
+  --theme-popup-bg: var(--mv-bg-dim);
+  --theme-popup-border: var(--mv-border);
+  --theme-hover: var(--mv-bg-active);
+  --quote-bg: var(--mv-bg-dim);
+  --quote-border: var(--mv-border);
+  --table-border-color: var(--mv-border);
+  --table-header-bg: var(--mv-bg-inactive);
+  --table-alternate-bg: var(--mv-bg-dim);
+  --searchbar-border-color: var(--mv-border);
+  --searchbar-bg: var(--mv-bg-dim);
+  --searchbar-fg: var(--mv-fg-main);
+  --searchbar-shadow-color: var(--mv-bg-active);
+  --searchresults-header-fg: var(--mv-fg-dim);
+  --searchresults-border-color: var(--mv-border);
+  --searchresults-li-hover-bg: var(--mv-bg-inactive);
+  --search-mark-bg: #7a6100;
+}
+
+/* Títulos: mapeamento fg-heading-N da paleta */
+.coal h1 { color: var(--mv-fg-main); }
+.coal h2 { color: var(--mv-yellow-faint); }
+.coal h3 { color: var(--mv-blue-faint); }
+.coal h4 { color: var(--mv-magenta); }
+.coal h5 { color: var(--mv-green-faint); }
+.coal h6 { color: var(--mv-red-faint); }
+
+/* Ambientes do livro. Uso: <div class="armadilha"> ... </div> */
+.coal .armadilha, .coal .aprofundamento, .coal .analogia, .coal .previsao {
+  border-left: 4px solid; padding: .6rem 1rem; margin: 1.2rem 0; border-radius: 3px;
+}
+.coal .armadilha { background: var(--mv-bg-red-nuanced); border-color: var(--mv-red); }
+.coal .aprofundamento { background: var(--mv-bg-cyan-nuanced); border-color: var(--mv-cyan); }
+.coal .analogia { background: var(--mv-bg-yellow-nuanced); border-color: var(--mv-yellow-warmer); }
+.coal .previsao { background: var(--mv-bg-magenta-nuanced); border-color: var(--mv-magenta-cooler); }
+.coal .armadilha::before { content: "Armadilha — cai nos testes"; color: var(--mv-red); }
+.coal .aprofundamento::before { content: "Aprofundamento — nunca cai nos testes"; color: var(--mv-cyan); }
+.coal .analogia::before { content: "Onde a analogia quebra"; color: var(--mv-yellow-warmer); }
+.coal .previsao::before { content: "Preveja antes de continuar"; color: var(--mv-magenta-cooler); }
+.coal .armadilha::before, .coal .aprofundamento::before,
+.coal .analogia::before, .coal .previsao::before {
+  display: block; font-weight: 700; font-size: .85em;
+  letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4rem;
+}
+
+/* Realce de sintaxe (highlight.js) com a paleta modus-vivendi */
+.coal .hljs { background: var(--mv-bg-dim); color: var(--mv-fg-main); }
+.coal .hljs-comment, .coal .hljs-quote { color: var(--mv-fg-dim); font-style: italic; }
+.coal .hljs-keyword, .coal .hljs-selector-tag { color: var(--mv-magenta-cooler); }
+.coal .hljs-string, .coal .hljs-regexp { color: var(--mv-blue-warmer); }
+.coal .hljs-number, .coal .hljs-literal { color: var(--mv-fg-main); }
+.coal .hljs-type, .coal .hljs-class .hljs-title { color: var(--mv-cyan-cooler); }
+.coal .hljs-title, .coal .hljs-function .hljs-title { color: var(--mv-magenta); }
+.coal .hljs-variable, .coal .hljs-attr, .coal .hljs-attribute { color: var(--mv-cyan); }
+.coal .hljs-built_in { color: var(--mv-magenta-warmer); }
+.coal .hljs-meta, .coal .hljs-doctag { color: var(--mv-red-cooler); }
+.coal .hljs-symbol, .coal .hljs-bullet { color: var(--mv-green-cooler); }
+.coal .hljs-addition { color: #a0e0a0; }
+.coal .hljs-deletion { color: #ffbfbf; }

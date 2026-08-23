@@ -1,0 +1,16 @@
+[book]
+title = "Core Java e Orientação a Objetos"
+description = "Base sólida para desenvolver e entender aplicações Spring."
+language = "pt-BR"
+src = "src"
+
+[output.html]
+default-theme = "coal"
+preferred-dark-theme = "coal"
+additional-css = ["theme/modus-vivendi.css"]
+git-repository-url = ""
+no-section-label = false
+
+[output.html.fold]
+enable = true
+level = 1
