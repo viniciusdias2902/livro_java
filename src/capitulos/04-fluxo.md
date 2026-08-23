@@ -316,11 +316,12 @@ int somaAte(int n) {
 `somaAte(4)` devolve `4 + somaAte(3)`, que devolve `3 + somaAte(2)`, e
 assim até `somaAte(1)`, que devolve 1 sem se chamar de novo: 10 ao todo. A
 linha do `n == 1` é o caso base, a saída da repetição, e é a parte que não
-pode faltar. Sem caso base, as chamadas se acumulam até a JVM desistir, com
-um erro de execução chamado `StackOverflowError`; o aprofundamento abaixo
-explica o nome. Todo problema recursivo tem uma versão com laço, e este
-livro usa laços na maior parte do tempo; a recursão volta quando a estrutura
-do problema for ela mesma recursiva.
+pode faltar. Sem caso base, as chamadas se acumulam na pilha de chamadas, a
+estrutura em que a JVM guarda as variáveis de cada chamada em andamento, até
+o limite dela, e o programa cai com um erro de execução chamado
+`StackOverflowError`; o aprofundamento abaixo detalha o mecanismo. Todo
+problema recursivo tem uma versão com laço, e este livro usa laços na maior
+parte do tempo.
 
 <div class="aprofundamento">
 

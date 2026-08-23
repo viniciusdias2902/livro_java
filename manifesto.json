@@ -115,7 +115,13 @@
       "parametro",
       "assinatura",
       "sobrecarga",
-      "recursao"
+      "recursao",
+      "break",
+      "caso base",
+      "decomposicao",
+      "pilha de chamadas",
+      "ArithmeticException",
+      "StackOverflowError"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -148,7 +154,8 @@
       "indice",
       "ArrayIndexOutOfBoundsException",
       "laco for-each",
-      "String[] args"
+      "String[] args",
+      "NumberFormatException"
     ],
     "termos_adiados": {
       "excecao": "13-excecoes",
@@ -200,7 +207,8 @@
       "pacote",
       "import",
       "throw",
-      "IllegalArgumentException"
+      "IllegalArgumentException",
+      "representacao de dinheiro"
     ],
     "termos_adiados": {
       "excecao": "13-excecoes",

@@ -96,7 +96,7 @@ diante. Um array também nasce sem valores escolhidos, com a palavra `new` e
 o tamanho: `new int[10]` cria dez posições valendo zero, o valor padrão de
 `int`. A próxima seção mostra o que `new` faz.
 
-Índice fora da faixa é o segundo erro de execução clássico da linguagem.
+Índice fora da faixa é um dos erros de execução clássicos da linguagem.
 Pedir `notas[3]` ao array de três posições acima produz:
 
 ```
@@ -162,9 +162,8 @@ flowchart LR
 ```
 
 Os objetos em si vivem numa região da memória chamada heap, criados pelo
-`new` ou pelo inicializador, e as variáveis vivem na pilha de chamadas, a
-estrutura que guarda as variáveis de cada método em andamento; o que elas
-guardam de um objeto é só a referência para lá. Cada objeto criado tem
+`new` ou pelo inicializador, e as variáveis vivem na pilha de chamadas; o
+que elas guardam de um objeto é só a referência para lá. Cada objeto criado tem
 identidade: é ele mesmo, distinto de qualquer outro, mesmo que outro objeto
 tenha conteúdo idêntico. Dois arrays criados com `{ 10, 20, 30 }` duas vezes
 são dois objetos; `a` e `b` acima são dois nomes para um só.
@@ -403,6 +402,18 @@ prefere a que declara o array quando as duas existem no arquivo.
    sofria antes da sua proteção.
 
 ## Ficha do capítulo
+
+| Chamada | O que faz |
+| --- | --- |
+| `texto.length()` | quantidade de caracteres |
+| `texto.toUpperCase()` | devolve a versão em maiúsculas |
+| `texto.charAt(i)` | o `char` da posição `i` |
+| `texto.substring(a, b)` | o trecho da posição `a` até antes de `b` |
+| `a.equals(b)` | compara conteúdo, não identidade |
+| `montagem.append(x)` | acrescenta ao fim do `StringBuilder` |
+| `Integer.parseInt(texto)` | converte o texto num `int` |
+| `IO.readln(pergunta)` | escreve a pergunta e devolve a linha digitada |
+| `new int[n]` | array de `n` posições com o valor padrão do tipo |
 
 | Termo | Definição |
 | --- | --- |

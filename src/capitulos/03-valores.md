@@ -293,7 +293,7 @@ o tipo sai; e o tipo inferido é fixo dali em diante, exatamente como se
 estivesse escrito, de modo que `total = 1.5` continua sendo recusado. `var`
 não muda o que a variável é; muda só quanto se digita. Nestes primeiros
 capítulos o livro escreve os tipos por extenso, para eles ficarem visíveis;
-`var` volta a aparecer quando os nomes de tipo crescerem.
+`var` volta a aparecer no capítulo 17, quando os nomes de tipo crescem.
 
 ## Prática
 
