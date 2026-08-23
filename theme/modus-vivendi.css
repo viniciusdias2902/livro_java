@@ -57,19 +57,22 @@ html.coal {
 .coal h6 { color: var(--mv-red-faint); }
 
 /* Ambientes do livro. Uso: <div class="armadilha"> ... </div> */
-.coal .armadilha, .coal .aprofundamento, .coal .analogia, .coal .previsao {
+.coal .armadilha, .coal .aprofundamento, .coal .analogia, .coal .previsao,
+.coal .construcao {
   border-left: 4px solid; padding: .6rem 1rem; margin: 1.2rem 0; border-radius: 3px;
 }
 .coal .armadilha { background: var(--mv-bg-red-nuanced); border-color: var(--mv-red); }
 .coal .aprofundamento { background: var(--mv-bg-cyan-nuanced); border-color: var(--mv-cyan); }
 .coal .analogia { background: var(--mv-bg-yellow-nuanced); border-color: var(--mv-yellow-warmer); }
 .coal .previsao { background: var(--mv-bg-magenta-nuanced); border-color: var(--mv-magenta-cooler); }
+.coal .construcao { background: var(--mv-bg-yellow-nuanced); border-color: var(--mv-yellow); }
 .coal .armadilha::before { content: "Armadilha — cai nos testes"; color: var(--mv-red); }
 .coal .aprofundamento::before { content: "Aprofundamento — nunca cai nos testes"; color: var(--mv-cyan); }
 .coal .analogia::before { content: "Onde a analogia quebra"; color: var(--mv-yellow-warmer); }
 .coal .previsao::before { content: "Preveja antes de continuar"; color: var(--mv-magenta-cooler); }
+.coal .construcao::before { content: "Em construção"; color: var(--mv-yellow); }
 .coal .armadilha::before, .coal .aprofundamento::before,
-.coal .analogia::before, .coal .previsao::before {
+.coal .analogia::before, .coal .previsao::before, .coal .construcao::before {
   display: block; font-weight: 700; font-size: .85em;
   letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4rem;
 }
