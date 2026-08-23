@@ -149,9 +149,8 @@ cada sistema. Oracle JDK, Eclipse Temurin, Amazon Corretto, Azul Zulu e
 Microsoft Build of OpenJDK são distribuições. A linguagem, a biblioteca padrão
 e o comportamento dos programas são os mesmos em todas, porque o código de
 origem é o mesmo; o que muda é quem publica correções, por quanto tempo e sob
-quais termos de licença. Para este livro, qualquer distribuição serve. Os
-exemplos do capítulo 2 mostram um Corretto por acaso da máquina em que foram
-executados, e nada mudaria com outra.
+quais termos de licença. Para este livro, qualquer distribuição serve, e
+trocar de uma para outra não muda uma linha do que vem pela frente.
 
 ## Como as versões funcionam
 
@@ -166,9 +165,9 @@ maior ou menor do que entre a 23 e a 24.
 Novidade de linguagem raramente estreia pronta. Entra primeiro como prévia —
 *preview*, o nome que aparece na documentação em inglês: disponível para
 teste, sujeita a mudar de forma, desligada a menos que se peça para ligá-la. Depois de uma ou mais rodadas de prévia, a novidade é finalizada
-e passa a valer sem pedido nenhum. O primeiro programa deste livro usa um
-recurso que percorreu esse caminho e foi finalizado na versão 25 — e essa é a
-razão de o livro exigir a versão que exige.
+e passa a valer sem pedido nenhum. Este livro se apoia em um recurso que
+percorreu esse caminho e foi finalizado na versão 25 — essa é a razão da
+exigência de versão feita na prática deste capítulo.
 
 A cada dois anos, a versão de setembro recebe a marca LTS, de *long-term
 support* — suporte de longo prazo. Uma versão LTS continua recebendo correções
@@ -197,20 +196,22 @@ OpenJDK 64-Bit Server VM Temurin-21.0.8+9 (build 21.0.8+9-LTS, mixed mode)
 ```
 
 Três perguntas, todas respondíveis com o que este capítulo apresentou: essa
-instalação ainda recebe correções? O primeiro programa deste livro funciona
-nela? E o que precisa acontecer para que funcione?
+instalação ainda recebe correções? Ela atende ao que este livro exige? E o que
+precisa acontecer para que atenda — a instalação existente se transforma, ou
+não?
 
 </div>
 
 A primeira resposta é sim: 21 é a LTS de setembro de 2023, e a própria saída
-mostra a correção 21.0.8 publicada em julho de 2025 — a versão segue mantida. A
-segunda resposta é não: o programa do capítulo 2 usa o recurso finalizado na
-25, e um JDK 21 o recusa; o capítulo 2 mostra essa recusa por extenso. A
-terceira: instalar um JDK da versão 25 ou mais nova. Atualizar, aqui, não
-transforma a instalação existente — é uma segunda instalação, e o comando
-`java` do terminal precisa passar a apontar para ela. Uma máquina com JDK em
-dia para o sistema que ela roda pode estar anos atrasada para este livro, e o
-número na primeira linha é o que decide.
+mostra a correção 21.0.8, publicada em julho de 2025 — a versão segue mantida.
+A segunda resposta é não: o livro exige a versão 25 ou mais nova, e essa
+instalação está quatro versões e dois anos atrás dela. Receber correções e
+estar atualizado são coisas diferentes — a saída acima é de uma máquina bem
+cuidada e, ainda assim, insuficiente aqui. A terceira: instalar um JDK da
+versão 25 ou mais nova, e nada se transforma sozinho — é uma segunda
+instalação, e o comando `java` do terminal precisa passar a apontar para ela.
+Uma máquina com JDK em dia para o sistema que ela roda pode estar anos
+atrasada para este livro, e o número na primeira linha é o que decide.
 
 <div class="aprofundamento">
 

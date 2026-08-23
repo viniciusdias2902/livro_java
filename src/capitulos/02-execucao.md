@@ -60,8 +60,8 @@ o chamou, para que a execução continue dali com esse resultado em mãos; `void
 devolve, e o que muda no código de quem chama, é assunto do capítulo 4.
 
 A linha do meio é uma chamada. `IO.println` é um método pronto: vem com o
-Java, dentro da biblioteca padrão que o capítulo 1 apresentou, e está
-disponível em qualquer arquivo como este sem nenhuma linha extra. Ele recebe
+Java, dentro da biblioteca padrão, e está disponível em qualquer arquivo como
+este sem nenhuma linha extra. Ele recebe
 um argumento — o valor escrito entre os parênteses, entregue ao método no
 momento da chamada — e escreve esse valor na saída padrão, seguido de uma
 quebra de linha. Saída padrão é o canal por onde um programa de terminal
@@ -78,9 +78,9 @@ compacto é o nome do arquivo `.java` que declara métodos diretamente, como
 este. Antes da
 versão 25, o mesmo programa exigia linhas de moldura em volta do método, e
 praticamente todo material publicado até hoje — livros, cursos, respostas em
-fórum — mostra essas linhas. O recurso que as dispensa percorreu o caminho de
-prévia descrito no capítulo 1 e foi finalizado na versão 25; dela em diante, o
-compilador fornece a moldura quando ela não está escrita. O que essa moldura
+fórum — mostra essas linhas. O recurso que as dispensa passou por rodadas de
+prévia e foi finalizado na versão 25; dela em diante, o compilador fornece a
+moldura quando ela não está escrita. O que essa moldura
 declara — e por que ela deixa de ser dispensável assim que um programa passa
 de um arquivo — é o capítulo 7. Há também uma segunda forma de escrever
 `main`, que recebe o que foi digitado no terminal depois do nome do programa;
@@ -123,9 +123,9 @@ OpenJDK Runtime Environment Corretto-26.0.2.10.1 (build 26.0.2+10-FR)
 OpenJDK 64-Bit Server VM Corretto-26.0.2.10.1 (build 26.0.2+10-FR, mixed mode, sharing)
 ```
 
-A leitura é a que o capítulo 1 ensinou: o número da primeira linha precisa ser
-25 ou maior, e o resto identifica a distribuição — um Corretto, nesta máquina
-— sem mudar nada do que este livro faz. Do capítulo 7 em diante, quando os
+Da saída interessa o número no começo da primeira linha, que precisa ser 25 ou
+maior; o resto identifica a distribuição — um Corretto, nesta máquina — e não
+muda nada do que este livro faz. Do capítulo 7 em diante, quando os
 arquivos passam a trazer a moldura escrita por extenso, o livro roda também em
 JDKs mais antigos; até lá, não.
 
@@ -147,18 +147,19 @@ Mercadinho aberto.
 comando próprios. Ele lê o texto de `Mercadinho.java`, confere se aquilo é Java
 válido e grava o resultado da tradução em um arquivo novo, o `Mercadinho.class`.
 O conteúdo desse arquivo não é texto Java nem código de máquina de processador
-algum. É bytecode — a forma intermediária que o capítulo 1 descreveu, até
-agora uma ideia, daqui em diante um arquivo concreto no disco, que pode ser
-copiado, movido e apagado como qualquer outro. A extensão `.class` vem do nome
+algum. É bytecode — até aqui uma ideia descrita no papel, daqui em diante um
+arquivo concreto no disco, que pode ser copiado, movido e apagado como
+qualquer outro. A extensão `.class` vem do nome
 de uma declaração que o capítulo 7 apresenta.
 
-Quem lê e executa esse arquivo é a JVM do capítulo 1. O comando `java` inicia uma JVM,
+Quem lê e executa esse arquivo é a JVM. O comando `java` inicia uma,
 entrega a ela o bytecode indicado e sai do caminho: dali em diante, quem está
 rodando é o programa. As duas ferramentas — `javac`, que traduz, e `java`, que
 executa — vêm juntas no JDK, ao lado da biblioteca padrão onde mora
 `IO.println`.
 
-A tradução em duas etapas é o mecanismo por trás da promessa feita no capítulo 1. O `Mercadinho.class` gerado aqui roda sem alteração em qualquer
+A tradução em duas etapas é o mecanismo por trás da portabilidade prometida no
+capítulo 1. O `Mercadinho.class` gerado aqui roda sem alteração em qualquer
 máquina que tenha uma JVM da mesma versão ou mais nova — x86 ou ARM, Windows,
 Linux ou macOS. O que se instala em cada máquina é a JVM certa para ela; o
 bytecode entregue é o mesmo em todas. Um compilador que traduzisse direto para
