@@ -208,7 +208,8 @@
       "import",
       "throw",
       "IllegalArgumentException",
-      "representacao de dinheiro"
+      "representacao de dinheiro",
+      "BigDecimal"
     ],
     "termos_adiados": {
       "excecao": "13-excecoes",
