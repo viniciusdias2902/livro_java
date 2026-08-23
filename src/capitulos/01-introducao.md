@@ -265,7 +265,8 @@ decide o que o código-fonte pode usar.
 
 <div class="previsao">
 
-Uma máquina responde isto ao comando de verificação:
+Nem toda máquina é a deste livro. Num computador herdado de outra pessoa, de
+um estágio ou de um laboratório, o comando de verificação responde isto:
 
 ```
 $ java -version
