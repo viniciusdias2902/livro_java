@@ -8,12 +8,45 @@ c3
 
 Um processador da família x86 — a que equipa a maior parte dos computadores de
 mesa e dos servidores — recebe ordens nesse formato. Cada linha acima é uma
-instrução, escrita aqui pelos números que a codificam: a primeira copia um valor
-de um lugar para outro dentro do processador, a segunda soma dois valores, a
-terceira devolve o resultado ao ponto que pediu a soma. Esse formato tem nome:
-código de máquina, e é a única coisa que um processador executa. Tudo o que um
-computador faz — abrir uma página, calcular um boleto, gravar um arquivo —
-termina, em algum nível, em sequências como essa.
+instrução: a primeira copia um valor de um lugar para outro dentro do
+processador, a segunda soma dois valores, a terceira devolve o resultado ao
+ponto que pediu a soma. Esse formato tem nome: código de máquina, e é a única
+coisa que um processador executa. Tudo o que um computador faz — abrir uma
+página, calcular um boleto, gravar um arquivo — termina, em algum nível, em
+sequências como essa.
+
+A própria escrita dessas linhas, porém, usa duas convenções que precisam ser
+desfeitas antes de qualquer outra coisa, porque as duas reaparecem pela vida
+inteira de quem programa. Um processador é um circuito elétrico, e um circuito
+distingue com segurança apenas dois estados — tensão presente ou tensão
+ausente. Toda informação que um computador guarda, transmite ou executa é, por
+isso, uma sequência desses dois estados, anotados no papel como 0 e 1. Cada
+posição de uma sequência dessas é um bit, a menor unidade de informação que
+existe; a escrita que usa apenas os símbolos 0 e 1 chama-se notação binária.
+Em notação binária, as três instruções da abertura têm esta forma — a forma
+que existe de fato dentro da máquina:
+
+```
+10001001 11001000
+00000001 11010000
+11000011
+```
+
+Ler, escrever e conferir zeros e uns em quantidade é impraticável para uma
+pessoa, e por isso quase nenhum material técnico os mostra assim. A abertura
+usou a notação hexadecimal: um sistema de escrita de números com dezesseis
+símbolos — os algarismos de 0 a 9 seguidos das letras de a a f — no lugar dos
+dez algarismos da notação decimal, a da vida cotidiana. O dezesseis não foi
+sorteado: como 16 = 2 × 2 × 2 × 2, cada símbolo hexadecimal corresponde
+exatamente a quatro bits, e um par de símbolos descreve um grupo de oito bits
+— um byte, a unidade em que quase tudo em computação é contado, de tamanho de
+arquivo a memória. O `89` da primeira linha da abertura e o `10001001` da
+primeira linha acima são o mesmo número: cento e trinta e sete, em notação
+decimal. Entre as três escritas muda a notação, nunca a quantidade — e a
+quantidade, aqui, nem é o que interessa, porque o processador não a trata como
+número e sim como ordem a cumprir. Notação de número volta ao livro no
+capítulo 3, quando os valores que um programa manipula ganham forma escrita em
+Java.
 
 Duas propriedades do código de máquina explicam por que ninguém constrói
 sistemas escrevendo essas linhas diretamente. A primeira é a escala: somar dois
@@ -205,6 +238,10 @@ máquinas antigas e em material antigo. 1.8 e 8 são a mesma versão.
 | Termo | Definição |
 | --- | --- |
 | código de máquina | instruções numéricas que um processador executa; específicas de cada família de processador |
+| bit | a menor unidade de informação; vale 0 ou 1 |
+| byte | grupo de oito bits; a unidade comum de contagem em computação |
+| notação binária | escrita de números com dois símbolos, 0 e 1 |
+| notação hexadecimal | escrita de números com dezesseis símbolos; cada um corresponde a quatro bits |
 | linguagem de programação | notação de texto com regras exatas, escrita por pessoas e traduzida por programa |
 | código-fonte | o texto escrito em uma linguagem de programação |
 | compilador | programa que lê código-fonte, confere as regras da linguagem e produz a forma executável |
