@@ -1,5 +1,33 @@
 [
   {
+    "n": 0,
+    "id": "00-introducao",
+    "titulo": "Introdução: a linguagem, a plataforma e as versões",
+    "apendice": false,
+    "termos_introduzidos": [
+      "linguagem de programacao",
+      "codigo de maquina",
+      "codigo-fonte",
+      "compilador",
+      "biblioteca padrao",
+      "JDK",
+      "OpenJDK",
+      "distribuicao",
+      "previa",
+      "LTS"
+    ],
+    "termos_adiados": {
+      "bytecode": "01-execucao",
+      "JVM": "01-execucao",
+      "arquivo-fonte compacto": "01-execucao"
+    },
+    "conceitos_de_carga": [
+      "código-fonte",
+      "compilador",
+      "LTS"
+    ]
+  },
+  {
     "n": 1,
     "id": "01-execucao",
     "titulo": "Hello world e como o Java executa",
@@ -11,10 +39,8 @@
       "IO.println",
       "argumento",
       "saida padrao",
-      "compilador",
       "bytecode",
       "JVM",
-      "JDK",
       "classpath",
       "arquivo-fonte compacto",
       "erro de compilacao",

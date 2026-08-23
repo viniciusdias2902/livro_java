@@ -1,6 +1,7 @@
 # Sumário
 
 [Prefácio](prefacio.md)
+[Introdução: a linguagem, a plataforma e as versões](capitulos/00-introducao.md)
 
 - [1. Hello world e como o Java executa](capitulos/01-execucao.md)
 - [2. Variáveis, primitivos e operadores](capitulos/02-valores.md)
