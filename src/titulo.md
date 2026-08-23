@@ -14,8 +14,8 @@ instruções para instalar ou atualizar o JDK com o SDKMAN, e o restante do
 capítulo explica como as versões do Java funcionam.
 
 O formato HTML deste livro é gerado com o mdBook. O livro aceita
-contribuições da comunidade em seu repositório no GitHub, acessível pelo
-ícone no topo da página.
+contribuições da comunidade em seu [repositório no
+GitHub](https://github.com), acessível também pelo ícone no topo da página.
 
 ## Sobre esta edição
 
