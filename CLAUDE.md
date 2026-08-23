@@ -54,8 +54,11 @@ e a documentação oficial, nunca o tutorial de internet.
   linhas e o nome do conceito. Nada de aprofundamento é cobrado em teste.
 - **Armadilha** (`<div class="armadilha">`) é comportamento contraintuitivo que produz
   bug silencioso. Cai nos testes.
-- **Domínio contínuo:** um mercadinho de bairro (produtos, preços, estoque, lotes e
-  validades, vendas, caderneta de fiado), do capítulo 7 ao 25. Sem `Foo` e `Bar`.
+- **Fio condutor:** um mercadinho de bairro (produtos, preços, estoque, lotes e
+  validades, vendas, caderneta de fiado) cresce do capítulo 7 ao 25 e culmina no
+  projeto integrador. Todo capítulo de 7 a 24 aplica o material novo ao mercadinho,
+  em seção ou exercícios; fora essa aplicação, cada conceito usa o exemplo que o
+  mostra com mais clareza — o domínio não é camisa de força. Sem `Foo` e `Bar`.
 - **Diagrama** só quando mostra estrutura que a prosa carrega mal: percursos,
   hierarquias, ponteiros. Poucos no livro inteiro, sempre em bloco ` ```mermaid `
   (o tema modus-vivendi já está configurado em `mermaid-init.js`). Diagrama nunca

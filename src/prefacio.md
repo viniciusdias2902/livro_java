@@ -27,26 +27,22 @@ outros três constroem interfaces gráficas com JavaFX.
 
 ## O mercadinho
 
-Do capítulo 7 ao 25, todos os exemplos e exercícios constroem o mesmo sistema:
-um mercadinho de bairro, com produtos e preços, estoque, lotes e validades,
-vendas, a caderneta de fiado e relatórios. Ele cresce peça a peça, cada
-capítulo acrescentando o que acabou de ensinar, e termina, no capítulo 25,
-como um programa completo de terminal; nos apêndices, ganha tela.
+Este livro tem um fio condutor: um mercadinho de bairro, com produtos e
+preços, estoque, lotes e validades, vendas, a caderneta de fiado e
+relatórios. Ele começa no capítulo 7, quando a linguagem passa a ter peças
+para construir um sistema, cresce capítulo a capítulo dali em diante e
+culmina no capítulo 25 como um programa completo de terminal; nos apêndices,
+vai para um banco de dados e ganha tela.
 
-A escolha de um sistema contínuo, no lugar dos exemplos avulsos habituais, é
-uma decisão pedagógica deliberada. Exemplos desconexos não acumulam
-consequência: cada um nasce limpo e morre na mesma página, e o leitor nunca vê
-o que acontece com uma decisão de projeto depois que ela envelhece. Em um
-sistema contínuo acontece o que acontece em software real: uma escolha
-apressada no capítulo 7 cobra seu preço no capítulo 15, e consertá-la exige
-mexer em código que já existia. Aprender a conviver com isso é parte do que o
-livro ensina.
-
-O mercadinho aparece pela primeira vez bem antes do capítulo 7: no capítulo 2,
-o primeiro programa do livro imprime uma única linha com o nome dele. Dos
-capítulos 2 ao 6, enquanto a linguagem ainda não tem peças para construir um
-sistema, os exemplos são pequenos e avulsos de propósito; o nome na tela é só
-o lembrete de para onde eles levam.
+O mercadinho não é o único exemplo do livro, e não tenta ser. Cada conceito é
+ensinado com o exemplo que o mostra com mais clareza, venha ele de onde vier.
+O que o mercadinho garante é a acumulação: em cada capítulo, do 7 ao 24, o
+material novo também é aplicado ao sistema que já existe, e é nessa aplicação
+que aparece o que exemplos avulsos não mostram. Exemplo desconexo nasce limpo
+e morre na mesma página; num sistema que continua, uma escolha apressada no
+capítulo 7 cobra seu preço no capítulo 15, e consertá-la exige mexer em
+código que já existia. Aprender a conviver com isso é parte do que o livro
+ensina.
 
 ## Como ler este livro
 

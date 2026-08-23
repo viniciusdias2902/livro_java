@@ -4,16 +4,16 @@ Um arquivo de três linhas é suficiente para pôr um programa Java de pé:
 
 ```java
 void main() {
-    IO.println("Mercadinho aberto.");
+    IO.println("Olá, mundo.");
 }
 ```
 
-O texto vai salvo em um arquivo chamado `Mercadinho.java`, e um único comando
+O texto vai salvo em um arquivo chamado `Ola.java`, e um único comando
 no terminal o executa:
 
 ```
-$ java Mercadinho.java
-Mercadinho aberto.
+$ java Ola.java
+Olá, mundo.
 ```
 
 Esse é o programa inteiro: uma linha impressa e o fim. A partir dele, este
@@ -27,14 +27,6 @@ diferentes e se consertam de jeitos diferentes. Quem trata as duas como a
 mesma coisa procura o defeito no lugar errado, às vezes por horas. Separar
 esses dois momentos é o trabalho deste capítulo, e é o que torna legíveis as
 mensagens de erro de todos os capítulos seguintes.
-
-O texto impresso, por sua vez, não é um exemplo qualquer. Um mercadinho de
-bairro, com produtos e preços, estoque e validades, vendas e a caderneta de
-fiado, é o sistema que este livro constrói do capítulo 7 ao 25; o prefácio
-descreve esse plano. Ele entra em cena aqui do único jeito que a linguagem
-vista até agora permite: como uma linha de saída. Até o capítulo 6, os
-exemplos seguem pequenos e avulsos, porque as peças para mais do que isso
-ainda não existem; o nome na tela fica como lembrete de para onde eles levam.
 
 ## As três linhas, uma a uma
 
@@ -66,7 +58,7 @@ valor na saída padrão, seguido de uma quebra de linha. Saída padrão é o can
 por onde um programa de terminal escreve seu resultado comum; é o que o
 terminal mostra sem que ninguém peça nada. As aspas duplas marcam onde o texto
 a imprimir começa e onde termina, e não aparecem na saída: o programa imprime
-`Mercadinho aberto.`, não as aspas em volta. O `ln` no fim do nome é a quebra
+`Olá, mundo.`, não as aspas em volta. O `ln` no fim do nome é a quebra
 de linha. Existe também `IO.print`, sem o `ln`, que escreve o mesmo valor e
 deixa a saída parada na mesma linha. A diferença parece miúda até o primeiro
 exercício em que duas mensagens saem grudadas uma na outra.
@@ -100,8 +92,8 @@ ligar à causa verdadeira. A mesma recusa pode ser reproduzida em um JDK novo,
 mandando o compilador seguir as regras de uma versão antiga:
 
 ```
-$ javac --release 24 Mercadinho.java
-Mercadinho.java:1: error: implicitly declared classes are not supported in -source 24
+$ javac --release 24 Ola.java
+Ola.java:1: error: implicitly declared classes are not supported in -source 24
 void main() {
 ^
   (use -source 25 or higher to enable implicitly declared classes)
@@ -128,22 +120,22 @@ mais antigos; até lá, não.
 
 ## Dois programas, dois momentos
 
-O comando da abertura, `java Mercadinho.java`, fazia dois trabalhos de uma
+O comando da abertura, `java Ola.java`, fazia dois trabalhos de uma
 vez, e enquanto os dois dão certo não há como perceber que são dois. Estes
 comandos os separam:
 
 ```
-$ javac Mercadinho.java
+$ javac Ola.java
 $ ls
-Mercadinho.class  Mercadinho.java
-$ java Mercadinho
-Mercadinho aberto.
+Ola.class  Ola.java
+$ java Ola
+Olá, mundo.
 ```
 
 `javac` é o compilador de Java: o compilador do capítulo 1, agora com nome e
-comando próprios. Ele lê o texto de `Mercadinho.java`, confere se aquilo é
+comando próprios. Ele lê o texto de `Ola.java`, confere se aquilo é
 Java válido e grava o resultado da tradução em um arquivo novo, o
-`Mercadinho.class`. O conteúdo desse arquivo não é texto Java nem código de
+`Ola.class`. O conteúdo desse arquivo não é texto Java nem código de
 máquina de processador algum. É bytecode: até aqui uma ideia descrita no
 papel, daqui em diante um arquivo concreto no disco, que pode ser copiado,
 movido e apagado como qualquer outro. A extensão `.class` vem do nome de uma
@@ -155,7 +147,7 @@ o programa. As duas ferramentas, `javac` para traduzir e `java` para executar,
 vêm juntas no JDK, ao lado da biblioteca padrão onde mora `IO.println`.
 
 A tradução em duas etapas é o mecanismo por trás da portabilidade prometida no
-capítulo 1. O `Mercadinho.class` gerado aqui roda sem alteração em qualquer
+capítulo 1. O `Ola.class` gerado aqui roda sem alteração em qualquer
 máquina que tenha uma JVM da mesma versão ou mais nova, seja ela x86 ou ARM,
 Windows, Linux ou macOS. O que se instala em cada máquina é a JVM certa para
 ela; o bytecode entregue é o mesmo em todas. Um compilador que traduzisse
@@ -165,7 +157,7 @@ pela portabilidade.
 
 O nome que aparece no comando `java` também sai desse desenho. Para um
 arquivo-fonte compacto, o compilador dá ao bytecode gerado o mesmo nome do
-arquivo: `Mercadinho.java` vira `Mercadinho.class`, e é `Mercadinho`, sem
+arquivo: `Ola.java` vira `Ola.class`, e é `Ola`, sem
 extensão nenhuma, que se escreve depois de `java`. Renomear o arquivo antes de
 compilar muda as duas coisas juntas.
 
@@ -173,12 +165,12 @@ Os dois caminhos, lado a lado:
 
 ```mermaid
 flowchart LR
-    F["Mercadinho.java<br>código-fonte"]
-    C["Mercadinho.class<br>bytecode em disco"]
+    F["Ola.java<br>código-fonte"]
+    C["Ola.class<br>bytecode em disco"]
     E["execução na JVM"]
-    F -->|"javac Mercadinho.java"| C
-    C -->|"java Mercadinho"| E
-    F -->|"java Mercadinho.java<br>compila na memória, nada vai ao disco"| E
+    F -->|"javac Ola.java"| C
+    C -->|"java Ola"| E
+    F -->|"java Ola.java<br>compila na memória, nada vai ao disco"| E
 ```
 
 ## O erro que não deixa nada para trás
@@ -186,19 +178,19 @@ flowchart LR
 O compilador recusa o que não entende, e recusar quer dizer não gravar nada:
 
 ```
-$ javac Mercadinho.java
-Mercadinho.java:2: error: cannot find symbol
-    IO.printn("Mercadinho aberto.");
+$ javac Ola.java
+Ola.java:2: error: cannot find symbol
+    IO.printn("Olá, mundo.");
       ^
   symbol:   method printn(String)
   location: class IO
 1 error
 $ ls
-Mercadinho.java
+Ola.java
 ```
 
 Esse é um erro de compilação: o compilador aponta arquivo, linha, coluna e o
-que não reconheceu, e o diretório continua sem nenhum `Mercadinho.class`. A
+que não reconheceu, e o diretório continua sem nenhum `Ola.class`. A
 consequência vale ser dita por inteiro: um erro de compilação nunca alcança
 quem usa o programa, porque não há programa a entregar. Tudo o que o
 compilador consegue pegar, ele pega antes de existir qualquer coisa
@@ -217,9 +209,9 @@ Nem toda recusa aponta a falta no lugar em que ela está. Retirar o ponto e
 vírgula do fim da linha produz esta mensagem:
 
 ```
-$ javac Mercadinho.java
-Mercadinho.java:2: error: ';' expected
-    IO.println("Mercadinho aberto.")
+$ javac Ola.java
+Ola.java:2: error: ';' expected
+    IO.println("Olá, mundo.")
                                   ^
 1 error
 ```
@@ -246,13 +238,13 @@ comando é repetido sem nenhuma outra mudança:
 
 ```
 $ ls
-Mercadinho.class  Mercadinho.java
+Ola.class  Ola.java
 $ mkdir saida
-$ mv Mercadinho.class saida/
-$ java Mercadinho
+$ mv Ola.class saida/
+$ java Ola
 ```
 
-`Mercadinho.java` continua ali, intacto, e o programa nele está correto. O que
+`Ola.java` continua ali, intacto, e o programa nele está correto. O que
 aparece no terminal?
 
 </div>
@@ -260,12 +252,12 @@ aparece no terminal?
 O terminal responde isto:
 
 ```
-Error: Could not find or load main class Mercadinho
-Caused by: java.lang.ClassNotFoundException: Mercadinho
+Error: Could not find or load main class Ola
+Caused by: java.lang.ClassNotFoundException: Ola
 ```
 
-O fonte estar no diretório não ajuda em nada, porque `java Mercadinho` não lê
-fonte nenhum: ele executa bytecode já pronto. E `Mercadinho`, nesse comando,
+O fonte estar no diretório não ajuda em nada, porque `java Ola` não lê
+fonte nenhum: ele executa bytecode já pronto. E `Ola`, nesse comando,
 não nomeia um arquivo; nomeia o que a JVM tem de encontrar. Onde ela procura é
 o classpath: a lista de lugares em que a JVM busca bytecode. Quando ninguém
 diz nada, essa lista tem um item só, o diretório atual. O arquivo saiu do
@@ -274,8 +266,8 @@ diretório atual, então saiu da lista, e a JVM não tem por onde continuar.
 Dizer onde procurar resolve:
 
 ```
-$ java -cp saida Mercadinho
-Mercadinho aberto.
+$ java -cp saida Ola
+Olá, mundo.
 ```
 
 `-cp`, que também se escreve `-classpath`, substitui a lista inteira pelo que
@@ -293,17 +285,17 @@ torna compreensível o que a ferramenta fará depois.
 Dois comandos, o mesmo diretório, saídas diferentes:
 
 ```
-$ javac Mercadinho.java
-$ # edite o arquivo e troque o texto por "Mercadinho fechado para inventário."
-$ java Mercadinho
-Mercadinho aberto.
-$ java Mercadinho.java
-Mercadinho fechado para inventário.
+$ javac Ola.java
+$ # edite o arquivo e troque o texto por "Tchau, mundo."
+$ java Ola
+Olá, mundo.
+$ java Ola.java
+Tchau, mundo.
 ```
 
-`java Mercadinho.java` compila o fonte na memória e executa o que acabou de
-compilar, sem gravar nada em disco. `java Mercadinho` ignora o fonte e executa
-o `Mercadinho.class` que encontrar no classpath, que é o de antes da edição. O
+`java Ola.java` compila o fonte na memória e executa o que acabou de
+compilar, sem gravar nada em disco. `java Ola` ignora o fonte e executa
+o `Ola.class` que encontrar no classpath, que é o de antes da edição. O
 sintoma é uma correção que não faz efeito: o código muda, o comando roda sem
 erro nenhum, e a saída continua a antiga. Compilar antes de executar, sempre,
 é o que elimina essa classe de engano.
@@ -350,10 +342,10 @@ execuções, sem que nada tenha mudado no programa.
 
 | Comando | O que faz |
 | --- | --- |
-| `java Mercadinho.java` | compila em memória e executa; não grava bytecode |
-| `javac Mercadinho.java` | grava `Mercadinho.class` e não executa nada |
-| `java Mercadinho` | procura o bytecode de nome `Mercadinho` no classpath e executa |
-| `java -cp saida Mercadinho` | mesma coisa, procurando em `saida` em vez do diretório atual |
+| `java Ola.java` | compila em memória e executa; não grava bytecode |
+| `javac Ola.java` | grava `Ola.class` e não executa nada |
+| `java Ola` | procura o bytecode de nome `Ola` no classpath e executa |
+| `java -cp saida Ola` | mesma coisa, procurando em `saida` em vez do diretório atual |
 
 | Termo | Definição |
 | --- | --- |

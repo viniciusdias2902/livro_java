@@ -40,8 +40,9 @@ Ler frase a frase contra o contrato de voz do CLAUDE.md.
   limite declarado.
 - Termo consagrado em inglês fica em inglês, com tradução na primeira
   aparição.
-- Domínio: mercadinho do capítulo 7 em diante, com os ganchos combinados
-  (dinheiro, validade, produto e lote).
+- Fio condutor: do capítulo 7 ao 24, o material novo foi aplicado ao
+  mercadinho, em seção ou exercícios? E, no sentido oposto, nenhum exemplo
+  foi forçado para dentro do domínio quando outro ensinaria melhor?
 - Diagrama só onde há percurso, hierarquia ou ponteiro que a prosa carrega
   mal. Capítulo sem essa necessidade fica sem diagrama nenhum: diagrama é
   complemento didático, não decoração, e o que estiver ali para aparecer sai
