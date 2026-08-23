@@ -20,10 +20,11 @@ nos seguintes. Os apêndices, sobre a construção de interfaces gráficas com
 JavaFX, são os únicos desviáveis: dependem do livro inteiro, mas nada no livro
 depende deles.
 
-## A locadora
+## A biblioteca
 
 Do capítulo 6 ao 24, todos os exemplos e exercícios constroem o mesmo sistema:
-uma locadora de livros, com acervo, empréstimos, prazos, multas e relatórios.
+uma biblioteca, com acervo, leitores, empréstimos, prazos, renovações,
+reservas, multas por atraso e relatórios.
 Ela cresce peça a peça — cada capítulo acrescenta o que acabou de ensinar — e
 termina, no capítulo 24, como um programa completo de terminal; nos apêndices,
 ganha tela.
@@ -37,7 +38,7 @@ apressada no capítulo 7 cobra seu preço no capítulo 15, e consertá-la exige
 mexer em código que já existia. Aprender a conviver com isso é parte do que o
 livro ensina.
 
-A locadora aparece pela primeira vez bem antes do capítulo 6: no capítulo 2, o
+A biblioteca aparece pela primeira vez bem antes do capítulo 6: no capítulo 2, o
 primeiro programa do livro imprime uma única linha com o nome dela. Dos
 capítulos 2 ao 5, enquanto a linguagem ainda não tem peças para construir um
 sistema, os exemplos são pequenos e avulsos de propósito; o nome na tela é só

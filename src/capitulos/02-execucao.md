@@ -4,16 +4,16 @@ Um arquivo de três linhas é suficiente para pôr um programa Java de pé:
 
 ```java
 void main() {
-    IO.println("Locadora aberta.");
+    IO.println("Biblioteca aberta.");
 }
 ```
 
-O texto vai salvo em um arquivo chamado `Locadora.java`, e um único comando no
+O texto vai salvo em um arquivo chamado `Biblioteca.java`, e um único comando no
 terminal o executa:
 
 ```
-$ java Locadora.java
-Locadora aberta.
+$ java Biblioteca.java
+Biblioteca aberta.
 ```
 
 Esse é o programa inteiro: uma linha impressa e o fim. A partir dele, este
@@ -28,8 +28,9 @@ mesma coisa procura o defeito no lugar errado, às vezes por horas. Separar
 esses dois momentos é o trabalho deste capítulo, e é o que torna legíveis as
 mensagens de erro de todos os capítulos seguintes.
 
-O texto impresso, por sua vez, não é um exemplo qualquer. Uma locadora de
-livros é o sistema que este livro constrói, peça a peça, do capítulo 6 ao 24 —
+O texto impresso, por sua vez, não é um exemplo qualquer. Uma biblioteca — com
+acervo, leitores, empréstimos e multas — é o sistema que este livro constrói,
+peça a peça, do capítulo 6 ao 24 —
 o prefácio descreve esse plano —, e ela entra em cena aqui do único jeito que
 a linguagem vista até agora permite: como uma linha de saída. Até o capítulo
 5, os exemplos seguem pequenos e avulsos, porque as peças para mais do que
@@ -66,7 +67,7 @@ momento da chamada — e escreve esse valor na saída padrão, seguido de uma
 quebra de linha. Saída padrão é o canal por onde um programa de terminal
 escreve seu resultado comum; é o que o terminal mostra sem que ninguém peça
 nada. As aspas duplas marcam onde o texto a imprimir começa e onde termina, e
-não aparecem na saída: o programa imprime `Locadora aberta.`, não as aspas em
+não aparecem na saída: o programa imprime `Biblioteca aberta.`, não as aspas em
 volta. O `ln` no fim do nome é a quebra de linha. Existe também `IO.print`,
 sem o `ln`, que escreve o mesmo valor e deixa a saída parada na mesma linha —
 uma diferença que parece miúda até o primeiro exercício em que duas mensagens
@@ -102,8 +103,8 @@ ligar à causa verdadeira. A mesma recusa pode ser reproduzida em um JDK novo,
 mandando o compilador seguir as regras de uma versão antiga:
 
 ```
-$ javac --release 24 Locadora.java
-Locadora.java:1: error: implicitly declared classes are not supported in -source 24
+$ javac --release 24 Biblioteca.java
+Biblioteca.java:1: error: implicitly declared classes are not supported in -source 24
 void main() {
 ^
   (use -source 25 or higher to enable implicitly declared classes)
@@ -130,21 +131,21 @@ JDKs mais antigos; até lá, não.
 
 ## Dois programas, dois momentos
 
-O comando da abertura, `java Locadora.java`, fazia dois trabalhos de uma vez —
+O comando da abertura, `java Biblioteca.java`, fazia dois trabalhos de uma vez —
 e enquanto os dois dão certo, não há como perceber que são dois. Estes
 comandos os separam:
 
 ```
-$ javac Locadora.java
+$ javac Biblioteca.java
 $ ls
-Locadora.class  Locadora.java
-$ java Locadora
-Locadora aberta.
+Biblioteca.class  Biblioteca.java
+$ java Biblioteca
+Biblioteca aberta.
 ```
 
 `javac` é o compilador de Java: o compilador do capítulo 1, agora com nome e
-comando próprios. Ele lê o texto de `Locadora.java`, confere se aquilo é Java
-válido e grava o resultado da tradução em um arquivo novo, o `Locadora.class`.
+comando próprios. Ele lê o texto de `Biblioteca.java`, confere se aquilo é Java
+válido e grava o resultado da tradução em um arquivo novo, o `Biblioteca.class`.
 O conteúdo desse arquivo não é texto Java nem código de máquina de processador
 algum. É bytecode — a forma intermediária que o capítulo 1 descreveu, até
 agora uma ideia, daqui em diante um arquivo concreto no disco, que pode ser
@@ -157,7 +158,7 @@ rodando é o programa. As duas ferramentas — `javac`, que traduz, e `java`, qu
 executa — vêm juntas no JDK, ao lado da biblioteca padrão onde mora
 `IO.println`.
 
-A tradução em duas etapas é o mecanismo por trás da promessa feita no capítulo 1. O `Locadora.class` gerado aqui roda sem alteração em qualquer
+A tradução em duas etapas é o mecanismo por trás da promessa feita no capítulo 1. O `Biblioteca.class` gerado aqui roda sem alteração em qualquer
 máquina que tenha uma JVM da mesma versão ou mais nova — x86 ou ARM, Windows,
 Linux ou macOS. O que se instala em cada máquina é a JVM certa para ela; o
 bytecode entregue é o mesmo em todas. Um compilador que traduzisse direto para
@@ -167,7 +168,7 @@ portabilidade.
 
 O nome que aparece no comando `java` também sai desse desenho. Para um
 arquivo-fonte compacto, o compilador dá ao bytecode gerado o mesmo nome do
-arquivo: `Locadora.java` vira `Locadora.class`, e é `Locadora` — sem extensão
+arquivo: `Biblioteca.java` vira `Biblioteca.class`, e é `Biblioteca` — sem extensão
 nenhuma — que se escreve depois de `java`. Renomear o arquivo antes de
 compilar muda as duas coisas juntas.
 
@@ -176,19 +177,19 @@ compilar muda as duas coisas juntas.
 O compilador recusa o que não entende, e recusar quer dizer não gravar nada:
 
 ```
-$ javac Locadora.java
-Locadora.java:2: error: cannot find symbol
-    IO.printn("Locadora aberta.");
+$ javac Biblioteca.java
+Biblioteca.java:2: error: cannot find symbol
+    IO.printn("Biblioteca aberta.");
       ^
   symbol:   method printn(String)
   location: class IO
 1 error
 $ ls
-Locadora.java
+Biblioteca.java
 ```
 
 Esse é um erro de compilação: o compilador aponta arquivo, linha, coluna e o
-que não reconheceu, e o diretório continua sem nenhum `Locadora.class`. A
+que não reconheceu, e o diretório continua sem nenhum `Biblioteca.class`. A
 consequência vale ser dita por inteiro: um erro de compilação nunca alcança
 quem usa o programa, porque não há programa a entregar. Tudo o que o
 compilador consegue pegar, ele pega antes de existir qualquer coisa executável
@@ -207,9 +208,9 @@ Nem toda recusa aponta a falta no lugar em que ela está. Retirar o ponto e
 vírgula do fim da linha produz esta mensagem:
 
 ```
-$ javac Locadora.java
-Locadora.java:2: error: ';' expected
-    IO.println("Locadora aberta.")
+$ javac Biblioteca.java
+Biblioteca.java:2: error: ';' expected
+    IO.println("Biblioteca aberta.")
                                   ^
 1 error
 ```
@@ -236,13 +237,13 @@ comando é repetido sem nenhuma outra mudança:
 
 ```
 $ ls
-Locadora.class  Locadora.java
+Biblioteca.class  Biblioteca.java
 $ mkdir saida
-$ mv Locadora.class saida/
-$ java Locadora
+$ mv Biblioteca.class saida/
+$ java Biblioteca
 ```
 
-`Locadora.java` continua ali, intacto, e o programa nele está correto. O que
+`Biblioteca.java` continua ali, intacto, e o programa nele está correto. O que
 aparece no terminal?
 
 </div>
@@ -250,12 +251,12 @@ aparece no terminal?
 O terminal responde isto:
 
 ```
-Error: Could not find or load main class Locadora
-Caused by: java.lang.ClassNotFoundException: Locadora
+Error: Could not find or load main class Biblioteca
+Caused by: java.lang.ClassNotFoundException: Biblioteca
 ```
 
-O fonte estar no diretório não ajuda em nada, porque `java Locadora` não lê
-fonte nenhum: ele executa bytecode já pronto. E `Locadora`, nesse comando, não
+O fonte estar no diretório não ajuda em nada, porque `java Biblioteca` não lê
+fonte nenhum: ele executa bytecode já pronto. E `Biblioteca`, nesse comando, não
 nomeia um arquivo — nomeia o que a JVM tem de encontrar. Onde ela procura é o
 classpath: a lista de lugares em que a JVM busca bytecode. Quando ninguém diz
 nada, essa lista tem um item só, o diretório atual. O arquivo saiu do
@@ -264,8 +265,8 @@ diretório atual, então saiu da lista, e a JVM não tem por onde continuar.
 Dizer onde procurar resolve:
 
 ```
-$ java -cp saida Locadora
-Locadora aberta.
+$ java -cp saida Biblioteca
+Biblioteca aberta.
 ```
 
 `-cp`, que também se escreve `-classpath`, substitui a lista inteira pelo que
@@ -283,17 +284,17 @@ vezes é o que torna compreensível o que a ferramenta fará depois.
 Dois comandos, o mesmo diretório, saídas diferentes:
 
 ```
-$ javac Locadora.java
-$ # edite o arquivo e troque o texto por "Locadora fechada para inventário."
-$ java Locadora
-Locadora aberta.
-$ java Locadora.java
-Locadora fechada para inventário.
+$ javac Biblioteca.java
+$ # edite o arquivo e troque o texto por "Biblioteca fechada para inventário."
+$ java Biblioteca
+Biblioteca aberta.
+$ java Biblioteca.java
+Biblioteca fechada para inventário.
 ```
 
-`java Locadora.java` compila o fonte na memória e executa o que acabou de
-compilar, sem gravar nada em disco. `java Locadora` ignora o fonte e executa o
-`Locadora.class` que encontrar no classpath — que é o de antes da edição. O
+`java Biblioteca.java` compila o fonte na memória e executa o que acabou de
+compilar, sem gravar nada em disco. `java Biblioteca` ignora o fonte e executa o
+`Biblioteca.class` que encontrar no classpath — que é o de antes da edição. O
 sintoma é uma correção que não faz efeito: o código muda, o comando roda sem
 erro nenhum, e a saída continua a antiga. Compilar antes de executar, sempre,
 é o que elimina essa classe de engano.
@@ -340,10 +341,10 @@ execuções, sem que nada tenha mudado no programa.
 
 | Comando | O que faz |
 | --- | --- |
-| `java Locadora.java` | compila em memória e executa; não grava bytecode |
-| `javac Locadora.java` | grava `Locadora.class` e não executa nada |
-| `java Locadora` | procura o bytecode de nome `Locadora` no classpath e executa |
-| `java -cp saida Locadora` | mesma coisa, procurando em `saida` em vez do diretório atual |
+| `java Biblioteca.java` | compila em memória e executa; não grava bytecode |
+| `javac Biblioteca.java` | grava `Biblioteca.class` e não executa nada |
+| `java Biblioteca` | procura o bytecode de nome `Biblioteca` no classpath e executa |
+| `java -cp saida Biblioteca` | mesma coisa, procurando em `saida` em vez do diretório atual |
 
 | Termo | Definição |
 | --- | --- |
