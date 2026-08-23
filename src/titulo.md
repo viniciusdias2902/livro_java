@@ -15,7 +15,7 @@ capítulo explica como as versões do Java funcionam.
 
 O formato HTML deste livro é gerado com o mdBook. O livro aceita
 contribuições da comunidade em seu [repositório no
-GitHub](https://github.com/viniciusdias2902/java_book), acessível também pelo ícone no topo da página.
+GitHub](https://github.com/viniciusdias2902/livro_java), acessível também pelo ícone no topo da página.
 
 ## Sobre esta edição
 
