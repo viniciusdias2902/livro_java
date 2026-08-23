@@ -4,7 +4,7 @@ O mercadinho vende café em pacote fechado e queijo fatiado na hora: um tem
 preço por unidade, o outro por quilo. Com o capítulo 7, a saída natural
 seria uma segunda classe, `ProdutoPorPeso`, copiando de `Produto` o nome, as
 validações e tudo o mais, e mudando só o cálculo do preço. A cópia funciona
-no primeiro dia e apodrece no segundo: cada correção em uma classe precisa
+no primeiro dia e começa a cobrar no segundo: cada correção em uma classe precisa
 ser lembrada na outra, e a que for esquecida diverge em silêncio. A
 linguagem tem um mecanismo para "é igual àquela, exceto em": a herança.
 
@@ -48,6 +48,10 @@ class ProdutoPorPeso extends Produto {
 }
 ```
 
+O estoque do capítulo 7 sai de cena nestes trechos, para cada exemplo
+mostrar só o que muda; na classe do projeto ele continua onde estava, com
+as validações.
+
 ## extends, superclasse e subclasse
 
 Herança é o mecanismo em que uma classe estende outra, recebendo os campos e
@@ -67,7 +71,7 @@ validações do capítulo 7 continuam protegendo o nascimento, e um
 dentro do objeto da subclasse, mas continua invisível até para ela; quem o
 acessa são os métodos da própria superclasse, e a subclasse os usa como
 qualquer outro código usa. Terceira: a herança pode ser proibida. O
-modificador `final` do capítulo 7, aplicado a uma classe, veta o `extends`
+modificador `final`, aplicado a uma classe, veta o `extends`
 (`String` é uma classe `final`, e é em parte por isso que a imutabilidade
 dela é uma garantia, não um costume); aplicado a um método, veta a
 sobrescrita daquele método, deixando o resto da classe aberto. Uma classe
@@ -115,9 +119,12 @@ cinquenta reais: o programa cobrou 250 unidades de R$ 39,80.
 </div>
 
 O método novo recebe `long`; o herdado recebe `int`. Assinaturas diferentes
-não sobrescrevem: convivem, como a sobrecarga do capítulo 4, e a chamada com
-`250`, um `int`, casa com a versão herdada, que multiplica por unidade.
-Nenhum erro em momento algum, e a diferença só aparece na conta do cliente.
+não sobrescrevem: convivem, como sobrecarga. Pela variável `queijo`, de tipo
+`Produto`, a versão de `long` nem é visível, e a chamada vai direto à
+herdada, que multiplica por unidade; mesmo por uma variável do subtipo, o
+argumento `250`, um `int`, prefere a versão herdada de `int`, pela regra do
+tipo mais estreito do capítulo 4. Nenhum caminho comum chega ao método
+novo, nenhum erro aparece, e a diferença só existe na conta do cliente.
 Com `@Override` escrito sobre o método, o compilador teria recusado na hora,
 avisando que `precoPara(long)` não sobrescreve nada. Daí a regra, curta:
 toda sobrescrita carrega `@Override`, sempre, porque a anotação transforma
@@ -144,8 +151,8 @@ void main() {
 }
 ```
 
-As duas variáveis do laço têm tipo `Produto`. Qual `etiqueta()` roda para o
-queijo?
+A variável do laço tem tipo `Produto` nas duas voltas. Qual `etiqueta()`
+roda para o queijo?
 
 </div>
 
@@ -172,17 +179,11 @@ editada. Código que ganha comportamento novo sem ser tocado é o que o
 polimorfismo compra, e é a diferença entre acrescentar uma classe e caçar
 todos os `if` do sistema.
 
-```mermaid
-flowchart TB
-    O["Object"] --> P["Produto"]
-    P --> PP["ProdutoPorPeso"]
-```
-
 ## Object, casts e instanceof
 
-Toda classe sem `extends` estende `Object`, a superclasse de todas; a
-hierarquia acima não tem três níveis por acaso, e `Produto` estende `Object`
-sem que ninguém tenha pedido. Duas consequências saem desse desenho. A
+Toda classe sem `extends` estende `Object`, a superclasse de todas:
+`Produto` estende `Object` sem que ninguém tenha pedido, e a cadeia
+completa do queijo é `Object`, depois `Produto`, depois `ProdutoPorPeso`. Duas consequências saem desse desenho. A
 primeira: uma variável do tipo `Object` aceita referência para qualquer
 objeto, o que dá à biblioteca padrão um jeito de escrever código que serve
 para todos os tipos de uma vez; o custo e o conserto desse truque são o
@@ -213,7 +214,7 @@ if (item instanceof ProdutoPorPeso) {
 }
 ```
 
-Vale registrar o cheiro: um código que enfileira `instanceof` para tratar
+Vale registrar o sinal de alerta: um código que enfileira `instanceof` para tratar
 cada subtipo de um jeito está refazendo à mão o que o despacho dinâmico faz
 sozinho, e cada subtipo novo exige lembrar de mais um `if`. Quando o
 comportamento varia por tipo, o lugar dele é um método sobrescrito; o
@@ -245,15 +246,18 @@ class Carrinho {
 preço de produto; pede a cada item que calcule o seu, via `precoPara`, e
 soma. Encaminhar trabalho para um objeto contido chama-se delegação, e o
 polimorfismo continua valendo dentro dela: o item por peso responde com a
-conta por peso. `BigDecimal.ZERO`, de passagem, é uma constante
-`static final` da própria classe, no desenho da seção de `static` do
-capítulo 7.
+conta por peso. Os dois arrays lado a lado reabrem, de propósito, a dívida
+da abertura do capítulo 7: aqui dentro, escondidos pelo encapsulamento e
+mantidos por uma classe só, eles têm um dono; ainda assim são dívida, e o
+capítulo 11 dá ao par produto-quantidade a forma definitiva. `BigDecimal.ZERO`, de passagem, é uma constante
+`static final` da própria classe, irmã das constantes da seção de
+`static`.
 
 A escolha entre herança e composição tem uma regra que envelheceu bem:
 herança só quando cada subclasse é um caso genuíno da superclasse, no
-domínio, e o resto é composição. Herança acopla forte: tudo que a
-superclasse muda, as subclasses sentem. Composição acopla no essencial: o
-`Carrinho` só conhece as promessas públicas de `Produto`. Na dúvida entre as
+domínio, e o resto é composição. Herança amarra forte: tudo que a
+superclasse muda, as subclasses sentem. Composição depende só do essencial:
+o `Carrinho` conhece apenas as promessas públicas de `Produto`. Na dúvida entre as
 duas, composição, e o arrependimento é menor.
 
 <div class="aprofundamento">

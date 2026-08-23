@@ -42,16 +42,17 @@ métodos de uma interface são `public` por definição, e uma classe adere à
 promessa com `implements`, ficando obrigada pelo compilador a dar corpo a
 cada método declarado; esquecer um é erro de compilação, não descuido
 possível. Ao contrário do `extends`, que aceita uma superclasse só, uma
-classe pode implementar quantas interfaces fizerem sentido, porque promessas
-não conflitam como implementações conflitariam. Cada interface é um papel, e
+classe pode implementar quantas interfaces fizerem sentido: duas promessas
+de mesma assinatura pedem a mesma coisa, e a ressalva dos métodos com corpo
+aparece na seção do default. Cada interface é um papel, e
 um mesmo tipo pode exercer vários: o `ProdutoPorPeso` do capítulo 8 pode
 implementar um contrato `Pesavel` sem deixar de ser um `Produto`, e cada
 trecho do sistema o enxerga pelo papel que lhe interessa.
 
 Uma interface também é um tipo, com tudo que isso implica desde o capítulo
 3: existe variável do tipo `MeioDePagamento`, parâmetro, retorno e array
-desse tipo, e guardar um `Dinheiro` numa variável assim é o upcast do
-capítulo 8, sempre seguro. A única coisa que não existe é
+desse tipo, e guardar um `Dinheiro` numa variável assim é um upcast,
+sempre seguro. A única coisa que não existe é
 `new MeioDePagamento()`, porque não há implementação para instanciar; toda
 referência de tipo interface aponta para um objeto de alguma classe
 concreta.
@@ -68,8 +69,8 @@ interface promete, e nada do que souber por fora; quem implementa deve
 honrar a promessa por inteiro, inclusive as partes que o compilador não
 confere. O compilador garante a assinatura, mas uma implementação que
 devolvesse `null` como valor final estaria tecnicamente compilando e
-concretamente quebrando o contrato, e derrubaria o caixa com o
-`NullPointerException` do capítulo 5 longe da causa. Contrato bem escrito
+concretamente quebrando o contrato, e derrubaria o caixa com um
+`NullPointerException` longe da causa. Contrato bem escrito
 diz também essas cláusulas de comportamento, nem que seja em comentário
 sobre a interface, e o capítulo 15 mostra como transformá-las em verificação
 executável.
@@ -86,17 +87,16 @@ class Caixa {
 }
 ```
 
-O parâmetro é do tipo da interface, e o polimorfismo do capítulo 8 vale
-igual para ela: a chamada `meio.valorFinal(compra)` é despachada para a
+O parâmetro é do tipo da interface, e o polimorfismo vale igual para ela: a chamada `meio.valorFinal(compra)` é despachada para a
 classe do objeto real. O `Caixa` compila sem conhecer `Dinheiro` nem
 `Cartao`, e é essa ignorância deliberada que tem nome: acoplamento é o grau
 em que um trecho de código depende dos detalhes de outro, e programar contra
 a interface deixa o acoplamento no mínimo necessário. Quando o mercadinho
 adotar Pix, a classe nova implementa `MeioDePagamento` e o `Caixa` a atende
-sem uma linha editada, no mesmo espírito do carrinho do capítulo 8.
+sem uma linha editada, no mesmo espírito do carrinho de compras.
 
-O caminho oposto é o que o capítulo 8 chamou de cheiro, e vale ver o custo
-dele por extenso:
+O caminho oposto é o sinal de alerta registrado no capítulo 8, e vale ver
+o custo dele por extenso:
 
 <div class="armadilha">
 
@@ -123,7 +123,19 @@ nenhum momento: o prejuízo de 5% em cada venda no Pix aparece no fechamento
 do mês, longe da causa. A cascata de tipos exige que cada tipo novo lembre
 de se apresentar em cada cascata do sistema; o contrato inverte a
 obrigação, porque quem chega já traz o próprio comportamento. É a mesma
-lição do polimorfismo, agora sem exigir parentesco de classe nenhum.
+lição do polimorfismo, agora sem exigir parentesco de classe nenhum. O
+fiado, terceiro meio da abertura, é o cumpridor mais simples do contrato,
+devolvendo a própria compra, e o registro na caderneta, com o limite dele,
+é assunto que o capítulo 13 retoma:
+
+```java
+class Fiado implements MeioDePagamento {
+    @Override
+    public BigDecimal valorFinal(BigDecimal compra) {
+        return compra;
+    }
+}
+```
 
 ## Método default
 
@@ -177,8 +189,10 @@ Pagamento
 
 Quem sobrescreveu responde com a própria versão; quem não sobrescreveu
 responde com o corpo `default`, e continua compilando como antes da
-mudança. O método default existe para isso, evolução de contrato publicado,
-e não para virar depósito de lógica: interface que acumula corpos está
+mudança. Com corpo na interface, o conflito volta a ser possível: uma classe que
+implemente duas interfaces com o mesmo método default é obrigada pelo
+compilador a sobrescrever e decidir. O método default existe para evolução
+de contrato publicado, e não para virar depósito de lógica: interface que acumula corpos está
 fazendo o trabalho da construção da próxima seção.
 
 ## Classe abstrata
@@ -249,7 +263,9 @@ noventa.
 
 1. Implemente `MeioDePagamento` com `Dinheiro`, `Cartao` e `Pix`, o `Caixa`
    programado contra a interface e uma volta de impressões que feche a mesma
-   compra pelos três meios, exibindo nome do recibo e valor final.
+   compra pelos três meios, exibindo nome do recibo e valor final. A impressão sai com casas de sobra,
+   porque `multiply` soma as casas dos dois lados; registre o fato e siga,
+   que o conserto, `setScale`, aparece no capítulo 11.
 
 2. Reproduza a armadilha da cascata: escreva a versão com `instanceof`,
    acrescente o `Pix` sem tocar nela e documente o valor errado. Depois

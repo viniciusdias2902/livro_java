@@ -44,12 +44,12 @@ public class CodigoDeBarras {
 }
 ```
 
-Quarenta linhas, todas corretas, todas já justificadas por este livro, e
+Trinta e seis linhas, todas corretas, todas já justificadas por este livro, e
 todas dizendo uma única ideia: um código de barras é treze dígitos, e dois
 códigos com os mesmos dígitos são o mesmo código. O mercadinho vai precisar
 do mesmo ritual para item de venda, para valor em dinheiro, para endereço de
-entrega, e cada repetição manual é uma chance nova de errar exatamente como
-o capítulo 10 mostrou: um parâmetro `Produto` onde devia ser `Object`, um
+entrega, e cada repetição manual é uma chance nova de errar como a
+armadilha da sobrecarga mostrou: um parâmetro `Produto` onde devia ser `Object`, um
 campo esquecido no `hashCode`, um `toString` desatualizado depois que um
 campo entrou. Ritual previsível que se repete e dá margem a erro é trabalho
 de compilador, e a linguagem o absorveu. O
@@ -68,9 +68,10 @@ parênteses, os componentes do record, e o compilador gera o resto do ritual:
 um campo `private final` por componente; o construtor canônico, que recebe
 todos os componentes na ordem declarada; um método de acesso por componente,
 com o mesmo nome dele, `digitos()`; e `equals`, `hashCode` e `toString`
-sobre todos os componentes, cumprindo o contrato inteiro do capítulo 10. Um
+sobre todos os componentes, este último no formato `Nome[componente=valor]`,
+cumprindo o contrato de equals por inteiro. Um
 record é imutável por construção: não existe forma de alterar um componente
-depois do `new`, e a imutabilidade do capítulo 5 deixa de ser disciplina
+depois do `new`, e a imutabilidade deixa de ser disciplina
 para ser garantia.
 
 O ganho de leitura vale tanto quanto o de digitação. A declaração de um
@@ -104,7 +105,7 @@ CodigoDeBarras[digitos=7891000100103]
 ```
 
 Igualdade por conteúdo e impressão legível, de fábrica, porque o compilador
-gerou as sobrescritas que o capítulo 10 ensinou a escrever. Saber escrevê-las
+gerou as sobrescritas que antes se escreviam à mão. Saber escrevê-las
 à mão continua sendo o que separa usar o record de entendê-lo: o record
 não muda as regras do contrato, muda quem digita.
 
@@ -145,18 +146,18 @@ public ItemDeVenda(Produto produto) {
 ```
 
 A delegação obrigatória garante que a validação do compacto rode sempre,
-venha o objeto do caminho que vier; não existe atalho que nasça sem passar
-pela alfândega.
+venha o objeto do caminho que vier; não existe caminho de criação que
+contorne a validação do canônico.
 
 ## Semântica de valor
 
 O nome do que o record materializa é semântica de valor: um tipo tem
 semântica de valor quando seus exemplares valem pelo conteúdo, e dois
 exemplares de mesmo conteúdo são intercambiáveis em qualquer uso. É o regime
-dos primitivos do capítulo 3, o `7` de uma conta é o `7` de outra, e o
-oposto do regime de identidade do capítulo 5, em que cada objeto é ele
-mesmo. O capítulo 10 construiu semântica de valor à mão, sobrescrevendo o
-contrato; o record a declara de nascença.
+dos primitivos, o `7` de uma conta é o `7` de outra, e o oposto do regime
+de identidade, em que cada objeto é ele mesmo. O ritual da abertura constrói
+semântica de valor à mão, sobrescrevendo o contrato; o record a declara de
+nascença.
 
 A régua para o mercadinho separa os tipos em duas famílias. Têm semântica de
 valor os que descrevem: código de barras, um item de venda com produto e
@@ -169,7 +170,9 @@ sentido trocar um pelo outro de mesmo conteúdo?", e a resposta sim aponta o
 record. No código profissional, os records se concentraram exatamente
 nesses papéis: retratos de dados que atravessam fronteiras, a linha de um
 relatório, o resultado de uma consulta, a resposta que um sistema envia a
-outro, todos dados que nascem prontos, viajam e não mudam no caminho.
+outro, todos dados que nascem prontos, viajam e não mudam no caminho. O capítulo
+12 apresenta a forma de abrir um record em padrões, componente a
+componente.
 
 Records participam do resto da linguagem sem regalias: aceitam métodos
 próprios, membros `static` e `implements` de interface; o que não aceitam é
@@ -212,7 +215,7 @@ false
 PesagensDoDia[gramas=[I@76ed5528]
 ```
 
-O mesmo conteúdo deu `false`, e a impressão saiu em hieróglifo.
+O mesmo conteúdo deu `false`, e a impressão saiu ilegível.
 
 </div>
 
@@ -226,6 +229,17 @@ uma vez: componente de record deve ser imutável e ter igualdade por
 conteúdo, como `String`, `BigDecimal`, primitivos e outros records. Sequência
 de valores dentro de record espera o tipo certo de recipiente, que o
 capítulo 17 apresenta.
+
+Duas notas fecham a regra do componente. `ItemDeVenda` carrega um `Produto`,
+entidade mutável, sem violar o que importa: a igualdade de `Produto` se
+apoia no código de barras `final`, e o `equals` e o hash do item não se
+movem quando o estoque muda. Componente pode ser entidade cuja igualdade é
+estável; o que não pode é igualdade instável ou por identidade. E componente
+`BigDecimal` herda a igualdade estrita de escala do capítulo 10: dois
+records com 95.0 e 95.00 no mesmo componente não se igualam. Dinheiro que
+participa da igualdade de um record pede escala fixada na entrada, no
+construtor compacto, com `setScale(2)`, o método de `BigDecimal` que fixa a
+quantidade de casas.
 
 <div class="aprofundamento">
 

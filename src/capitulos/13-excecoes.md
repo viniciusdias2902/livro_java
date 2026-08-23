@@ -15,9 +15,9 @@ void main() {
 $ java Caixa.java
 Quantidade: duas
 Exception in thread "main" java.lang.NumberFormatException: For input string: "duas"
-	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
-	at java.base/java.lang.Integer.parseInt(Integer.java:588)
-	at java.base/java.lang.Integer.parseInt(Integer.java:685)
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:64)
+	at java.base/java.lang.Integer.parseInt(Integer.java:565)
+	at java.base/java.lang.Integer.parseInt(Integer.java:662)
 	at Caixa.main(Caixa.java:3)
 ```
 
@@ -34,13 +34,13 @@ Tudo que este livro chamou de erro de execução tem um nome próprio na
 linguagem: exceção. Uma exceção é um objeto, dos comuns, criado no instante
 do problema: carrega uma mensagem, o tipo que classifica o problema
 (`NumberFormatException`, `NullPointerException` e as demais conhecidas) e
-um retrato da pilha de chamadas do momento. O `throw` do capítulo 7 é quem
-arremessa esse objeto, e a biblioteca faz o mesmo por dentro: o
+um retrato da pilha de chamadas do momento. O `throw` é quem
+lança esse objeto, e a biblioteca faz o mesmo por dentro: o
 `parseInt` da abertura executa um `throw new NumberFormatException(...)`
 quando o texto não é número.
 
 Lançada, a exceção interrompe o fluxo normal no ato: a linha seguinte não
-roda. Ela então sobe pela pilha de chamadas do capítulo 4, encerrando cada
+roda. Ela então sobe pela pilha de chamadas, encerrando cada
 método no caminho, à procura de alguém disposto a tratá-la; essa subida
 chama-se propagação. Quando ninguém trata e a propagação passa do `main`, a
 JVM encerra o programa e imprime o que a abertura mostrou. Toda queda que o
@@ -51,7 +51,8 @@ A transcrição da queda tem nome, stack trace: o retrato da pilha, impresso
 de cima para baixo do ponto do problema até o `main`. Lê-se assim: a
 primeira linha dá o tipo e a mensagem; cada linha `at` é um método que
 estava em andamento, com arquivo e linha; as de `java.base` são o interior
-da biblioteca, e a primeira linha com um arquivo nosso, `Caixa.java:3`,
+da biblioteca, com números de linha que variam de uma versão de JDK para
+outra, e a primeira linha com um arquivo nosso, `Caixa.java:3`,
 aponta onde o nosso código entrou na história. Em stack traces longos, achar
 a linha do próprio programa é o primeiro gesto da leitura.
 
@@ -88,10 +89,12 @@ certo, o `catch` é ignorado; lançada uma exceção do tipo declarado dentro do
 `try`, a execução salta o resto do bloco e entra no `catch`, e o programa
 segue vivo depois dele. O laço em volta transforma o tratamento em política:
 pergunta de novo até vir número. Um `try` aceita vários `catch`, um por
-tipo, avaliados na ordem, e o polimorfismo do capítulo 8 vale aqui:
-`catch (Exception erro)` apanha qualquer exceção, porque todas descendem de
-`Exception`, e a armadilha adiante mostra por que essa rede larga costuma
-ser a decisão errada.
+tipo, avaliados na ordem, e o polimorfismo vale aqui: `catch (Exception erro)`
+apanha qualquer exceção do livro, porque todas descendem de `Exception`.
+Existe uma família irmã, `Error`, das falhas da própria JVM, como o
+`StackOverflowError` do capítulo 4; ela fica fora dessa rede, e é melhor
+assim, porque não há tratamento sensato para a pilha estourada. A armadilha
+adiante mostra por que mesmo a rede das exceções costuma ser larga demais.
 
 <div class="previsao">
 
@@ -168,8 +171,8 @@ melhor do que errar em silêncio: a queda tem endereço, o silêncio não.
 
 ## Checked, unchecked e throws
 
-Nem toda exceção é igual perante o compilador, e a divisão é o conceito mais
-cobrado deste capítulo. As exceções unchecked são `RuntimeException` e tudo
+Nem toda exceção é igual perante o compilador, e é a divisão que decide o
+que ele exige de quem chama. As exceções unchecked são `RuntimeException` e tudo
 que descende dela, a família inteira das conhecidas deste livro:
 `NullPointerException`, `ArrayIndexOutOfBoundsException`,
 `NumberFormatException`, `IllegalArgumentException`, `ArithmeticException`,
@@ -195,16 +198,14 @@ public void vender(ItemDeVenda item) throws LimiteDeFiadoException {
 ```
 
 Criar exceção própria é estender `Exception`, para checked, ou
-`RuntimeException`, para unchecked, repassando a mensagem com o `super` do
-capítulo 8. A caderneta de fiado acima escolheu checked de propósito:
+`RuntimeException`, para unchecked, repassando a mensagem com o `super`. A caderneta de fiado acima escolheu checked de propósito:
 estourar o limite não é bug, é uma resposta possível do domínio, e quem
 chama `vender` é obrigado pelo compilador a decidir na hora o que o
 mercadinho faz, recusa a venda, oferece outro pagamento, chama o dono. O
 `throws` na assinatura é o aviso público dessa obrigação, parte do contrato
 do método no sentido do capítulo 9.
 
-A régua deste livro, dita com a honestidade de que o assunto divide opiniões
-há décadas: unchecked para violação de regra que o chamador tinha como
+A régua deste livro, num assunto que divide opiniões há décadas: unchecked para violação de regra que o chamador tinha como
 respeitar (argumento inválido, estado impossível), checked para condição
 esperável do domínio que o chamador precisa decidir, e com parcimônia,
 porque cada `throws` se espalha pelas assinaturas acima. Grande parte do

@@ -22,7 +22,7 @@ procura, porque cada remessa cria um objeto novo. O capítulo 5 avisou que
 `equals` compara conteúdo, e a frase era verdadeira para `String`; para as
 classes nossas, ainda não, e este capítulo explica o porquê e o conserto.
 
-O `equals` que rodou ali é o herdado de `Object`, do capítulo 8, e a versão
+O `equals` que rodou ali é o herdado de `Object`, e a versão
 de `Object` compara identidade, como o `==`: só responde `true` para o
 mesmíssimo objeto. `String` responde por conteúdo porque a classe `String`
 sobrescreve `equals`; `Produto` ainda não sobrescreveu, e igualdade por
@@ -32,9 +32,10 @@ conhecer as cláusulas.
 ## O contrato de equals
 
 A documentação de `Object` define o que toda sobrescrita de `equals` deve
-cumprir, e o conjunto se chama contrato de equals, no sentido exato do
-capítulo 9: promessas que quem chama pode assumir e quem implementa deve
-honrar. São cinco cláusulas, três delas com nome de propriedade matemática.
+cumprir, e o conjunto se chama contrato de equals, contrato no sentido
+exato do capítulo 9: promessas que quem chama pode assumir e quem
+implementa deve honrar. São cinco cláusulas, três delas com nome de
+propriedade matemática.
 
 Reflexividade: todo objeto é igual a si mesmo, `x.equals(x)` responde
 `true`. Simetria: a resposta não depende da ordem, `x.equals(y)` e
@@ -85,8 +86,7 @@ public class Produto {
 
 A primeira conferência resolve o caso comum, mesmo objeto, sem trabalho. O
 `instanceof` cobre o `null` e qualquer tipo estranho de uma vez, porque
-`null instanceof Produto` responde `false` sem erro. O downcast do capítulo
-8 vem protegido pela pergunta anterior, e a última linha delega a comparação
+`null instanceof Produto` responde `false` sem erro. O downcast vem protegido pela pergunta anterior, e a última linha delega a comparação
 ao `equals` de `String`, que já cumpre o contrato. Cada linha dessa forma
 tem função, e a assinatura tem uma exigência que a armadilha abaixo torna
 inesquecível: o parâmetro é `Object`, não `Produto`.
@@ -120,10 +120,10 @@ variável `Object`, respondeu `false`.
 </div>
 
 `equals(Produto)` não sobrescreve
-`equals(Object)`: assinatura diferente é sobrecarga, a mesma acidente do
+`equals(Object)`: assinatura diferente é sobrecarga, o mesmo acidente do
 capítulo 8, e as duas versões passam a conviver. A chamada através da
 variável `Object` resolve para o `equals(Object)` herdado, o de identidade,
-e responde `false`. O veneno é a intermitência: nos testes diretos, com
+e responde `false`. O defeito é intermitente: nos testes diretos, com
 variáveis `Produto`, tudo funciona; dentro das estruturas do capítulo 17,
 que guardam tudo por referências genéricas, a igualdade some. `@Override`
 pega o engano na hora, porque `equals(Produto)` não sobrescreve nada, e é
@@ -131,9 +131,11 @@ mais uma vez a diferença entre bug silencioso e erro de compilação.
 
 ## hashCode e o código de hash
 
-`equals` anda acorrentado a um segundo método de `Object`. O código de hash
-de um objeto é um `int` derivado do conteúdo dele, devolvido pelo método
-`hashCode`, e a cláusula que amarra os dois é curta: objetos iguais segundo
+`equals` obriga a sobrescrever um segundo método de `Object`. O código de hash
+de um objeto é um `int` que o acompanha, devolvido pelo método `hashCode`:
+as sobrescritas corretas o derivam dos mesmos campos que o `equals`
+compara, e o herdado de `Object` deriva da identidade, não do conteúdo. A
+cláusula que amarra os dois métodos é curta: objetos iguais segundo
 `equals` devem ter o mesmo código de hash. O contrário não é exigido:
 objetos diferentes podem partilhar um hash, o que se chama colisão de hash,
 e colisões são inevitáveis, porque há mais conteúdos possíveis do que
@@ -159,7 +161,7 @@ public int hashCode() {
 
 `String` já sabe calcular o próprio hash, e delegar a ele cumpre a cláusula:
 mesmo código de barras, mesmo hash, sempre. Quando a igualdade olha mais de
-um campo, o utilitário `Objects.hash(campo1, campo2)` combina os hashes de
+um campo, o utilitário `Objects.hash(campo1, campo2)`, do pacote `java.util`, combina os hashes de
 todos numa chamada, e a regra continua a mesma: os campos do `hashCode` são
 exatamente os campos do `equals`. Um hash também pode ser ruim sem estar
 errado: devolver sempre `42` cumpre a cláusula à risca, porque iguais têm o
@@ -170,8 +172,7 @@ dois.
 
 ## toString
 
-O terceiro método de `Object` responde pela cara do objeto em forma de
-texto:
+O terceiro método de `Object` responde pela forma em texto do objeto:
 
 ```java
 IO.println(new Produto("7891000100103", "Café 500g", new BigDecimal("19.90")));
@@ -182,11 +183,14 @@ Produto@6f2b958e
 ```
 
 Sem sobrescrita, `toString` devolve o nome da classe, um arroba e um número
-em hexadecimal, a notação do capítulo 1, derivado do hash. Serve para
-distinguir objetos e para nada mais. Sobrescrever muda a impressão inteira,
+em hexadecimal derivado da identidade; o número muda de objeto para objeto
+e de execução para execução, e a saída acima é a de uma execução, não a de
+todas. No arquivo-fonte compacto ainda sai o nome qualificado pela classe
+implícita do arquivo, como `Caixa$Produto@...`. Serve para distinguir
+objetos e para nada mais. Sobrescrever muda a impressão inteira,
 porque `IO.println` chama `toString` de qualquer objeto que recebe, e essa é
-a resposta da promessa do capítulo 5 sobre o `StringBuilder` impresso
-direto:
+a resposta da promessa sobre o `StringBuilder` impresso direto no capítulo
+5:
 
 ```java
 @Override
@@ -235,8 +239,11 @@ quantidade de casas, e o `equals` dele compara as duas coisas: 2.50 tem duas
 casas, 2.5 tem uma, e a igualdade estrita recusa. É uma decisão documentada
 da classe, não um defeito, e a consequência prática cabe numa regra:
 igualdade de dinheiro se pergunta com `compareTo(...) == 0`, nunca com
-`equals`, e o mesmo vale quando `BigDecimal` for campo comparado dentro de
-um `equals` nosso. O sintoma de esquecer é o de sempre nesta família:
+`equals`. Levar essa regra para dentro de um `equals` nosso exige cuidado
+com a cláusula do hash: um `equals` que iguala 2.5 a 2.50 precisa de um
+`hashCode` que também os iguale, e o caminho seguro é normalizar a escala
+do campo na entrada, fixando as casas com `setScale`, para `equals` e hash
+enxergarem o mesmo valor. O sintoma de esquecer é o de sempre nesta família:
 valores que são o mesmo preço na etiqueta e objetos que se dizem diferentes
 no código.
 
@@ -282,7 +289,7 @@ feitos para chave serem imutáveis por inteiro.
 | simetria | `x.equals(y)` e `y.equals(x)` respondem o mesmo |
 | transitividade | iguais a um mesmo terceiro são iguais entre si |
 | `hashCode` | devolve o código de hash; iguais por `equals` têm o mesmo hash |
-| código de hash | `int` derivado do conteúdo, usado para busca rápida |
+| código de hash | `int` que acompanha o objeto; sobrescrito, deriva dos campos do `equals` |
 | colisão de hash | objetos diferentes com o mesmo hash; permitida e inevitável |
 | `toString` | a forma em texto do objeto; usada por `IO.println`; para depuração |
 
@@ -290,4 +297,4 @@ feitos para chave serem imutáveis por inteiro.
 | --- | --- |
 | parâmetro do `equals` | sempre `Object`, com `@Override` |
 | `equals` e `hashCode` | sobrescreve um, sobrescreve o outro, sobre os mesmos campos |
-| dinheiro | igualdade com `compareTo(...) == 0`, não com `equals` |
+| dinheiro | igualdade com `compareTo(...) == 0`; campo `BigDecimal` em `equals` pede escala normalizada |

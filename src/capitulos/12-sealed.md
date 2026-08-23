@@ -106,7 +106,7 @@ public enum Categoria {
 ```
 
 O construtor de enum roda uma vez por constante, na carga do tipo, e não é
-chamável com `new`: a lista do topo é o único berçário. Campos e métodos
+chamável com `new`: as constantes só nascem na lista do topo. Campos e métodos
 seguem as regras normais dos capítulos 7 em diante.
 
 ## sealed: hierarquia fechada
@@ -128,9 +128,10 @@ public record Recusado(String motivo) implements Resultado { }
 
 Uma interface ou classe `sealed` declara em `permits` a lista completa de
 quem pode implementá-la ou estendê-la; qualquer tipo fora da lista é erro de
-compilação. Cada tipo permitido declara o próprio destino: records e classes
-`final` encerram o ramo, e `non-sealed` o reabre, permitindo herança livre
-dali para baixo, o que é raro e deliberado. O casamento com o capítulo 11 é
+compilação. Cada tipo permitido declara o próprio destino: records e classes `final`
+encerram o ramo; um tipo permitido pode seguir fechado, declarando-se
+`sealed` com a própria lista; e `non-sealed` reabre o ramo para herança
+livre, o que é raro e deliberado. O casamento com o capítulo 11 é
 natural: os ramos de uma hierarquia selada costumam ser records, dados
 imutáveis com o contrato pronto, e o conjunto descreve "um resultado é isto
 ou aquilo, com estes dados em cada caso".
@@ -165,8 +166,8 @@ public String linhaDoRecibo(Resultado resultado) {
 
 Sem `default`, porque `permits` disse ao compilador que a lista acabou; a
 mesma regra da armadilha do enum vale inteira aqui. E quando o ramo é um
-record, o padrão de registro desestrutura os componentes na própria
-cláusula:
+record, o padrão de registro (*record pattern*) desestrutura os componentes
+na própria cláusula:
 
 ```java
 return switch (resultado) {
@@ -194,7 +195,9 @@ Nenhum switch do sistema foi tocado. O que acontece na recompilação?
 </div>
 
 Cada switch sobre `Resultado` sem o caso novo vira um erro de compilação,
-com a mensagem dizendo que `Estornado` não está coberto. É a mesma mecânica
+com a mensagem `the switch expression does not cover all possible input
+values`; quem aponta os lugares a atualizar é a lista dos próprios erros,
+cada um com arquivo e linha. É a mesma mecânica
 da armadilha do enum, agora a favor: o compilador entrega a lista completa
 dos pontos do sistema que precisam aprender o que fazer com um estorno, e
 nada compila até todos decidirem. A dupla sealed e switch exaustivo

@@ -52,15 +52,16 @@ aqui, pela primeira vez, o tipo é nosso. Cada `new Produto()` cria uma
 instância: um objeto independente desse tipo, com os próprios valores nos
 campos. Duas instâncias de `Produto` são dois objetos no heap, cada um com
 seu `nome` e seu `estoque`, e a variável `cafe` guarda a referência de um
-deles, exatamente como no capítulo 5. Nome, estoque e o que mais o produto
+deles. Nome, estoque e o que mais o produto
 tiver agora viajam juntos, e o desalinhamento dos arrays paralelos deixa de
 ser possível: não há mais duas listas para dessincronizar.
 
 ## Construtor e this
 
-Criar o objeto vazio e preencher campo a campo, como acima, deixa uma janela
-aberta: entre o `new` e a última atribuição existe um produto pela metade. O
-construtor fecha essa janela. Construtor é o método especial que roda no
+Criar o objeto vazio e preencher campo a campo, como acima, deixa um intervalo
+perigoso: entre o `new` e a última atribuição existe um produto pela
+metade, visível a qualquer código que rode no meio. O construtor fecha esse
+intervalo. Construtor é o método especial que roda no
 `new`, tem o mesmo nome da classe, não declara tipo de retorno e recebe o
 necessário para o objeto nascer completo:
 
@@ -93,10 +94,13 @@ O programa compila. O que a impressão mostra?
 null
 ```
 
-Dentro do construtor existem dois `nome`: o parâmetro e o campo. Pelo escopo
-do capítulo 4, o nome mais próximo vence, e `nome = nome` atribui o
-parâmetro a ele mesmo; o campo nunca é tocado e fica com o valor padrão de
-uma referência, `null`. Nenhum aviso, porque a linha é válida. A palavra
+Dentro do construtor existem dois `nome`: o parâmetro e o campo. Quando
+dois escopos sobrepostos declaram o mesmo nome, o mais interno vence, uma
+regra nova deste capítulo chamada sombreamento, e `nome = nome` fala do
+parâmetro duas vezes, atribuindo-o a ele mesmo. O campo nunca é tocado e
+fica com o valor padrão: campo de objeto nasce valendo zero, `false` ou
+`null`, conforme o tipo, ao contrário da variável local, que o compilador
+recusa usar sem valor. Nenhum aviso, porque a linha é válida. A palavra
 `this` resolve: ela é a referência da própria instância em construção, e
 `this.nome` aponta sem ambiguidade para o campo:
 
@@ -131,7 +135,8 @@ A palavra `throw` dispara um erro de execução no ponto do problema, e
 `IllegalArgumentException` é o erro padrão da biblioteca para argumento que
 viola as regras de quem recebe; a mensagem entre parênteses aparece na tela
 com a linha do disparo. O ganho é de localização: sem a defesa, o estoque
-negativo entra mudo e explode longe, num relatório qualquer; com ela, o
+negativo entra sem aviso e o efeito aparece longe, num relatório qualquer;
+com ela, o
 programa cai no instante e na linha em que o valor ruim tentou entrar, com o
 valor impresso. O mecanismo completo por trás do `throw`, incluindo como um
 programa reage a ele em vez de cair, é o capítulo 13; `isBlank`, usado ali,
@@ -142,7 +147,8 @@ apenas pergunta se o texto está vazio ou só com espaços.
 A defesa do construtor tem um furo: qualquer código pode escrever
 `cafe.estoque = -8` depois do nascimento, por engano ou por atalho. A
 solução é controlar o acesso. Os modificadores de acesso definem quem
-enxerga cada membro da classe: `private` restringe à própria classe,
+enxerga cada membro da classe, o nome coletivo de campos, métodos e
+construtores: `private` restringe à própria classe,
 `public` libera para todo o programa. Campo fica `private`; o que o resto do
 programa pode fazer vira método `public`, e passa pela regra:
 
@@ -177,8 +183,12 @@ class Produto {
 Isso é encapsulamento: esconder a representação interna de um objeto e
 expor apenas operações que mantêm as invariantes. O estoque continua
 existindo, mas o único caminho até ele agora valida cada baixa; o
-`cafe.estoque = -8` virou erro de compilação, porque o campo é invisível lá
-fora. O `final` no campo `nome` acrescenta outra trava, do próprio
+`cafe.estoque = -8` passa a ser recusado pelo compilador em qualquer classe
+de arquivo próprio, porque o campo é invisível fora de `Produto`. Uma
+ressalva de laboratório: no arquivo-fonte compacto, em que tudo divide um
+arquivo, as classes dali de dentro se enxergam por inteiro, `private`
+incluído, e a recusa só vale com cada classe no seu arquivo, que é o
+formato da última seção e de todo o livro daqui em diante. O `final` no campo `nome` acrescenta outra trava, do próprio
 compilador: o modificador `final` marca o que recebe valor uma vez e nunca
 mais, e produto que muda de nome não existe neste domínio. A regra prática
 do capítulo: campo `private` sempre; `public` é decisão, tomada método a
@@ -199,8 +209,6 @@ imutável de método em método, o que exercita exatamente o que este capítulo
 ensina.
 
 ```java
-import java.math.BigDecimal;
-
 BigDecimal preco = new BigDecimal("19.90");
 BigDecimal total = preco.multiply(new BigDecimal(3));
 IO.println(total);
@@ -213,9 +221,10 @@ IO.println(total);
 `BigDecimal` nasce de `new`, como qualquer objeto, e o argumento do
 construtor é um `String` com o valor exato. As contas são métodos: `add`
 soma, `subtract` subtrai, `multiply` multiplica, e todos devolvem um
-`BigDecimal` novo, porque o tipo é imutável como o `String` do capítulo 5;
+`BigDecimal` novo, porque o tipo é imutável como o `String`;
 comparações de ordem usam o método `compareTo`, que devolve negativo, zero
-ou positivo. A linha do `import` é apresentada na última seção.
+ou positivo. No arquivo compacto, `BigDecimal` resolve sem linha extra; o
+`import` que a moldura exige aparece na última seção.
 
 <div class="armadilha">
 
@@ -236,7 +245,7 @@ IO.println(certo);
 </div>
 
 O `new BigDecimal(0.1)` não criou o valor um décimo: criou o retrato exato
-da aproximação binária que o capítulo 3 mostrou, com todas as casas. O
+da aproximação binária do `double`, com todas as casas. O
 `double` já chega contaminado, e o `BigDecimal` apenas fotografa. Em código
 de dinheiro, `BigDecimal` nasce de `String` ou de inteiros, nunca de
 `double`; essa regra é curta e a violação passa em qualquer teste que não
@@ -274,7 +283,7 @@ import java.math.BigDecimal;
 
 public class Loja {
     public static void main(String[] args) {
-        Produto cafe = new Produto("Café 500g", 25, new BigDecimal("19.90"));
+        Produto cafe = new Produto("Café 500g", 25);
         IO.println(cafe.nome());
     }
 }
@@ -282,9 +291,13 @@ public class Loja {
 
 `public class Loja` declara a classe visível a todo o programa, no arquivo
 `Loja.java`, com o nome do arquivo amarrado ao da classe pública; é dessa
-declaração que a extensão `.class` do bytecode tira o nome. `main` é
-`static` porque a JVM o chama pelo tipo, sem instância nenhuma para existir
-antes dele, e `public` porque ela o chama de fora. O `import` declara de
+declaração que a extensão `.class` do bytecode tira o nome. O `main` com `public static` é a forma
+tradicional, esperada por décadas de ferramentas e presente em praticamente
+todo projeto existente: `static` dispensa instância para a partida, e
+`public` o expõe ao lançador. O Java 25 flexibilizou esse protocolo junto
+com o arquivo compacto, e formas mais enxutas de `main` também valem; o
+livro escreve a tradicional na moldura, porque é a que o leitor vai
+encontrar. O `import` declara de
 onde vem um tipo de fora do arquivo: `BigDecimal` mora no pacote
 `java.math`, e pacote é o espaço de nomes que agrupa classes relacionadas,
 declarado com `package` na primeira linha de um arquivo e refletido em
@@ -308,8 +321,9 @@ próprios.
 
 1. Escreva a classe `Produto` completa deste capítulo, com nome, estoque e
    preço em `BigDecimal`, invariantes no construtor e campos `private`.
-   Tente violar cada invariante a partir do `main` e anote o que acontece em
-   cada tentativa.
+   Monte na estrutura da última seção, cada classe em seu arquivo, tente
+   violar cada invariante a partir do `main` e anote o que o compilador
+   recusa e o que o construtor recusa.
 
 2. Acrescente a `Produto` um método `repor(int quantidade)` com a validação
    que ele merece, e um método `valorEmEstoque()` que devolva o preço

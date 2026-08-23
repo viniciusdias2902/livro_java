@@ -4,14 +4,15 @@ O mercadinho já soma uma dúzia de classes, e o ritual de colocá-lo de pé
 cresceu junto:
 
 ```console
-$ javac -d saida Produto.java CodigoDeBarras.java ItemDeVenda.java Caixa.java Loja.java
+$ javac -d saida *.java
 $ java -cp saida Loja
 ```
 
-Funciona, e três incômodos moram aí. A lista de arquivos precisa ser mantida
-à mão, e esquecer um recompila o programa contra bytecode velho do outro. O
-classpath, digitado desde o capítulo 2, precisa ser combinado entre todos
-que rodam o projeto, em toda máquina. E o terceiro incômodo é o maior:
+Funciona, e três incômodos moram aí. O curinga `*.java` alcança uma pasta
+só: no momento em que os fontes se organizarem em subpastas, os pacotes do
+capítulo 7, o comando deixa arquivos para trás. O classpath, digitado desde
+o capítulo 2, precisa ser combinado entre todos que rodam o projeto, em
+toda máquina. E o terceiro incômodo é o maior:
 nenhum código de fora entra. A ferramenta de testes do capítulo 15, ou
 qualquer outra peça pronta do ecossistema, chegaria como um arquivo a
 baixar, guardar em algum lugar e acrescentar ao classpath, à mão, para cada
@@ -20,18 +21,30 @@ ferramenta de construção, e este capítulo instala a do resto do livro.
 
 ## O que uma ferramenta de construção faz
 
-Uma ferramenta de construção é o programa que transforma código-fonte e
-dependências num artefato pronto, sempre do mesmo jeito, em qualquer
-máquina. Ela descobre os fontes sozinha, baixa o código de fora que o
+Uma ferramenta de construção é o programa que transforma o código-fonte,
+junto do código de fora de que ele depende, num pacote pronto para
+distribuir, sempre do mesmo jeito, em qualquer máquina. Ela descobre os fontes sozinha, baixa o código de fora que o
 projeto declarar, monta o classpath, compila na ordem certa, roda
 verificações e empacota o resultado. O que era uma sequência de comandos
-combinada entre pessoas vira um arquivo versionado junto do projeto, e
-"funciona na minha máquina" perde a parte da mágica: a construção é a mesma
+combinada entre pessoas vira um arquivo guardado junto do projeto, e
+"funciona na minha máquina" deixa de ser mistério: a construção é a mesma
 em todas.
 
 As duas ferramentas dominantes no mundo Java são Maven e Gradle. Este livro
 apresenta as duas e adota o Maven do próximo capítulo em diante; os motivos
-fecham o capítulo, junto com o mapa para ler projetos Gradle.
+fecham o capítulo, junto com o mapa para ler projetos Gradle. A instalação
+segue o caminho do capítulo 1:
+
+```console
+$ sdk install maven
+$ mvn -version
+Apache Maven 3.9.11
+...
+```
+
+A primeira linha da resposta confirma a instalação; as seguintes, omitidas
+acima, mostram qual JDK a ferramenta enxerga, que precisa ser o 25 do
+livro.
 
 ## Maven: convenção e pom.xml
 
@@ -75,8 +88,10 @@ O único arquivo a escrever é o `pom.xml`, a descrição do projeto:
 A escrita entre `<` e `>` é XML, um formato de texto para dados
 aninhados, e o essencial dela se lê no exemplo: cada `<coisa>` abre e
 `</coisa>` fecha, e o conteúdo vai no meio. As três linhas do meio
-identificam o projeto: `groupId` é o dono, na convenção de domínio
-invertido; `artifactId` é o nome; `version` é a versão. As `properties`
+identificam o projeto: `groupId` é o dono, escrito como um domínio de internet de trás para a
+frente, `br.com.mercadinho` para quem controla `mercadinho.com.br`,
+convenção que garante nome único no mundo sem cadastro central, porque só o
+dono do domínio o usaria; `artifactId` é o nome; `version` é a versão. As `properties`
 travam a versão do Java, a 25 exigida desde o capítulo 1, e a codificação
 dos fontes. Com isso e os fontes movidos para `src/main/java`, a construção
 inteira vira:
@@ -91,8 +106,8 @@ $ java -cp target/classes Loja
 ainda empacota. O pacote gerado, `target/mercadinho-1.0.jar`, é um jar: o
 formato de distribuição do Java, um arquivo único que embrulha o bytecode e
 metadados, feito para entrar no classpath de outros projetos. O nome sai da
-coordenada do `pom.xml`, e o capítulo 21 mostra a variante que se executa
-com dois cliques de terminal.
+coordenada do `pom.xml`, e o capítulo 21 mostra a variante executável
+com um único comando.
 
 <div class="previsao">
 
@@ -170,7 +185,7 @@ arquivo que ele não enxerga. O sintoma aparece depois, como
 `cannot find symbol` em quem usar `Promocao`, ou como um jar sem a classe. A
 convenção de diretórios não é sugestão: é o contrato de descoberta dos
 fontes, e arquivo fora dela simplesmente não existe para a construção. O
-mesmo vale para recursos e testes, cada qual na sua pasta.
+mesmo vale para os testes, na pasta deles.
 
 ## Gradle, e a escolha do livro
 
@@ -217,8 +232,9 @@ custa só o novo download.
 
 1. Converta o mercadinho para a estrutura Maven: crie o `pom.xml` deste
    capítulo, mova os fontes para `src/main/java`, rode `mvn package` e
-   execute com `java -cp target/classes`. Versione o `pom.xml` junto do
-   código e confirme que `target/` fica de fora.
+   execute com `java -cp target/classes`. Guarde o `pom.xml` junto do
+   código, e confirme que `target/` é descartável apagando-o e
+   reconstruindo.
 
 2. Reproduza a previsão: mude um preço, execute sem reconstruir, veja o
    valor antigo, reconstrua e veja o novo. Escreva a regra de trabalho em
