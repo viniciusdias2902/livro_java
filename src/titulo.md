@@ -26,3 +26,11 @@ todos os capítulos passaram por extensa revisão humana, que definiu o escopo,
 a ordem, o domínio dos exemplos e corrigiu o que a máquina errou. O registro
 fica aqui por honestidade com quem lê: nenhuma parte do texto finge uma origem
 que não tem.
+
+Com as contribuições da comunidade e com escrita minha, porque sempre gostei
+de escrever, virá a versão 2.0, mais humanizada e mais revisada. A 1.0, ainda
+assim, precisava vir ao mundo: eu legitimamente senti falta de aprender Java
+por um livro atualizado, e não encontrei no mercado uma didática que me
+agradasse.
+
+Boa sorte a todos que vão aprender com este livro.
