@@ -103,6 +103,7 @@
     "titulo": "Fluxo de controle e decomposição",
     "apendice": false,
     "termos_introduzidos": [
+      "estrutura de controle",
       "if",
       "condicao",
       "curto-circuito",

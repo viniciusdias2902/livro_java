@@ -41,6 +41,10 @@ e a documentação oficial, nunca o tutorial de internet.
 
 ## Regras de conteúdo
 
+- **Definição e prática, sempre as duas.** Todo conceito central ganha uma definição
+  formal citável, em uma frase, do tipo que responde uma pergunta de entrevista
+  ("o que é uma estrutura de controle?"), além da demonstração pela prática. Nenhum
+  conceito fica só implícito no exemplo, e a ficha recolhe as definições.
 - **Nenhum termo sem definição.** Nenhum termo técnico aparece antes de ter sido
   definido no livro ou definido na mesma frase. Citar um termo de passagem para dizer
   que ele ainda não será tratado é violação, não exceção. Exceção única: o apêndice

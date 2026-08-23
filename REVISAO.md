@@ -18,6 +18,10 @@ escreveu o texto.
   requisito. (Caso: previsão do capítulo 1 perguntando sobre o programa do 2.)
 - Todo termo novo é definido antes do primeiro uso ou na mesma frase, no
   texto de fato, e não apenas no manifesto?
+- Cada conceito central tem definição formal citável, além da demonstração
+  prática? O teste: uma pergunta de entrevista sobre o conceito ("o que é
+  uma estrutura de controle?") encontra resposta enunciada no texto, não só
+  exemplificada.
 - A previsão é respondível só com o que já foi lido, e a resposta vem logo
   depois da caixa?
 - A prática é executável com o que o leitor tem instalado e sabe até aqui?

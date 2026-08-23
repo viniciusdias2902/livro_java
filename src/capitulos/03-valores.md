@@ -66,6 +66,18 @@ Os tipos mais simples da linguagem chamam-se primitivos: neles, a variável
 guarda o próprio valor, direto. Existem oito; este livro trabalha com cinco,
 e os outros três ficam registrados na ficha do capítulo por completude.
 
+Cada primitivo ocupa um número fixo de bits na memória, e é esse número que
+determina quantos valores cabem no tipo. O capítulo 1 apresentou o bit como
+a menor unidade de informação, com dois estados possíveis; combinar bits
+multiplica possibilidades: 2 bits formam 4 combinações, 3 bits formam 8, e
+cada bit acrescentado dobra o total, de modo que N bits distinguem 2^N
+valores. Um `int` ocupa 32 bits, o que dá 2³² combinações, cerca de 4,29
+bilhões; metade delas fica com os negativos, e daí vem o intervalo de ±2,1
+bilhões. Um `long` ocupa 64 bits, um `double` também 64, um `char` 16, e o
+`boolean` é o único cujo tamanho a linguagem não define, deixando a escolha
+para a JVM. Como oito bits formam um byte, os mesmos tamanhos aparecem por
+aí como 4 bytes para `int` e 8 para `long`.
+
 `int` guarda inteiros de −2.147.483.648 a 2.147.483.647. Um valor escrito
 diretamente no código, como o `17` e o `2026` da abertura, chama-se literal.
 Java aceita o separador `_` dentro de um literal numérico, e ele só existe
@@ -312,14 +324,14 @@ capítulos o livro escreve os tipos por extenso, para eles ficarem visíveis;
 
 ## Ficha do capítulo
 
-| Tipo | Guarda | Literal de exemplo |
-| --- | --- | --- |
-| `int` | inteiros até ±2,1 bilhões | `42`, `2_147_483_647`, `0x2A`, `0b101010` |
-| `long` | inteiros até cerca de ±9,2 × 10¹⁸ | `8_000_000_000L` |
-| `double` | ponto flutuante, 64 bits | `19.90`, `0.5` |
-| `boolean` | `true` ou `false` | `true` |
-| `char` | um caractere (código Unicode) | `'A'` |
-| `byte`, `short`, `float` | versões menores de `int` e `double`; raras fora de arquivo e rede | |
+| Tipo | Bits | Guarda | Literal de exemplo |
+| --- | --- | --- | --- |
+| `int` | 32 | inteiros até ±2,1 bilhões | `42`, `2_147_483_647`, `0x2A`, `0b101010` |
+| `long` | 64 | inteiros até cerca de ±9,2 × 10¹⁸ | `8_000_000_000L` |
+| `double` | 64 | ponto flutuante | `19.90`, `0.5` |
+| `boolean` | a JVM decide | `true` ou `false` | `true` |
+| `char` | 16 | um caractere (código Unicode) | `'A'` |
+| `byte`, `short`, `float` | 8, 16, 32 | versões menores de `int` e `double`; raras fora de arquivo e rede | |
 
 | Operador | O que faz |
 | --- | --- |

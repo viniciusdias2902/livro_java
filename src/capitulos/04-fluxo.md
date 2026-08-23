@@ -26,6 +26,19 @@ execução, repetir trechos e dar nome a pedaços do programa são as três
 habilidades deste capítulo, e com elas os programas deixam de ser listas de
 ordens para virar comportamento.
 
+As construções que fazem isso têm nome de família: estrutura de controle é
+toda construção da linguagem que determina a ordem em que as instruções
+executam. Na ausência delas vale o fluxo sequencial, uma instrução após a
+outra, de cima para baixo, que foi o regime de todos os programas até aqui.
+As estruturas de controle quebram essa sequência de três maneiras: por
+seleção, escolhendo um entre dois ou mais caminhos, que é o território do
+`if` e do switch deste capítulo; por repetição, voltando a um trecho
+enquanto uma condição valer, que é o território dos laços; e por desvio,
+abandonando o fluxo corrente, como fazem o `return` e as palavras de
+controle de laço. Qualquer programa, em qualquer linguagem dessa família, se
+descreve com sequência, seleção, repetição e desvio, e o resto do capítulo
+apresenta as formas que Java dá a cada uma.
+
 ## if, else e a condição
 
 `if` executa um bloco somente quando uma condição vale. Condição é uma
@@ -393,6 +406,7 @@ primeiro dia.
 
 | Termo | Definição |
 | --- | --- |
+| estrutura de controle | construção que determina a ordem de execução das instruções; seleção, repetição ou desvio |
 | condição | expressão `boolean` consultada por `if`, laços e afins |
 | `if` | executa um bloco somente com a condição valendo |
 | curto-circuito | `&&` e `\|\|` não avaliam o lado direito quando o esquerdo decide |
