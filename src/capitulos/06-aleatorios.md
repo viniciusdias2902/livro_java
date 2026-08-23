@@ -98,10 +98,10 @@ Quatro sorteios. Que relação existe entre as duas primeiras linhas e as duas
 </div>
 
 ```
-81
-35
-81
-35
+31
+64
+31
+64
 ```
 
 As duas sequências são idênticas, e idênticas em toda execução, em qualquer
