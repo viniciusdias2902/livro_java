@@ -22,7 +22,7 @@ uma conta feita durante a execução, sobre valores guardados com nome nas duas
 primeiras linhas. Guardar valores e calcular com eles é o assunto deste
 capítulo, e as regras desse jogo têm consequências práticas: duas delas
 produzem resultados errados sem aviso nenhum, e este capítulo as provoca de
-propósito, como o capítulo 2 fez com os erros de execução.
+propósito.
 
 ## Variáveis
 
@@ -74,7 +74,8 @@ capítulo 1 também valem como literal: `0x1F` é a escrita hexadecimal e
 `0b11111` a binária do mesmo 31 decimal. A base muda a escrita no fonte; o
 valor guardado é um só.
 
-`long` guarda inteiros muito maiores, e seu literal leva o sufixo `L`:
+`long` guarda inteiros de até cerca de ±9,2 quintilhões (9,2 × 10¹⁸), e seu
+literal leva o sufixo `L`:
 `8_000_000_000L`. É o tipo das contagens que passam dos dois bilhões, como
 milissegundos acumulados ou habitantes do planeta.
 
@@ -100,8 +101,9 @@ expressão, `idade` é uma expressão, `ano + 18 - idade` é uma expressão. Um
 operador é o símbolo que combina valores dentro de uma expressão. Os
 aritméticos são cinco: `+`, `-`, `*` para multiplicar, `/` para dividir e
 `%` para o resto da divisão. A precedência é a da escola: `*`, `/` e `%`
-antes de `+` e `-`, e parênteses decidem qualquer outra ordem. Na dúvida,
-parênteses: eles não custam nada e eliminam a dúvida do próximo leitor.
+antes de `+` e `-`, e parênteses decidem qualquer outra ordem. Em caso de
+dúvida, parênteses resolvem: não custam nada e eliminam a ambiguidade para o
+próximo leitor.
 
 <div class="previsao">
 
@@ -113,28 +115,25 @@ void main() {
     int pessoas = 2;
     IO.println(total / pessoas);
     IO.println(total % pessoas);
-    IO.println(total / 2.0);
 }
 ```
 
-Três linhas de saída. Quais valores aparecem?
+Duas linhas de saída. Quais valores aparecem?
 
 </div>
 
 ```
 3
 1
-3.5
 ```
 
 A divisão entre dois `int` produz um `int`: a parte fracionária é descartada,
 sem arredondamento (7 dividido por 2 daria 3,5; o resultado é 3, e 3,9
 viraria 3 do mesmo jeito). O `%` entrega o que a divisão descartou como
-resto inteiro: 7 cabe 3 vezes em 2, sobra 1. Já `total / 2.0` produziu 3.5
-porque um dos lados é `double`, pela regra da próxima seção. O custo de não
-saber disso é concreto: média de avaliações, porcentual de desconto e rateio
-de conta saem errados, sem erro nenhum na tela, sempre que os dois lados da
-divisão são inteiros.
+resto inteiro: 2 cabe 3 vezes em 7, sobra 1. O custo de não saber disso é
+concreto: média de avaliações, porcentual de desconto e rateio de conta saem
+errados, sem erro nenhum na tela, sempre que os dois lados da divisão são
+inteiros. O conserto aparece na seção de promoção, logo adiante.
 
 Três atalhos completam o conjunto. Os operadores compostos aplicam a conta
 sobre a própria variável: `total += 2` soma 2 a `total`, e `-=`, `*=`, `/=`
@@ -150,9 +149,11 @@ capítulo 4 junto das estruturas que decidem.
 
 ## Promoção e casting
 
-Misturar tipos numa expressão é permitido, com uma regra fixa. Em
-`total / 2.0`, um lado é `int` e o outro é `double`; antes da conta, o `int`
-é convertido para `double`, e a divisão acontece entre dois `double`. Essa
+Misturar tipos numa expressão é permitido, com uma regra fixa, e é ela que
+conserta o rateio da previsão: na divisão `total / 2.0`, um lado é `int` e o
+outro é `double`; antes da conta, o `int` é convertido para `double`, a
+divisão acontece entre dois `double` e o resultado é 3.5, com a fração
+preservada. Essa
 conversão automática do tipo mais estreito para o mais largo da expressão
 chama-se promoção, e segue a largura dos tipos: `int` promove para `long`,
 e ambos promovem para `double`. O `char` entra nas contas como o número que
@@ -202,7 +203,7 @@ exatamente os valores do intervalo dado na seção dos primitivos; uma conta
 que passa do máximo dá a volta e continua a contagem do outro extremo, no
 lado negativo. A JVM não trata isso como erro: é o comportamento definido, o
 programa segue, e o valor errado se espalha pelas contas seguintes. É a
-primeira das duas surpresas prometidas na abertura, e morde em lugares
+primeira das duas surpresas prometidas na abertura, e aparece em lugares
 previsíveis: contadores que crescem sem parar, quantias em centavos somadas
 aos milhões, multiplicações de valores já grandes.
 
@@ -243,18 +244,20 @@ O que aparece no terminal?
 0.30000000000000004
 ```
 
-A segunda surpresa prometida. Um `double` guarda o número em binário, a
-notação do capítulo 1, e nem todo número decimal tem escrita binária exata.
-Um décimo está para o binário como um terço está para o decimal: 1/3 em
-decimal vira 0,333… sem fim, e 1/10 em binário vira uma sequência periódica
-sem fim. O que cabe nos 64 bits de um `double` é a aproximação mais próxima;
+Esta é a segunda surpresa prometida na abertura. Um `double` guarda o número
+em binário, a notação do capítulo 1, e nem todo número decimal tem escrita
+binária exata. A notação binária também aceita casas depois da vírgula, cada
+uma valendo a metade da anterior: 0,1 em binário é um meio, 0,01 é um
+quarto, 0,11 é três quartos. Um décimo está para essa escrita como um terço
+está para a decimal: 1/3 em decimal vira 0,333… sem fim, e 1/10 em binário
+vira uma sequência periódica sem fim. O que cabe nos 64 bits de um `double` é a aproximação mais próxima;
 as sobras de 0.1 e de 0.2, invisíveis na impressão de cada um, aparecem na
 soma. Frações cujo denominador é potência de dois, como 0.5 e 0.25, são
 exatas, e por isso `0.5 + 0.25` imprime `0.75` sem ruído.
 
-Duas regras práticas saem daí, e as duas caem em teste. Primeira: comparar
-`double` com `==` é aposta, porque dois caminhos de cálculo que deveriam dar
-no mesmo valor podem diferir na última casa da aproximação. Segunda:
+Duas regras práticas saem daí, e as duas voltam nos exercícios. Primeira:
+comparar `double` com `==` não é confiável, porque dois caminhos de cálculo
+que deveriam dar no mesmo valor podem diferir na última casa da aproximação. Segunda:
 dinheiro não se guarda em `double`; um sistema que soma centavos aproximados
 espalha diferenças de um centavo que ninguém consegue rastrear. Como
 dinheiro se representa em Java é assunto do capítulo 7, junto do sistema que
@@ -271,8 +274,8 @@ var total = 7;
 var preco = 19.90;
 ```
 
-O compilador olha o literal e infere o tipo: `total` é `int`, `preco` é
-`double`. Isso se chama inferência de tipo, e vem com duas regras. A
+O compilador olha o valor inicial e infere o tipo: `total` é `int`, `preco`
+é `double`. Isso se chama inferência de tipo, e vem com duas regras. A
 declaração com `var` exige o valor inicial na mesma linha, porque é dele que
 o tipo sai; e o tipo inferido é fixo dali em diante, exatamente como se
 estivesse escrito, de modo que `total = 1.5` continua sendo recusado. `var`
@@ -295,9 +298,9 @@ capítulos o livro escreve os tipos por extenso, para eles ficarem visíveis;
    a conta de modo a obter o valor correto, e explique por escrito em que
    ponto da linha a correção agiu.
 
-4. Imprima `0.1 + 0.2` e depois `0.5 + 0.25`. Explique por escrito, usando a
-   notação binária do capítulo 1, por que uma soma sai com ruído e a outra
-   não.
+4. Imprima `0.1 + 0.2` e depois `0.5 + 0.25`. Explique por escrito,
+   apoiando-se na comparação com 1/3 em decimal, por que uma soma sai com
+   ruído e a outra não.
 
 5. Imprima `'a'`, depois `'a' + 1`, depois `(char) ('a' + 1)`. Descreva o
    tipo do valor em cada uma das três impressões e o papel do casting na
@@ -312,7 +315,7 @@ capítulos o livro escreve os tipos por extenso, para eles ficarem visíveis;
 | Tipo | Guarda | Literal de exemplo |
 | --- | --- | --- |
 | `int` | inteiros até ±2,1 bilhões | `42`, `2_147_483_647`, `0x2A`, `0b101010` |
-| `long` | inteiros longos | `8_000_000_000L` |
+| `long` | inteiros até cerca de ±9,2 × 10¹⁸ | `8_000_000_000L` |
 | `double` | ponto flutuante, 64 bits | `19.90`, `0.5` |
 | `boolean` | `true` ou `false` | `true` |
 | `char` | um caractere (código Unicode) | `'A'` |
@@ -341,4 +344,4 @@ capítulos o livro escreve os tipos por extenso, para eles ficarem visíveis;
 | overflow | conta que passa do limite do tipo e dá a volta, sem aviso |
 | ponto flutuante | formato binário aproximado do `double` |
 | `var` | declaração cujo tipo o compilador infere do valor inicial |
-| inferência de tipo | dedução do tipo pelo compilador a partir do literal |
+| inferência de tipo | dedução do tipo pelo compilador a partir do valor inicial |

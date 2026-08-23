@@ -1,6 +1,7 @@
 # Fluxo de controle e decomposição
 
-Um programa de cinema precisa responder se um ingresso é de meia-entrada:
+Um programa de cinema, salvo em `Ingresso.java`, precisa responder se um
+ingresso é de meia-entrada:
 
 ```java
 void main() {
@@ -28,8 +29,8 @@ ordens para virar comportamento.
 ## if, else e a condição
 
 `if` executa um bloco somente quando uma condição vale. Condição é uma
-expressão de valor `boolean`, exatamente as que as comparações do capítulo 3
-produzem: `idade < 18` vale `true` ou `false`, e o `if` consulta esse valor.
+expressão de valor `boolean`, exatamente o que as comparações produzem:
+`idade < 18` vale `true` ou `false`, e o `if` consulta esse valor.
 O bloco entre chaves logo após o `if` roda no caso `true`; o bloco do
 `else`, que é opcional, roda no caso `false`. Encadear decisões é escrever
 `else if`:
@@ -49,8 +50,8 @@ verdadeira ganha: uma nota 95 imprime só `A`, porque o `else if` nem chega a
 ser avaliado. A ordem das faixas, portanto, faz parte da lógica, e
 invertê-la muda o programa.
 
-As chaves são opcionais quando o bloco tem uma linha só, e este livro as
-escreve sempre. O motivo cabe numa armadilha, mais adiante.
+As chaves são opcionais quando o corpo é uma única instrução, e este livro
+as escreve sempre. O motivo cabe numa armadilha, mais adiante.
 
 ## Combinando condições
 
@@ -64,7 +65,7 @@ boolean meia = idade < 18 || idade >= 60;
 boolean pagaInteira = !meia;
 ```
 
-`&&` e `||` avaliam com preguiça calculada, e isso tem nome: curto-circuito.
+`&&` e `||` avaliam apenas o necessário, e isso tem nome: curto-circuito.
 Quando o lado esquerdo já decide o resultado, o lado direito nem é avaliado:
 um `&&` com esquerda `false` já é `false`, um `||` com esquerda `true` já é
 `true`, e a execução segue sem tocar no resto. Não é só economia; é uma
@@ -93,12 +94,12 @@ int desconto = idade < 18 ? 50 : 0;
 ```
 
 Lê-se: se a condição vale, o valor é o do meio; senão, o do fim. Ele serve
-para escolhas curtas dentro de uma atribuição; encadear ternários dentro de
-ternários compila, e é o jeito mais rápido de escrever uma linha que ninguém
-mais consegue ler.
+para escolhas curtas dentro de uma atribuição. Encadear ternários dentro de
+ternários compila, mas obriga o leitor a resolver as condições de cabeça
+para descobrir qual valor sai; este livro não os encadeia.
 
 Para escolher entre vários casos a partir de um mesmo valor, existe o switch
-expression:
+expression (a expressão switch):
 
 ```java
 int minutosDeTreino = switch (dia) {
@@ -113,10 +114,11 @@ produzido; casos podem ser agrupados com vírgula; e `default` cobre todo o
 resto. O switch expression exige que algum caminho exista para qualquer
 valor possível, e com um `int` na entrada isso obriga o `default`: sem ele,
 erro de compilação. Essa exigência é uma proteção, e ela cresce de
-importância no capítulo 12, quando os valores da entrada passam a ter dono.
-Material antigo mostra um `switch` de outro formato, com dois-pontos no
-lugar da seta e regras traiçoeiras de continuação; este livro usa apenas a
-forma nova.
+importância no capítulo 12, quando a entrada do switch passa a ser um tipo
+com lista fechada de valores. Material antigo mostra um `switch` de outro
+formato, com dois-pontos no lugar da seta e uma regra de continuação em que
+a execução atravessa também os casos seguintes por omissão; este livro usa
+apenas a forma nova.
 
 ## Laços
 
@@ -186,8 +188,8 @@ entra na conta de dentro, nunca no controle da repetição.
 
 ## Métodos próprios e decomposição
 
-Desde o capítulo 2, todo código deste livro mora em `main`. Um arquivo-fonte
-compacto aceita outros métodos ao lado dele:
+Até aqui, todo código deste livro mora em `main`. Um arquivo-fonte compacto
+aceita outros métodos ao lado dele:
 
 ```java
 int precoDoIngresso(int idade) {
@@ -210,9 +212,8 @@ void main() {
 
 Três novidades moram aí. `int idade`, entre os parênteses da declaração, é
 um parâmetro: uma variável que nasce a cada chamada, já valendo o argumento
-que veio de fora. O capítulo 2 apresentou o argumento como o valor entregue
-na chamada; o parâmetro é o outro lado do balcão, o nome que o recebe. A
-palavra `return` devolve um valor ao ponto que chamou e encerra o método
+que veio de fora. O argumento é o valor entregue na chamada; o parâmetro é o
+nome que o recebe na declaração. A palavra `return` devolve um valor ao ponto que chamou e encerra o método
 naquele instante: na primeira chamada acima, o `return 20` roda e o
 `return 40` nem é alcançado. E o `int` antes do nome do método declara o
 tipo do valor devolvido, ocupando a posição onde `main` escreve `void`, a
@@ -262,8 +263,10 @@ Três linhas de saída. Quais, e qual `dobro` atende cada chamada?
 O compilador escolhe pela assinatura que casa com o argumento: `21` é `int`
 e vai para o primeiro método, `21.0` é `double` e vai para o segundo. A
 terceira chamada é o caso interessante: não existe `dobro` de `char`, e o
-compilador aplica a promoção do capítulo 3, convertendo `'a'` para o seu
-código 97 e chamando a versão de `int`, que devolve 194. A escolha acontece
+compilador converte o argumento por alargamento, na mesma direção da
+promoção: `char` cabe em `int`, e cabe também em `double`. Entre as versões
+capazes de receber o valor, vence a de tipo mais estreito: a de `int` é
+chamada com 97, o código de `'a'`, e devolve 194. A escolha acontece
 na compilação, em silêncio, e uma sobrecarga nova pode mudar para onde
 chamadas antigas vão. Sobrecarga é ferramenta boa para operações realmente
 iguais sobre tipos diferentes, e má para qualquer outra coisa.
@@ -274,9 +277,9 @@ Uma variável não existe no programa inteiro. Ela nasce na linha da
 declaração e morre no fim do bloco onde nasceu, e esse alcance chama-se
 escopo. O contador declarado na primeira parte de um `for` vive só dentro
 do laço; a variável declarada dentro de um `if` vive só ali; um parâmetro
-vive só no corpo do seu método. Usar o nome fora do escopo produz o
-`cannot find symbol` do capítulo 2, porque, para o compilador, fora do bloco
-o nome simplesmente não existe.
+vive só no corpo do seu método. Usar o nome fora do escopo reproduz o
+`cannot find symbol` da primeira semana: para o compilador, fora do bloco o
+nome simplesmente não existe.
 
 O escopo é o que torna a decomposição segura. Dois métodos podem declarar
 variáveis de mesmo nome sem conflito, porque cada nome vive no seu corpo;
@@ -342,8 +345,9 @@ O saldo é negativo e a mensagem sai mesmo assim, sem erro nenhum.
 O `;` logo após o `if` é uma instrução vazia, válida, e é ela o bloco do
 `if`. As chaves seguintes formam um bloco solto, que roda sempre. O
 compilador não reclama porque nada está errado para ele; o programa apenas
-não diz o que parece dizer. O mesmo vale para o `while`: `while (x > 0);`
-gira em silêncio para sempre. É por acidentes dessa família que este livro
+não diz o que parece dizer. O mesmo vale para o `while`: com `x` positivo,
+`while (x > 0);` gira em silêncio para sempre, porque o corpo vazio nunca
+altera `x`. É por acidentes dessa família que este livro
 escreve chaves mesmo em blocos de uma linha, e o hábito vale a pena desde o
 primeiro dia.
 
