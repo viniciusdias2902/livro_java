@@ -1,6 +1,5 @@
 # Sumário
 
-[Capa](capa.md)
 [Prefácio](prefacio.md)
 
 - [1. A linguagem, a plataforma e as versões](capitulos/01-introducao.md)
