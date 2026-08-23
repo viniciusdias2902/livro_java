@@ -49,9 +49,11 @@ Para cada capítulo, em ordem:
 
 1. Releia o capítulo anterior por inteiro, para manter continuidade do domínio (o mercadinho de bairro) e não redefinir o que já foi definido.
 2. Escreva o capítulo no arquivo correspondente em `src/capitulos/`.
-3. Rode `python3 lint.py` e corrija as violações.
-4. Faça um commit isolado, com o número do capítulo na mensagem.
-5. **Pare e me mostre o capítulo.** Um capítulo por vez, sempre. Não encadeie.
+3. Faça as duas passadas de revisão do `REVISAO.md` — a de leitor do zero, de
+   preferência, com um revisor de contexto limpo — e corrija o que elas apontarem.
+4. Rode `python3 lint.py` e corrija as violações.
+5. Faça um commit isolado, com o número do capítulo na mensagem.
+6. **Pare e me mostre o capítulo.** Um capítulo por vez, sempre. Não encadeie.
 
 Os capítulos 1 e 2 (`src/capitulos/01-introducao.md` e `src/capitulos/02-execucao.md`)
 já estão escritos e revisados. Use-os como referência de densidade, de registro e de

@@ -66,8 +66,11 @@ e a documentação oficial, nunca o tutorial de internet.
    os capítulos em `manifesto.json`, antes de escrever qualquer prosa.
 2. `python3 lint.py --esqueleto` até passar. Conflito de dependência se resolve
    **reordenando capítulos**, nunca enfraquecendo o adiamento.
-3. Escrever um capítulo por vez, em ordem. Depois de cada um: `python3 lint.py`,
-   corrigir, e um commit isolado com o número do capítulo na mensagem.
+3. Escrever um capítulo por vez, em ordem. Depois de cada um: as duas passadas de
+   revisão do `REVISAO.md` (a primeira de preferência com revisor de contexto limpo,
+   que não escreveu o texto), depois `python3 lint.py`, corrigir, e um commit isolado
+   com o número do capítulo na mensagem. O lint é piso, não teto: passar nele não
+   substitui as passadas.
 4. Antes de escrever o capítulo N, reler o N-1 para manter continuidade do domínio.
 
 ## O que o lint não pega
