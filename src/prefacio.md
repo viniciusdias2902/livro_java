@@ -128,13 +128,3 @@ O livro usa Java 25 porque é a versão de suporte longo mais recente na
 escrita, e porque um recurso dela, explicado no capítulo 2, deixa os primeiros
 programas do tamanho que programas de primeiro capítulo deveriam ter tido
 desde sempre.
-
-## Sobre esta edição
-
-A versão 1.0 deste livro foi inteiramente gerada por inteligência artificial,
-sob direção humana. A geração não foi livre: o texto foi produzido sob um
-contrato de estilo explícito, com verificação mecânica a cada capítulo, e
-todos os capítulos passaram por extensa revisão humana, que definiu o escopo,
-a ordem, o domínio dos exemplos e corrigiu o que a máquina errou. O registro
-fica aqui por honestidade com quem lê: nenhuma parte do texto finge uma origem
-que não tem.
