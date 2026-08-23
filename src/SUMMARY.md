@@ -1,5 +1,6 @@
 # Sumário
 
+[Java 25](titulo.md)
 [Prefácio](prefacio.md)
 
 - [A linguagem, a plataforma e as versões](capitulos/01-introducao.md)

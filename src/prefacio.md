@@ -1,9 +1,3 @@
-<div class="capa">
-
-![Java 25](capa.png)
-
-</div>
-
 # Prefácio
 
 Este é um livro de Java para quem parte do zero. Ele não assume que o leitor
