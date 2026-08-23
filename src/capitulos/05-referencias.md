@@ -92,7 +92,8 @@ tamanho: `new int[10]` cria dez posições valendo zero. O que `new` faz por
 baixo é o coração da próxima seção.
 
 Índice fora da faixa é o segundo erro de execução clássico da linguagem, ao
-lado do que o capítulo 2 mostrou:
+lado do que o capítulo 2 mostrou. Pedir `notas[3]` ao array de três posições
+acima produz:
 
 ```
 $ java Notas.java
