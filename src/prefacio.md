@@ -39,8 +39,8 @@ vendas, a caderneta de fiado e relatórios. Ele cresce peça a peça, cada
 capítulo acrescentando o que acabou de ensinar, e termina, no capítulo 25,
 como um programa completo de terminal; nos apêndices, ganha tela.
 
-A escolha de um sistema contínuo, no lugar dos exemplos avulsos habituais, é a
-decisão pedagógica mais deliberada do livro. Exemplos desconexos não acumulam
+A escolha de um sistema contínuo, no lugar dos exemplos avulsos habituais, é
+uma decisão pedagógica deliberada. Exemplos desconexos não acumulam
 consequência: cada um nasce limpo e morre na mesma página, e o leitor nunca vê
 o que acontece com uma decisão de projeto depois que ela envelhece. Em um
 sistema contínuo acontece o que acontece em software real: uma escolha

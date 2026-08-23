@@ -30,6 +30,13 @@ PROIBIDAS = [
     (r"\bnão se preocupe com isso agora\b", "adiamento sem prazo"),
     (r"\bcusta caro\b", "dramatização sem consequência concreta"),
     (r"\ba coisa mais importante\b", "superlativo"),
+    (r"\bmais importante\b", "superlativo"),
+    (r"\bmais \w+ d[oa] livro\b", "superlativo (ranking interno)"),
+    (r"\bextremamente\b", "superlativo"),
+    (r"\bincr[íi]vel(mente)?\b", "superlativo"),
+    (r"\bfant[áa]stic\w*", "superlativo"),
+    (r"\bespetacular\w*", "superlativo"),
+    (r"\babsurdamente\b", "superlativo"),
 ]
 
 AMBIENTES = {"armadilha", "aprofundamento", "analogia", "previsao"}
