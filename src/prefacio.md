@@ -14,7 +14,7 @@ rumo mais comum das carreiras Java, e o penúltimo capítulo constrói à mão o
 mecanismo central deles. Quem não quiser não perde nada: esse mesmo capítulo
 vale por si, como técnica de organizar programas grandes.
 
-São vinte e cinco capítulos e quatro apêndices. A ordem não é temática, é de
+São vinte e cinco capítulos e cinco apêndices. A ordem não é temática, é de
 dependência: cada capítulo assume todos os anteriores, cada termo técnico é
 definido uma única vez, no capítulo que o apresenta, e usado livremente dali
 em diante. Por isso a leitura é sequencial, e pular um capítulo cobra o preço
@@ -23,7 +23,10 @@ inteiro, mas nada no livro depende deles. O primeiro leva o projeto do livro
 para um banco de dados com JDBC, e é o único ponto em que o livro assume
 conhecimento de fora, a saber, SQL e um banco configurado; ele declara isso na
 própria abertura, junto com material de referência para quem precisar. Os
-outros três constroem interfaces gráficas com JavaFX.
+três seguintes constroem interfaces gráficas com JavaFX. O último é um guia
+de leitura do Java legado: as grafias antigas, como `System.out.println` e a
+data da era anterior, que continuam por toda parte no código existente e que
+o leitor precisa reconhecer sem estranhar.
 
 ## O mercadinho
 

@@ -716,5 +716,26 @@
       "modelo de apresentação",
       "injeção de dependência"
     ]
+  },
+  {
+    "n": null,
+    "id": "A5-legado",
+    "titulo": "Java legado: lendo o código que existe",
+    "apendice": true,
+    "termos_introduzidos": [
+      "System.out",
+      "Scanner",
+      "Date",
+      "Calendar",
+      "SimpleDateFormat",
+      "StringBuffer",
+      "raw type"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "System.out",
+      "Scanner",
+      "Date"
+    ]
   }
 ]

@@ -35,3 +35,4 @@
 - [JavaFX: janela, cena e o thread de UI](apendice/A2-javafx-basico.md)
 - [JavaFX: eventos, properties e binding](apendice/A3-javafx-eventos.md)
 - [JavaFX: ligando a tela ao domínio](apendice/A4-javafx-dominio.md)
+- [Java legado: lendo o código que existe](apendice/A5-legado.md)
