@@ -42,6 +42,10 @@ Ler frase a frase contra o contrato de voz do CLAUDE.md.
   aparição.
 - Domínio: mercadinho do capítulo 7 em diante, com os ganchos combinados
   (dinheiro, validade, produto e lote).
+- Diagrama só onde há percurso, hierarquia ou ponteiro que a prosa carrega
+  mal. Capítulo sem essa necessidade fica sem diagrama nenhum: diagrama é
+  complemento didático, não decoração, e o que estiver ali para aparecer sai
+  na revisão.
 
 ## Depois das duas passadas
 

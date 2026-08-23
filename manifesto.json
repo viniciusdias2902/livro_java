@@ -20,6 +20,8 @@
       "JDK",
       "OpenJDK",
       "distribuicao",
+      "SDKMAN",
+      "WSL",
       "previa",
       "LTS"
     ],

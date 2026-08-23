@@ -151,6 +151,49 @@ origem é o mesmo; o que muda é quem publica correções, por quanto tempo e so
 quais termos de licença. Para este livro, qualquer distribuição serve, e
 trocar de uma para outra não muda uma linha do que vem pela frente.
 
+## Instalação
+
+Cada distribuição tem instalador próprio, e qualquer um funciona. Este livro
+recomenda um caminho único, válido para Linux e macOS: o SDKMAN, um
+gerenciador que instala, lista e troca versões de JDK pelo terminal. Dois
+comandos o instalam, e um terceiro instala o JDK:
+
+```
+$ curl -s "https://get.sdkman.io" | bash
+$ source "$HOME/.sdkman/bin/sdkman-init.sh"
+$ sdk install java 25.0.4-amzn
+```
+
+O identificador `25.0.4-amzn` nomeia a correção 25.0.4 do Corretto, a
+distribuição da Amazon. O número exato muda a cada trimestre; o comando
+abaixo mostra os identificadores disponíveis no dia, e qualquer um que comece
+com 25, ou mais novo, atende ao livro:
+
+```
+$ sdk list java
+``` Instalado por esse caminho, `java -version`
+dirá Corretto no lugar do Temurin do exemplo acima, e a leitura é a mesma.
+Quando houver mais de um JDK na máquina, o SDKMAN também faz a troca:
+`sdk default java`, seguido de um identificador, passa a apontar o comando
+`java` para a instalação escolhida.
+
+No Windows, a recomendação é instalar o WSL (Windows Subsystem for Linux), que
+põe um Linux completo dentro do Windows, e seguir o caminho acima dentro dele.
+Um comando faz a instalação, em um PowerShell aberto como administrador (o `>`
+faz as vezes do `$` no PowerShell):
+
+```
+> wsl --install
+```
+
+Depois de reiniciar a máquina, o terminal do WSL é um terminal Linux comum. A
+recomendação tem um motivo que vai além deste capítulo: os comandos de
+terminal deste livro, como os de listar arquivos, mover e criar pastas que o
+capítulo 2 já usa, são os do mundo Unix, e as saídas mostradas vêm de um
+sistema assim. Nada disso é obrigatório: o JDK existe para Windows puro e o
+Java é o mesmo lá. Mas quem estiver em Linux, WSL ou macOS verá na tela
+exatamente o que o livro mostra.
+
 ## Como as versões funcionam
 
 Até 2017, uma versão nova de Java saía quando ficava pronta, em intervalos
@@ -258,6 +301,8 @@ máquinas antigas e em material antigo. 1.8 e 8 são a mesma versão.
 | JDK | conjunto instalável que reúne o compilador, a JVM e a biblioteca padrão |
 | OpenJDK | projeto de código aberto onde o JDK é desenvolvido |
 | distribuição | empacotamento do OpenJDK publicado e mantido por uma empresa |
+| SDKMAN | gerenciador que instala, lista e troca versões de JDK pelo terminal |
+| WSL | Windows Subsystem for Linux: um Linux completo dentro do Windows |
 | prévia (*preview*) | novidade disponível para teste, sujeita a mudança, desligada a menos que se peça |
 | LTS | versão com correções por anos; as demais recebem correções por seis meses |
 
