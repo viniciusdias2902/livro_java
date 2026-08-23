@@ -14,6 +14,8 @@
       "notacao hexadecimal",
       "codigo-fonte",
       "compilador",
+      "bytecode",
+      "JVM",
       "biblioteca padrao",
       "JDK",
       "OpenJDK",
@@ -22,8 +24,6 @@
       "LTS"
     ],
     "termos_adiados": {
-      "bytecode": "02-execucao",
-      "JVM": "02-execucao",
       "arquivo-fonte compacto": "02-execucao"
     },
     "conceitos_de_carga": [
@@ -44,8 +44,6 @@
       "IO.println",
       "argumento",
       "saida padrao",
-      "bytecode",
-      "JVM",
       "classpath",
       "arquivo-fonte compacto",
       "erro de compilacao",

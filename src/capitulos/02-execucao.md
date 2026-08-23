@@ -138,13 +138,12 @@ Locadora aberta.
 comando próprios. Ele lê o texto de `Locadora.java`, confere se aquilo é Java
 válido e grava o resultado da tradução em um arquivo novo, o `Locadora.class`.
 O conteúdo desse arquivo não é texto Java nem código de máquina de processador
-algum. É bytecode: a forma intermediária que o capítulo 1 prometeu nomear — um
-formato projetado para ser lido por um programa, não por um processador de
-silício. A extensão `.class` vem do nome de uma declaração que o capítulo 6
-apresenta.
+algum. É bytecode — a forma intermediária que o capítulo 1 descreveu, até
+agora uma ideia, daqui em diante um arquivo concreto no disco, que pode ser
+copiado, movido e apagado como qualquer outro. A extensão `.class` vem do nome
+de uma declaração que o capítulo 6 apresenta.
 
-O programa que lê bytecode e o executa é a JVM, a máquina virtual Java — a
-outra peça que o capítulo 1 deixou sem nome. O comando `java` inicia uma JVM,
+Quem lê e executa esse arquivo é a JVM do capítulo 1. O comando `java` inicia uma JVM,
 entrega a ela o bytecode indicado e sai do caminho: dali em diante, quem está
 rodando é o programa. As duas ferramentas — `javac`, que traduz, e `java`, que
 executa — vêm juntas no JDK, ao lado da biblioteca padrão onde mora

@@ -104,11 +104,17 @@ biblioteca, e boa parte deste livro é apresentá-la.
 A terceira é a plataforma de execução, e é ela que distingue Java da descrição
 genérica dada até aqui. O compilador de Java não traduz o código-fonte para o
 código de máquina de um processador específico. Traduz para uma forma
-intermediária, e quem executa essa forma é um programa instalado em cada
-máquina. O nome da forma intermediária e o nome do programa que a executa abrem
-o capítulo 2, junto com os comandos que os manipulam. O que importa neste capítulo é a consequência: o mesmo programa Java, compilado uma vez, roda em
-x86 e em ARM, em Windows, em Linux e em macOS. O que muda de uma máquina para
-outra é a peça instalada nela, não o programa.
+intermediária chamada bytecode: instruções definidas em especificação, não em
+silício — o mesmo papel do código de máquina, sem pertencer a nenhum
+processador real. Quem executa bytecode é a JVM, de *Java Virtual Machine* — a
+máquina virtual Java: um programa instalado em cada máquina, que lê essas
+instruções e as cumpre usando o processador que houver ali. Existe uma JVM
+para x86 com Windows, outra para ARM com macOS, e assim por diante, todas
+lendo o mesmo bytecode. A consequência é o que define a plataforma: o mesmo
+programa Java, compilado uma vez, roda em qualquer sistema que tenha uma JVM;
+o que muda de uma máquina para outra é a JVM instalada nela, não o programa. O
+capítulo 2 põe as duas peças para funcionar no terminal, com os comandos que
+compilam e executam.
 
 Essa arquitetura, somada a um compromisso incomum de compatibilidade — código
 compilado há vinte anos continua rodando nas versões atuais —, explica onde
@@ -123,8 +129,8 @@ sentido lidas contra esse requisito.
 ## O JDK e as distribuições
 
 Desenvolver em Java exige instalar um único conjunto de programas: o JDK, sigla
-de Java Development Kit. Dele fazem parte o compilador de Java, o programa que
-executa a forma intermediária e a biblioteca padrão. Instalado o JDK, o
+de Java Development Kit. Dele fazem parte o compilador de Java, a JVM e a
+biblioteca padrão. Instalado o JDK, o
 terminal passa a ter o comando `java`, e pedir a versão a ele é a primeira
 verificação a fazer em qualquer máquina:
 
@@ -245,8 +251,10 @@ máquinas antigas e em material antigo. 1.8 e 8 são a mesma versão.
 | linguagem de programação | notação de texto com regras exatas, escrita por pessoas e traduzida por programa |
 | código-fonte | o texto escrito em uma linguagem de programação |
 | compilador | programa que lê código-fonte, confere as regras da linguagem e produz a forma executável |
+| bytecode | forma intermediária gerada pelo compilador de Java; igual em qualquer máquina |
+| JVM | máquina virtual Java: programa instalado em cada máquina, que executa bytecode |
 | biblioteca padrão | código pronto para tarefas comuns, distribuído junto com a linguagem |
-| JDK | conjunto instalável que reúne o compilador, o executor da forma intermediária e a biblioteca padrão |
+| JDK | conjunto instalável que reúne o compilador, a JVM e a biblioteca padrão |
 | OpenJDK | projeto de código aberto onde o JDK é desenvolvido |
 | distribuição | empacotamento do OpenJDK publicado e mantido por uma empresa |
 | prévia (*preview*) | novidade disponível para teste, sujeita a mudança, desligada a menos que se peça |
