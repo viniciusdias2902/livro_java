@@ -170,7 +170,7 @@ flowchart LR
     E["execução na JVM"]
     F -->|"javac Ola.java"| C
     C -->|"java Ola"| E
-    F -->|"java Ola.java<br>compila na memória, nada vai ao disco"| E
+    F -->|"java Ola.java (compila na memória)"| E
 ```
 
 ## O erro que não deixa nada para trás
