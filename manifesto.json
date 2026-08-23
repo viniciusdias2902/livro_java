@@ -643,7 +643,11 @@
       "Connection",
       "PreparedStatement",
       "ResultSet",
-      "transacao"
+      "transacao",
+      "SQL injection",
+      "DataSource",
+      "pool de conexoes",
+      "ORM"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -664,7 +668,9 @@
       "Scene",
       "grafo de cena",
       "thread de aplicacao JavaFX",
-      "Platform.runLater"
+      "Platform.runLater",
+      "painel de layout",
+      "controle JavaFX"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -699,7 +705,8 @@
     "apendice": true,
     "termos_introduzidos": [
       "modelo de apresentacao",
-      "TableView"
+      "TableView",
+      "Alert"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
