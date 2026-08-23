@@ -67,6 +67,9 @@ e a documentação oficial, nunca o tutorial de internet.
   hierarquias, ponteiros. Poucos no livro inteiro, sempre em bloco ` ```mermaid `
   (o tema modus-vivendi já está configurado em `mermaid-init.js`). Diagrama nunca
   substitui a explicação em prosa; resume o que ela acabou de dizer.
+- **Blocos de código:** fonte Java em ` ```java `; sessão de terminal (linhas com `$`)
+  em ` ```console `, que realça o prompt; saída pura e conteúdo sem linguagem ficam em
+  bloco sem etiqueta.
 - **Estrutura:** abre com o problema concreto, fecha com seção de prática e ficha de
   referência. Ambas obrigatórias, verificadas pelo lint.
 - Java 25. Capítulos 2 a 6 usam arquivo-fonte compacto nos exercícios.
