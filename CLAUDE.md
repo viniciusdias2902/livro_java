@@ -34,6 +34,11 @@ alta. Exemplo gravado:
 Sem metáfora. Proibidas em especial: variável como caixa, herança como família, objeto
 como "coisa do mundo real".
 
+Travessão é recurso raro: no máximo um a cada 250 palavras, verificado pelo lint.
+Aparte se resolve com vírgula, parêntese, dois-pontos ou frase própria — variar a
+pontuação é parte do ofício. A referência de registro é o livro técnico estabelecido
+e a documentação oficial, nunca o tutorial de internet.
+
 ## Regras de conteúdo
 
 - **Nenhum termo sem definição.** Nenhum termo técnico aparece antes de ter sido

@@ -6,25 +6,25 @@
 c3
 ```
 
-Um processador da família x86 — a que equipa a maior parte dos computadores de
-mesa e dos servidores — recebe ordens nesse formato. Cada linha acima é uma
+Um processador da família x86, a que equipa a maior parte dos computadores de
+mesa e dos servidores, recebe ordens nesse formato. Cada linha acima é uma
 instrução: a primeira copia um valor de um lugar para outro dentro do
 processador, a segunda soma dois valores, a terceira devolve o resultado ao
 ponto que pediu a soma. Esse formato tem nome: código de máquina, e é a única
-coisa que um processador executa. Tudo o que um computador faz — abrir uma
-página, calcular um boleto, gravar um arquivo — termina, em algum nível, em
+coisa que um processador executa. Tudo o que um computador faz, de abrir uma
+página a calcular um boleto ou gravar um arquivo, termina, em algum nível, em
 sequências como essa.
 
 A própria escrita dessas linhas, porém, usa duas convenções que precisam ser
 desfeitas antes de qualquer outra coisa, porque as duas reaparecem pela vida
 inteira de quem programa. Um processador é um circuito elétrico, e um circuito
-distingue com segurança apenas dois estados — tensão presente ou tensão
+distingue com segurança apenas dois estados: tensão presente ou tensão
 ausente. Toda informação que um computador guarda, transmite ou executa é, por
 isso, uma sequência desses dois estados, anotados no papel como 0 e 1. Cada
 posição de uma sequência dessas é um bit, a menor unidade de informação que
 existe; a escrita que usa apenas os símbolos 0 e 1 chama-se notação binária.
-Em notação binária, as três instruções da abertura têm esta forma — a forma
-que existe de fato dentro da máquina:
+Em notação binária, as três instruções da abertura têm a forma que existe de
+fato dentro da máquina:
 
 ```
 10001001 11001000
@@ -35,16 +35,16 @@ que existe de fato dentro da máquina:
 Ler, escrever e conferir zeros e uns em quantidade é impraticável para uma
 pessoa, e por isso quase nenhum material técnico os mostra assim. A abertura
 usou a notação hexadecimal: um sistema de escrita de números com dezesseis
-símbolos — os algarismos de 0 a 9 seguidos das letras de a a f — no lugar dos
-dez algarismos da notação decimal, a da vida cotidiana. O dezesseis não foi
-sorteado: como 16 = 2 × 2 × 2 × 2, cada símbolo hexadecimal corresponde
-exatamente a quatro bits, e um par de símbolos descreve um grupo de oito bits
-— um byte, a unidade em que quase tudo em computação é contado, de tamanho de
-arquivo a memória. O `89` da primeira linha da abertura e o `10001001` da
+símbolos (os algarismos de 0 a 9, seguidos das letras de a a f) no lugar dos
+dez algarismos da notação decimal, a da vida cotidiana. A escolha do dezesseis
+tem motivo: como 16 = 2 × 2 × 2 × 2, cada símbolo hexadecimal corresponde
+exatamente a quatro bits, e um par de símbolos descreve um grupo de oito bits,
+chamado byte, a unidade em que quase tudo em computação é contado, de tamanho
+de arquivo a memória. O `89` da primeira linha da abertura e o `10001001` da
 primeira linha acima são o mesmo número: cento e trinta e sete, em notação
-decimal. Entre as três escritas muda a notação, nunca a quantidade — e a
-quantidade, aqui, nem é o que interessa, porque o processador não a trata como
-número e sim como ordem a cumprir. Notação de número volta ao livro no
+decimal. Entre as três escritas muda a notação, nunca a quantidade. E a
+quantidade, aqui, nem é o que interessa: o processador não a trata como
+número, e sim como ordem a cumprir. Notação de número volta ao livro no
 capítulo 3, quando os valores que um programa manipula ganham forma escrita em
 Java.
 
@@ -53,8 +53,8 @@ sistemas escrevendo essas linhas diretamente. A primeira é a escala: somar dois
 números são três instruções; emitir uma nota fiscal são milhões, e um texto de
 milhões de números não pode ser lido, revisado nem corrigido por uma pessoa. A
 segunda é a dependência do processador: cada família tem seu próprio conjunto
-de instruções, e as três linhas acima, levadas a um processador ARM — o dos
-celulares e de parte dos notebooks atuais —, não significam nada. Um programa
+de instruções, e as três linhas acima, levadas a um processador ARM, o dos
+celulares e de parte dos notebooks atuais, não significam nada. Um programa
 escrito assim vale para uma família de máquina e precisa ser reescrito para
 cada outra.
 
@@ -74,14 +74,14 @@ produz a forma executável chama-se compilador.
 
 "Regras exatas" tem um sentido preciso, e é ele que separa uma linguagem de
 programação de uma língua natural. Para cada texto possível, ou o texto
-pertence à linguagem e tem um único significado, ou não pertence — e então o
+pertence à linguagem e tem um único significado, ou não pertence, e então o
 compilador o recusa, apontando onde parou de entender. Não existe interpretação
 aproximada, não existe "deu para entender o que se quis dizer". A consequência
 prática aparece no primeiro dia e não vai embora: o computador executa o que
 está escrito, não o que se pretendia escrever. Um texto quase correto não
-produz um programa quase correto; produz uma recusa do compilador ou — pior —
-produz um programa que faz, sem avisar ninguém, exatamente a coisa errada que
-está escrita.
+produz um programa quase correto; produz uma recusa do compilador ou, pior,
+um programa que faz, sem avisar ninguém, exatamente a coisa errada que está
+escrita.
 
 ## O que é Java
 
@@ -89,7 +89,7 @@ Java é uma linguagem de programação publicada em 1995 pela Sun Microsystems,
 empresa comprada pela Oracle em 2010. Hoje a linguagem é desenvolvida em um
 projeto de código aberto, o OpenJDK, do qual participam Oracle, Amazon,
 Microsoft, Red Hat e outras empresas, e evolui por um processo público de
-propostas — qualquer mudança na linguagem começa como um documento numerado,
+propostas: qualquer mudança na linguagem começa como um documento numerado,
 discutido em aberto antes de virar código.
 
 O nome, porém, cobre mais do que a notação do texto. O que se instala e se usa
@@ -97,7 +97,7 @@ sob o nome Java são três coisas. A primeira é a linguagem propriamente dita: 
 regras que dizem o que é um texto Java válido e o que cada construção
 significa. A segunda é a biblioteca padrão: um conjunto extenso de código
 pronto, distribuído junto com a linguagem, para as tarefas que quase todo
-programa tem — imprimir no terminal, ler e gravar arquivos, medir tempo,
+programa tem, como imprimir no terminal, ler e gravar arquivos, medir tempo e
 conversar com a rede. Boa parte do trabalho de escrever Java é chamar essa
 biblioteca, e boa parte deste livro é apresentá-la.
 
@@ -105,9 +105,9 @@ A terceira é a plataforma de execução, e é ela que distingue Java da descri�
 genérica dada até aqui. O compilador de Java não traduz o código-fonte para o
 código de máquina de um processador específico. Traduz para uma forma
 intermediária chamada bytecode: instruções definidas em especificação, não em
-silício — o mesmo papel do código de máquina, sem pertencer a nenhum
-processador real. Quem executa bytecode é a JVM, de *Java Virtual Machine* — a
-máquina virtual Java: um programa instalado em cada máquina, que lê essas
+silício, que cumprem o mesmo papel do código de máquina sem pertencer a nenhum
+processador real. Quem executa bytecode é a JVM (*Java Virtual Machine*, a
+máquina virtual Java): um programa instalado em cada máquina, que lê essas
 instruções e as cumpre usando o processador que houver ali. Existe uma JVM
 para x86 com Windows, outra para ARM com macOS, e assim por diante, todas
 lendo o mesmo bytecode. A consequência é o que define a plataforma: o mesmo
@@ -116,13 +116,13 @@ o que muda de uma máquina para outra é a JVM instalada nela, não o programa. 
 capítulo 2 põe as duas peças para funcionar no terminal, com os comandos que
 compilam e executam.
 
-Essa arquitetura, somada a um compromisso incomum de compatibilidade — código
-compilado há vinte anos continua rodando nas versões atuais —, explica onde
+Essa arquitetura, somada a um compromisso incomum de compatibilidade (código
+compilado há vinte anos continua rodando nas versões atuais), explica onde
 Java está: em sistemas bancários, no comércio eletrônico de grande porte, em
 ferramentas de infraestrutura que sustentam outros sistemas, e na origem dos
 aplicativos Android, que usam a linguagem com outra plataforma de execução.
-Java é uma escolha frequente para sistemas que precisam funcionar por décadas e
-ser mantidos por pessoas que não estavam lá quando eles começaram — e as
+Java é uma escolha frequente para sistemas que precisam funcionar por décadas
+e ser mantidos por pessoas que não estavam lá quando eles começaram. As
 decisões de projeto da linguagem, inclusive as que geram reclamação, fazem
 sentido lidas contra esse requisito.
 
@@ -130,9 +130,8 @@ sentido lidas contra esse requisito.
 
 Desenvolver em Java exige instalar um único conjunto de programas: o JDK, sigla
 de Java Development Kit. Dele fazem parte o compilador de Java, a JVM e a
-biblioteca padrão. Instalado o JDK, o
-terminal passa a ter o comando `java`, e pedir a versão a ele é a primeira
-verificação a fazer em qualquer máquina:
+biblioteca padrão. Instalado o JDK, o terminal passa a ter o comando `java`, e
+pedir a versão a ele é a primeira verificação a fazer em qualquer máquina:
 
 ```
 $ java -version
@@ -141,7 +140,7 @@ OpenJDK Runtime Environment Temurin-25.0.1+8 (build 25.0.1+8-LTS)
 OpenJDK 64-Bit Server VM Temurin-25.0.1+8 (build 25.0.1+8-LTS, mixed mode)
 ```
 
-O número no começo da primeira linha é a versão — 25, neste caso. O nome
+O número no começo da primeira linha é a versão, 25 neste caso. O nome
 Temurin, nas linhas seguintes, identifica a distribuição: o JDK é desenvolvido
 como código aberto no projeto OpenJDK, e o que se baixa e instala é um
 empacotamento desse código feito por alguma empresa, compilado e testado para
@@ -157,23 +156,24 @@ trocar de uma para outra não muda uma linha do que vem pela frente.
 Até 2017, uma versão nova de Java saía quando ficava pronta, em intervalos
 irregulares: quase cinco anos separam a versão 6 da 7; a 8 é de 2014, a 9 de
 2017. Desde a versão 9 o calendário é fixo: uma versão nova em março e outra em
-setembro, todos os anos, estejam prontas as novidades que estiverem — o que não
+setembro, todos os anos, estejam prontas as novidades que estiverem; o que não
 entrou espera a versão seguinte. O número da versão, portanto, mede posição no
 calendário, não tamanho de mudança: a distância entre a 24 e a 25 pode ser
 maior ou menor do que entre a 23 e a 24.
 
-Novidade de linguagem raramente estreia pronta. Entra primeiro como prévia —
-*preview*, o nome que aparece na documentação em inglês: disponível para
-teste, sujeita a mudar de forma, desligada a menos que se peça para ligá-la. Depois de uma ou mais rodadas de prévia, a novidade é finalizada
-e passa a valer sem pedido nenhum. Este livro se apoia em um recurso que
-percorreu esse caminho e foi finalizado na versão 25 — essa é a razão da
-exigência de versão feita na prática deste capítulo.
+Novidade de linguagem raramente estreia pronta. Entra primeiro como prévia
+(*preview*, o nome que aparece na documentação em inglês): disponível para
+teste, sujeita a mudar de forma, desligada a menos que se peça para ligá-la.
+Depois de uma ou mais rodadas de prévia, a novidade é finalizada e passa a
+valer sem pedido nenhum. Este livro se apoia em um recurso que percorreu esse
+caminho e foi finalizado na versão 25; essa é a razão da exigência de versão
+feita na prática deste capítulo.
 
 A cada dois anos, a versão de setembro recebe a marca LTS, de *long-term
-support* — suporte de longo prazo. Uma versão LTS continua recebendo correções
+support*, suporte de longo prazo. Uma versão LTS continua recebendo correções
 de erros e de segurança por anos; uma versão comum para de recebê-las seis
 meses depois de lançada, quando a seguinte chega. São LTS as versões 11 (2018),
-17 (2021), 21 (2023) e 25 (2025) — e também a 8, de 2014, anterior ao
+17 (2021), 21 (2023) e 25 (2025), e também a 8, de 2014, anterior ao
 calendário atual e ainda viva em muitos sistemas antigos. Empresas que mantêm
 sistemas em produção em geral ficam nas LTS e pulam de uma para a outra;
 as versões intermediárias são usadas por quem quer testar as novidades no
@@ -203,12 +203,12 @@ não?
 </div>
 
 A primeira resposta é sim: 21 é a LTS de setembro de 2023, e a própria saída
-mostra a correção 21.0.8, publicada em julho de 2025 — a versão segue mantida.
-A segunda resposta é não: o livro exige a versão 25 ou mais nova, e essa
-instalação está quatro versões e dois anos atrás dela. Receber correções e
-estar atualizado são coisas diferentes — a saída acima é de uma máquina bem
-cuidada e, ainda assim, insuficiente aqui. A terceira: instalar um JDK da
-versão 25 ou mais nova, e nada se transforma sozinho — é uma segunda
+mostra a correção 21.0.8, publicada em julho de 2025, sinal de que a versão
+segue mantida. A segunda resposta é não: o livro exige a versão 25 ou mais
+nova, e essa instalação está quatro versões e dois anos atrás dela. Receber
+correções e estar atualizado são coisas diferentes: a saída acima é de uma
+máquina bem cuidada e, ainda assim, insuficiente aqui. A terceira: instalar um
+JDK da versão 25 ou mais nova, e nada se transforma sozinho. É uma segunda
 instalação, e o comando `java` do terminal precisa passar a apontar para ela.
 Uma máquina com JDK em dia para o sistema que ela roda pode estar anos
 atrasada para este livro, e o número na primeira linha é o que decide.

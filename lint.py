@@ -99,6 +99,16 @@ def checar_prosa(man, ordem, introduz, erros):
             for m in re.finditer(padrao, prosa, flags=re.I):
                 erros.append(f"[{cap['id']}] registro ({rotulo}): '{m.group(0)}'")
 
+        # 2a. saturação de travessão: aparte se resolve com vírgula, parêntese
+        #     ou frase própria; travessão é recurso raro
+        n_trav = prosa.count("—")
+        n_palavras = len(prosa.split())
+        if n_palavras and n_trav > max(3, n_palavras // 250):
+            erros.append(
+                f"[{cap['id']}] {n_trav} travessões em {n_palavras} palavras "
+                f"(limite: 1 a cada 250)"
+            )
+
         # 2. saturação de segunda pessoa
         frases = [f for f in re.split(r"[.!?]\s", prosa) if f.strip()]
         com_voce = sum(1 for f in frases if re.search(r"\bvoc[êe]\b", f, re.I))
