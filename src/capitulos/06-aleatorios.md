@@ -22,10 +22,10 @@ $ java Sorteio.java
 89
 ```
 
-Duas execuções, quatro valores diferentes. `Random` é um objeto da
-biblioteca padrão que produz números imprevisíveis sob demanda: `new`
-o cria, como criou o `StringBuilder` do capítulo 5, e cada chamada de
-`nextInt(1, 101)` devolve um inteiro de 1 a 100. O que exatamente é o nome
+Duas execuções, quatro valores diferentes. Sob o nome `Random`, a biblioteca
+padrão oferece um gerador de números: `new Random()` cria um, do mesmo jeito
+que `new StringBuilder()` criou o objeto de texto do capítulo 5, e cada
+chamada de `nextInt(1, 101)` devolve um inteiro de 1 a 100. O que exatamente é o nome
 `Random`, e por que `new Random()` tem essa forma, é assunto do capítulo 7;
 este capítulo é sobre usá-lo bem, e sobre o punhado de contas prontas que
 mora sob o nome `Math`.
@@ -70,8 +70,9 @@ O dado, porém, está viciado de um jeito que nenhuma dessas execuções denunci
 `nextInt(6)` produz de 0 a 5: este dado tem uma face zero que não existe e
 nunca tira seis. Nenhum erro acontece, os valores parecem plausíveis, e o
 defeito só seria flagrado por quem contasse milhares de lançamentos. O
-limite de fora é a fonte clássica de erros de um-a-menos com `Random`, e a
-correção tem duas grafias equivalentes: `dado.nextInt(6) + 1` ou
+limite de fora é, com `Random`, a fonte clássica dos erros de *off-by-one*,
+o engano de uma unidade num limite, e a correção tem duas grafias
+equivalentes: `dado.nextInt(6) + 1` ou
 `dado.nextInt(1, 7)`. Na dúvida, a forma de dois argumentos deixa a intenção
 escrita: de 1 até antes de 7.
 
@@ -158,7 +159,9 @@ void main() {
 ```
 
 `max` e `min` escolhem entre dois valores, `abs` descarta o sinal, e `round`
-arredonda para o inteiro mais próximo, devolvendo `long`. `round` é o
+arredonda para o inteiro mais próximo, devolvendo `long`; nos empates,
+arredonda para cima, e por isso 2.5 foi a 3, enquanto `Math.round(-2.5)`
+daria −2. `round` é o
 arredondamento que o casting do capítulo 3 não faz: `(int) 2.9` trunca para
 2, `Math.round(2.9)` vai a 3. Na ficha ficam ainda `pow` e `sqrt`, para
 potência e raiz, à disposição de quem precisar; nenhum exercício deste livro
@@ -241,7 +244,7 @@ todas as direções.
 
 | Termo | Definição |
 | --- | --- |
-| `Random` | objeto gerador de números imprevisíveis sob demanda |
+| `Random` | gerador de números pseudoaleatórios; a sequência é determinada pela semente |
 | número pseudoaleatório | valor calculado em sequência determinada, com aparência de sorteio |
 | semente | valor inicial que determina toda a sequência do gerador |
 | `Math` | conjunto de contas prontas da biblioteca padrão, chamadas pelo nome |

@@ -20,8 +20,9 @@ Bem-vindo, Ana.
 devolve o que foi digitado. O valor devolvido é um texto, e texto em Java
 tem tipo: `String`. A segunda linha monta a saudação com o operador `+`, que
 entre textos tem outro significado, apresentado adiante. Duas linhas, e o
-programa deixou de ser um monólogo. O preço é que `String` não é como os
-tipos do capítulo 3, e a diferença entre as duas famílias de tipos é o
+programa passou a depender do que quem o executa digita. O preço é que
+`String` não é como os tipos que vieram antes, e a diferença entre as duas
+famílias de tipos é o
 assunto que dá nome a este capítulo, além de ser a origem de metade dos
 defeitos difíceis de quem começa.
 
@@ -52,9 +53,12 @@ Java
 `length()` devolve a quantidade de caracteres; `toUpperCase()` devolve a
 versão em maiúsculas; `charAt(0)` devolve o `char` da posição zero, porque
 posições em Java começam do zero, um fato que volta em força na seção de
-arrays; `substring(0, 4)` devolve o trecho da posição 0 até antes da 4. O
-padrão de todos eles fica claro em breve: nenhum altera o texto original,
-todos devolvem um valor novo.
+arrays; `substring(0, 4)` devolve o trecho da posição 0 até antes da 4. Os
+parênteses vazios de `length()` são a primeira chamada sem argumento do
+livro: chamar sem entregar valor nenhum é permitido, e os parênteses
+continuam obrigatórios, porque são eles que fazem a chamada. Nenhum desses
+métodos altera o texto original; os que produzem texto devolvem outro
+`String`, e a seção de imutabilidade retoma essa propriedade.
 
 O `+` entre um `String` e qualquer outro valor produz um `String` novo com
 os dois emendados, e isso se chama concatenação: `"Bem-vindo, " + nome`
@@ -83,17 +87,17 @@ void main() {
 9
 ```
 
-`int[]` é o tipo "array de `int`", e as chaves com valores são o literal de
-array. Cada posição é lida e gravada pelo índice entre colchetes, contado a
-partir do zero: num array de 3 posições, os índices válidos são 0, 1 e 2.
-`length`, sem parênteses, informa o tamanho, fixado na criação e imutável
-dali em diante. Um array também nasce vazio, com a palavra `new`, dizendo o
-tamanho: `new int[10]` cria dez posições valendo zero. O que `new` faz por
-baixo é o coração da próxima seção.
+`int[]` é o tipo "array de `int`", e as chaves com valores são o
+inicializador de array, uma escrita que só vale junto da declaração. Cada
+posição é lida e gravada pelo índice entre colchetes, contado a partir do
+zero: num array de 3 posições, os índices válidos são 0, 1 e 2. `length`,
+sem parênteses, informa o tamanho, fixado na criação e imutável dali em
+diante. Um array também nasce sem valores escolhidos, com a palavra `new` e
+o tamanho: `new int[10]` cria dez posições valendo zero, o valor padrão de
+`int`. A próxima seção mostra o que `new` faz.
 
-Índice fora da faixa é o segundo erro de execução clássico da linguagem, ao
-lado do que o capítulo 2 mostrou. Pedir `notas[3]` ao array de três posições
-acima produz:
+Índice fora da faixa é o segundo erro de execução clássico da linguagem.
+Pedir `notas[3]` ao array de três posições acima produz:
 
 ```
 $ java Notas.java
@@ -105,7 +109,7 @@ A mensagem de `ArrayIndexOutOfBoundsException` entrega o índice pedido, o
 tamanho real e a linha. Ela costuma nascer de um laço com condição `<=` onde
 deveria ser `<`, porque o último índice válido é o tamanho menos um.
 
-Percorrer um array combina com o `for` do capítulo 4, e existe uma forma
+Percorrer um array combina com o `for` clássico, e existe uma forma
 dedicada a "visitar todos", o laço for-each, que dispensa o índice quando a
 posição não importa:
 
@@ -123,7 +127,7 @@ da posição seguinte, do primeiro ao último.
 
 <div class="previsao">
 
-Duas variáveis, um literal de array, uma alteração:
+Duas variáveis, um inicializador de array, uma alteração:
 
 ```java
 void main() {
@@ -143,7 +147,7 @@ A alteração foi feita através de `b`. O que imprime a leitura através de
 99
 ```
 
-Este é o fato central do capítulo. Uma variável de tipo primitivo guarda o
+Uma variável de tipo primitivo guarda o
 próprio valor; uma variável de tipo objeto, como `String` e arrays, não
 guarda o objeto: guarda o endereço dele, e esse endereço se chama
 referência. Quando `int[] b = a` executa, o que se copia é o endereço, não o
@@ -158,8 +162,9 @@ flowchart LR
 ```
 
 Os objetos em si vivem numa região da memória chamada heap, criados pelo
-`new` ou por literais, e as variáveis, que vivem na pilha de chamadas do
-capítulo 4, guardam apenas referências para lá. Cada objeto criado tem
+`new` ou pelo inicializador, e as variáveis vivem na pilha de chamadas, a
+estrutura que guarda as variáveis de cada método em andamento; o que elas
+guardam de um objeto é só a referência para lá. Cada objeto criado tem
 identidade: é ele mesmo, distinto de qualquer outro, mesmo que outro objeto
 tenha conteúdo idêntico. Dois arrays criados com `{ 10, 20, 30 }` duas vezes
 são dois objetos; `a` e `b` acima são dois nomes para um só.
@@ -171,11 +176,11 @@ Um método que só deveria calcular:
 ```java
 int menorNota(int[] notas) {
     int menor = notas[0];
-    for (int nota : notas) {
-        if (nota < menor) {
-            menor = nota;
+    for (int i = 0; i < notas.length; i++) {
+        if (notas[i] < menor) {
+            menor = notas[i];
         }
-        notas[0] = 0;
+        notas[i] = 0; // limpa o rascunho, acreditando ser uma cópia
     }
     return menor;
 }
@@ -193,8 +198,8 @@ void main() {
 ```
 
 O método devolveu o menor valor, mas a segunda impressão mostra o array de
-`main` alterado: a linha `notas[0] = 0`, esquecida dentro do laço, agiu
-sobre o array original.
+`main` alterado: a limpeza, escrita na crença de que o parâmetro era uma
+cópia, zerou o array original.
 
 </div>
 
@@ -300,7 +305,15 @@ para emendas pontuais; `StringBuilder` para montagem dentro de laço.
 
 Uma referência pode não apontar para objeto nenhum, e o literal desse estado
 é `null`. Chamar qualquer método através de uma referência nula derruba o
-programa com o mais famoso dos erros de execução:
+programa com um erro de execução: o `NullPointerException`. O programa
+abaixo, salvo em `Cadastro.java`, o provoca:
+
+```java
+void main() {
+    String nome = null;
+    IO.println(nome.length());
+}
+```
 
 ```
 $ java Cadastro.java
@@ -308,11 +321,12 @@ Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String
 	at Cadastro.main(Cadastro.java:3)
 ```
 
-A mensagem do `NullPointerException` diz qual chamada falhou e sobre o quê,
-e a linha aponta o local; a causa verdadeira, porém, costuma estar antes, no
-ponto que deixou a referência nula. Nos programas deste livro, `null` quase
-não aparece por enquanto; ele volta a cada capítulo em que alguma operação
-pode legitimamente não ter resposta.
+A mensagem diz qual chamada falhou e sobre o quê: o `<local1>` é a variável
+`nome`, cujo nome o compilador descarta na tradução, restando a posição
+dela. A linha aponta o local da queda; a causa verdadeira, porém, costuma
+estar antes, no ponto que deixou a referência nula. Nos programas deste
+livro, `null` quase não aparece por enquanto; ele volta no capítulo 17,
+quando buscas passam a poder terminar sem encontrar nada.
 
 `IO.readln` devolve sempre `String`, inclusive quando o usuário digita um
 número: `"25"` é texto, e `"25" + 1` é a concatenação `"251"`, não a soma
@@ -355,7 +369,7 @@ $ java Soma.java 2 3
 `args` é um array de `String` com os argumentos da linha de comando, na
 ordem digitada: `args[0]` é `"2"`, `args[1]` é `"3"`, e `args.length` diz
 quantos vieram. Executado sem argumentos, o programa cai com o
-`ArrayIndexOutOfBoundsException` desta mesma página, pedindo o índice 0 de
+`ArrayIndexOutOfBoundsException` deste capítulo, pedindo o índice 0 de
 um array de tamanho zero; conferir `args.length` antes de ler é o hábito que
 evita a queda. As duas formas de `main` convivem na linguagem, e a JVM
 prefere a que declara o array quando as duas existem no arquivo.
