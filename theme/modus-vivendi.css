@@ -102,3 +102,9 @@ html.coal {
   margin: 0 auto;
   max-height: 85vh;
 }
+
+/* Marcador » de título-alvo (h:target, CSS padrão do mdBook) no roxo da paleta */
+.coal h1:target::before, .coal h2:target::before, .coal h3:target::before,
+.coal h4:target::before, .coal h5:target::before, .coal h6:target::before {
+  color: var(--mv-magenta-cooler);
+}
