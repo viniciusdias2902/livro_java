@@ -48,10 +48,10 @@ como "coisa do mundo real".
 - **Armadilha** (`<div class="armadilha">`) é comportamento contraintuitivo que produz
   bug silencioso. Cai nos testes.
 - **Domínio contínuo:** um mercadinho de bairro (produtos, preços, estoque, lotes e
-  validades, vendas, caderneta de fiado), do capítulo 6 ao 24. Sem `Foo` e `Bar`.
+  validades, vendas, caderneta de fiado), do capítulo 7 ao 25. Sem `Foo` e `Bar`.
 - **Estrutura:** abre com o problema concreto, fecha com seção de prática e ficha de
   referência. Ambas obrigatórias, verificadas pelo lint.
-- Java 25. Capítulos 2 a 5 usam arquivo-fonte compacto nos exercícios.
+- Java 25. Capítulos 2 a 6 usam arquivo-fonte compacto nos exercícios.
 
 ## Fluxo de trabalho
 

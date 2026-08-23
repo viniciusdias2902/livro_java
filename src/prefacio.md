@@ -15,7 +15,7 @@ mão o mecanismo central desses frameworks; quem não quiser não perde nada,
 porque esse mesmo capítulo vale por si, como técnica de organizar programas
 grandes.
 
-São vinte e quatro capítulos e três apêndices. A ordem não é temática, é de
+São vinte e cinco capítulos e três apêndices. A ordem não é temática, é de
 dependência: cada capítulo assume todos os anteriores, cada termo técnico é
 definido uma única vez, no capítulo que o apresenta, e usado livremente dali
 em diante. Por isso a leitura é sequencial — pular um capítulo cobra o preço
@@ -25,11 +25,11 @@ depende deles.
 
 ## O mercadinho
 
-Do capítulo 6 ao 24, todos os exemplos e exercícios constroem o mesmo sistema:
+Do capítulo 7 ao 25, todos os exemplos e exercícios constroem o mesmo sistema:
 um mercadinho de bairro, com produtos e preços, estoque, lotes e validades,
 vendas, a caderneta de fiado e relatórios.
 Ele cresce peça a peça — cada capítulo acrescenta o que acabou de ensinar — e
-termina, no capítulo 24, como um programa completo de terminal; nos apêndices,
+termina, no capítulo 25, como um programa completo de terminal; nos apêndices,
 ganha tela.
 
 A escolha de um sistema contínuo, no lugar dos exemplos avulsos habituais, é a
@@ -41,9 +41,9 @@ apressada no capítulo 7 cobra seu preço no capítulo 15, e consertá-la exige
 mexer em código que já existia. Aprender a conviver com isso é parte do que o
 livro ensina.
 
-O mercadinho aparece pela primeira vez bem antes do capítulo 6: no capítulo 2, o
+O mercadinho aparece pela primeira vez bem antes do capítulo 7: no capítulo 2, o
 primeiro programa do livro imprime uma única linha com o nome dele. Dos
-capítulos 2 ao 5, enquanto a linguagem ainda não tem peças para construir um
+capítulos 2 ao 6, enquanto a linguagem ainda não tem peças para construir um
 sistema, os exemplos são pequenos e avulsos de propósito; o nome na tela é só
 o lembrete de para onde eles levam.
 
@@ -97,7 +97,7 @@ reutilizar.
 
 Um computador com Windows, Linux ou macOS, um terminal, um editor de texto
 qualquer e um JDK da versão 25 ou mais nova — o capítulo 1 explica o que é um
-JDK, de onde baixar e como conferir a versão. Até o capítulo 13, nenhum outro
+JDK, de onde baixar e como conferir a versão. Até o capítulo 14, nenhum outro
 programa é necessário.
 
 Um ambiente integrado de desenvolvimento — IDE, de *integrated development

@@ -30,12 +30,12 @@ mensagens de erro de todos os capítulos seguintes.
 
 O texto impresso, por sua vez, não é um exemplo qualquer. Um mercadinho de
 bairro — com produtos e preços, estoque e validades, vendas e a caderneta de
-fiado — é o sistema que este livro constrói, peça a peça, do capítulo 6 ao 24
+fiado — é o sistema que este livro constrói, peça a peça, do capítulo 7 ao 25
 — o prefácio descreve esse plano —, e ele entra em cena aqui do único jeito
-que a linguagem vista até agora permite: como uma linha de saída. Até o capítulo
-5, os exemplos seguem pequenos e avulsos, porque as peças para mais do que
-isso ainda não existem; o nome na tela fica como lembrete de para onde eles
-levam.
+que a linguagem vista até agora permite: como uma linha de saída. Até o
+capítulo 6, os exemplos seguem pequenos e avulsos, porque as peças para mais
+do que isso ainda não existem; o nome na tela fica como lembrete de para onde
+eles levam.
 
 ## As três linhas, uma a uma
 
@@ -82,7 +82,7 @@ fórum — mostra essas linhas. O recurso que as dispensa percorreu o caminho de
 prévia descrito no capítulo 1 e foi finalizado na versão 25; dela em diante, o
 compilador fornece a moldura quando ela não está escrita. O que essa moldura
 declara — e por que ela deixa de ser dispensável assim que um programa passa
-de um arquivo — é o capítulo 6. Há também uma segunda forma de escrever
+de um arquivo — é o capítulo 7. Há também uma segunda forma de escrever
 `main`, que recebe o que foi digitado no terminal depois do nome do programa;
 essa forma é o capítulo 5.
 
@@ -125,7 +125,7 @@ OpenJDK 64-Bit Server VM Corretto-26.0.2.10.1 (build 26.0.2+10-FR, mixed mode, s
 
 A leitura é a que o capítulo 1 ensinou: o número da primeira linha precisa ser
 25 ou maior, e o resto identifica a distribuição — um Corretto, nesta máquina
-— sem mudar nada do que este livro faz. Do capítulo 6 em diante, quando os
+— sem mudar nada do que este livro faz. Do capítulo 7 em diante, quando os
 arquivos passam a trazer a moldura escrita por extenso, o livro roda também em
 JDKs mais antigos; até lá, não.
 
@@ -150,7 +150,7 @@ O conteúdo desse arquivo não é texto Java nem código de máquina de processa
 algum. É bytecode — a forma intermediária que o capítulo 1 descreveu, até
 agora uma ideia, daqui em diante um arquivo concreto no disco, que pode ser
 copiado, movido e apagado como qualquer outro. A extensão `.class` vem do nome
-de uma declaração que o capítulo 6 apresenta.
+de uma declaração que o capítulo 7 apresenta.
 
 Quem lê e executa esse arquivo é a JVM do capítulo 1. O comando `java` inicia uma JVM,
 entrega a ela o bytecode indicado e sai do caminho: dali em diante, quem está
@@ -274,7 +274,7 @@ vem depois dele. O formato da mensagem merece memória: `could not find or
 load` quase nunca quer dizer que o código não existe. Quer dizer que ele não
 está em nenhum dos lugares da lista. Procurar o defeito dentro do fonte, nesse
 caso, é procurar onde não está — e essa confusão responde por boa parte das
-primeiras horas perdidas de quem começa. A partir do capítulo 13, quem monta o
+primeiras horas perdidas de quem começa. A partir do capítulo 14, quem monta o
 classpath deixa de ser quem digita o comando e passa a ser a ferramenta de
 construção do projeto; até lá, ele é digitado à mão, e digitá-lo à mão algumas
 vezes é o que torna compreensível o que a ferramenta fará depois.
