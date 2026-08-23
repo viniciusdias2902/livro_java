@@ -4,8 +4,9 @@ Toda correção do mercadinho, até aqui, foi conferida do mesmo jeito: rodar o
 programa e olhar a saída. O método funciona para um arquivo e morre de
 cansaço num sistema: a cada mudança no `Caixa`, alguém precisaria reexecutar
 à mão a venda em dinheiro, a venda no cartão, o fiado no limite, o desconto,
-o troco, e ninguém reexecuta tudo, então as quebras passam. A conferência
-manual não escala; a saída é escrever programas que conferem programas.
+o troco, e ninguém reexecuta tudo, então as quebras passam. A conferência manual
+deixa de acontecer conforme o sistema cresce; a saída é escrever programas
+que conferem programas.
 
 Um teste unitário é um método que executa um pedaço pequeno do sistema, uma
 unidade, e confere o resultado contra o esperado, falhando sozinho quando
@@ -37,17 +38,20 @@ exatamente como o capítulo 14 prometeu:
 Duas novidades no XML. O `<scope>test</scope>` diz que a dependência existe
 só para os testes: o JUnit não entra no jar do mercadinho, porque o cliente
 do sistema não roda testes. E o bloco do `surefire` fixa a versão do
-executor de testes do Maven; sem ele, versões antigas do executor ignoram
-testes de JUnit 5 em silêncio, e um projeto pode exibir `BUILD SUCCESS` sem
-nunca ter rodado teste nenhum.
+executor de testes do Maven. A trava protege contra máquinas e projetos
+presos a Maven antigo, cujo executor padrão ignora testes de JUnit 5 em
+silêncio, exibindo `BUILD SUCCESS` sem rodar teste nenhum; o Maven do
+capítulo 14 já traz executor moderno, e fixar a versão mantém a construção
+igual em toda máquina.
 
 ## O primeiro teste
 
-Teste é código, e mora na pasta que a convenção do capítulo 14 reservou:
+Teste é código, e mora na pasta que a convenção de diretórios reservou:
 `src/test/java`. A classe de teste espelha a classe testada, com `Test` no
 nome:
 
 ```java
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -68,7 +72,7 @@ $ mvn test
 [INFO] BUILD SUCCESS
 ```
 
-A anotação `@Test`, no espírito do `@Override` do capítulo 8, marca o método
+A anotação `@Test`, no espírito do `@Override`, marca o método
 para o executor encontrar; o nome do método é a descrição do caso, e vale
 uma frase inteira, porque é ele que aparece no placar quando falha. O corpo
 segue um ritmo em três tempos que praticamente todo teste do mundo repete:
@@ -88,39 +92,40 @@ Quando a asserção falha, o teste conta exatamente o quê e onde:
 
 ```console
 $ mvn test
-[ERROR] ProdutoTest.calculaPrecoParaTresUnidades:12
-org.opentest4j.AssertionFailedError: expected: <59.70> but was: <59.7000>
-[INFO] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[ERROR] CaixaTest.aplicaDescontoDeCincoPorCento:18
+org.opentest4j.AssertionFailedError: expected: <57.00> but was: <57.0000>
+[INFO] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0
 [INFO] BUILD FAILURE
 ```
 
 <div class="previsao">
 
-A falha acima é real, e nasce de um teste sobre o método que aplica desconto
-percentual:
+A falha acima nasce de um teste sobre o método que aplica o desconto de 5%
+do dinheiro:
 
 ```java
 @Test
 void aplicaDescontoDeCincoPorCento() {
-    BigDecimal resultado = caixa.comDesconto(new BigDecimal("59.70"));
-    assertEquals(new BigDecimal("56.71"), resultado);
+    BigDecimal resultado = caixa.comDesconto(new BigDecimal("60.00"));
+    assertEquals(new BigDecimal("57.00"), resultado);
 }
 ```
 
-O cálculo multiplica por `0.95` e o valor está certo na etiqueta. Por que o
-teste falha mesmo assim?
+Sessenta reais menos 5% são exatamente cinquenta e sete, e o método
+multiplica por `0.95` sem errar a conta. Por que o teste falha mesmo assim?
 
 </div>
 
 Porque `assertEquals` usa o `equals`, e o `equals` de `BigDecimal` é o
-estrito do capítulo 10: `56.71` e `56.7150` têm escalas diferentes, e a
-multiplicação soma as casas dos dois lados. O teste está protegendo o
-sistema de um jeito que a etiqueta não mostra: ou o método normaliza a
-escala com `setScale`, arredondando centavos de um jeito decidido, ou o
-dinheiro do mercadinho vai acumulando casas fantasmas a cada desconto. Teste
-bom falha por motivo verdadeiro, e este é o primeiro serviço prestado pelo
-placar: a conversa sobre arredondamento aconteceu no capítulo do teste, não
-numa diferença de caixa.
+estrito por escala: `57.00` e `57.0000` são o mesmo número, o `compareTo`
+daria zero, e ainda assim não são iguais para o `equals`, porque a
+multiplicação somou as casas dos dois lados. O teste está protegendo o
+sistema de um jeito que a etiqueta não mostra: ou o método fixa a escala
+com `setScale(2)`, e todo valor de dinheiro do sistema circula com duas
+casas, ou cada desconto acumula casas fantasmas que vão aparecer em alguma
+comparação futura. Teste bom falha por motivo verdadeiro, e este é o
+primeiro serviço do placar: a conversa sobre escala aconteceu no capítulo
+do teste, e não numa diferença de caixa.
 
 ## Fixture e o ciclo de cada teste
 
@@ -128,6 +133,8 @@ Testes da mesma classe repetem preparação, e a repetição tem lugar próprio.
 A fixture é o conjunto de objetos que os testes de uma classe usam como
 ponto de partida, e o método anotado com `@BeforeEach` a monta de novo antes
 de cada teste:
+
+Os imports já vistos ficam omitidos dos próximos trechos.
 
 ```java
 import org.junit.jupiter.api.BeforeEach;
@@ -160,12 +167,12 @@ O "de novo antes de cada" é a parte que importa: cada teste recebe uma
 fixture recém-criada, e a ordem em que os testes rodam deixa de ter
 importância, porque nenhum herda o estado sujo do anterior. Um teste que só
 passa depois de outro é um teste que mente, e a fixture por teste é o que
-evita a mentira. A comparação via `compareTo`, nas duas asserções, é a regra
-de dinheiro do capítulo 10 aplicada a testes.
+evita a mentira. A comparação via `compareTo`, nas duas asserções, é a regra de dinheiro
+aplicada a testes.
 
 Falta testar o que deve dar errado: o construtor de `Produto` precisa
 recusar estoque negativo, e isso também é comportamento com contrato. Sem as
-peças do capítulo 18, a forma disponível usa o que o capítulo 13 deu:
+peças do capítulo 18, a forma disponível usa `try` e `catch`:
 
 ```java
 @Test
@@ -186,7 +193,7 @@ moderna e mais curta de escrever exatamente isso.
 
 <div class="armadilha">
 
-Um teste novo entra na classe, e o placar segue verde:
+Um teste novo entra em `CaixaTest`, e o placar da classe segue limpo:
 
 ```java
 void recusaQuantidadeZero() {
@@ -200,7 +207,7 @@ void recusaQuantidadeZero() {
 
 ```console
 $ mvn test
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0 -- in CaixaTest
 [INFO] BUILD SUCCESS
 ```
 
@@ -227,7 +234,7 @@ notado, porque a semente fixa daquele capítulo torna o sorteio testável:
 
 ```java
 @Test
-void sorteioComSementeFixaCobreAsFacesUmASeis() {
+void sorteioComSementeFixaFicaNaFaixaDoDado() {
     Random dado = new Random(42);
     for (int volta = 0; volta < 1000; volta++) {
         int face = dado.nextInt(1, 7);
@@ -236,7 +243,7 @@ void sorteioComSementeFixaCobreAsFacesUmASeis() {
 }
 ```
 
-É a promessa de reprodutibilidade do capítulo 6, paga: com a semente fixa, o
+É a promessa de reprodutibilidade paga: com a semente fixa, o
 teste confere as mesmas mil jogadas em qualquer máquina, para sempre. E o
 conjunto de testes acumulado muda a economia do sistema inteiro: refatorar o
 `Caixa`, trocar o cálculo do desconto ou acelerar um método deixa de ser um
@@ -250,7 +257,7 @@ promessa, conferida a cada `mvn test`.
 `ProdutoTest`. O executor abre as classes de teste compiladas e pergunta a
 cada uma quais métodos carregam `@Test`, usando um mecanismo da linguagem
 para examinar tipos em execução; o capítulo 23 constrói um executor desses
-do zero, e a mágica dura vinte linhas.
+do zero, em vinte linhas.
 
 </div>
 

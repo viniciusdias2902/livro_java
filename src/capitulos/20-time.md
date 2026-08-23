@@ -24,7 +24,7 @@ IO.println(diasRestantes);
 `LocalDate` representa uma data de calendário, dia, mês e ano, sem hora e
 sem lugar: a data da etiqueta de validade, do feriado, do vencimento.
 Nasce de `LocalDate.of(ano, mes, dia)`, que valida na entrada e recusa 31 de
-fevereiro com a `DateTimeException` da família do capítulo 13, ou de
+fevereiro com `DateTimeException`, uma exceção unchecked, ou de
 `LocalDate.now()`, a data corrente do relógio da máquina. A aritmética vem
 por métodos, `plusDays`, `plusMonths`, `minusWeeks`, e as comparações por
 `isBefore`, `isAfter` e o `compareTo` de `Comparable`, que o tipo implementa;
@@ -62,8 +62,7 @@ LocalDate inicio = LocalDate.of(2026, 1, 31);
 IO.println(inicio.plusMonths(1));
 ```
 
-Fevereiro de 2026 tem 28 dias. O que imprime, e o que a linha nem tenta
-fazer?
+Fevereiro de 2026 tem 28 dias. O que imprime?
 
 </div>
 
@@ -152,8 +151,8 @@ LocalDate lida = LocalDate.parse("30/09/2026", brasileiro);
 
 O padrão usa letras com papel fixo: `dd` dia, `MM` mês, `yyyy` ano. A caixa
 das letras importa, e a dupla `MM` maiúsculo mês contra `mm` minúsculo
-minuto é a confusão mais famosa; a segunda mais famosa é pior, porque passa
-meses sem sintoma:
+minuto é a confusão frequente; a do `YYYY`, logo adiante, é pior, porque
+passa meses sem sintoma:
 
 <div class="armadilha">
 
@@ -175,8 +174,7 @@ A data é de 2025, e o cupom imprime 2026.
 `YYYY` maiúsculo não é o ano do calendário: é o ano da semana, uma convenção
 em que os últimos dias de dezembro podem pertencer à primeira semana do ano
 seguinte, e 31 de dezembro de 2025 pertence. O formato funciona idêntico ao
-`yyyy` o ano inteiro e erra exatamente na virada, quando ninguém está
-olhando e todo cupom importa. A regra: ano de calendário é `yyyy`
+`yyyy` o ano inteiro e erra exatamente na virada do ano. A regra: ano de calendário é `yyyy`
 minúsculo, e `YYYY` só existe para quem trabalha deliberadamente com
 semanas. É o tipo de defeito que o teste de regressão do capítulo 15 fixa
 para sempre com uma data de dezembro.

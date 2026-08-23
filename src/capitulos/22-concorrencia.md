@@ -18,39 +18,43 @@ argumentos e sem retorno, em paralelo com quem pediu:
 
 <div class="previsao">
 
-Duas threads imprimindo, e o `main` esperando as duas com `join`:
+O fechamento divide o mês em duas quinzenas, uma thread para cada, e o
+`main` espera as duas com `join`:
 
 ```java
 void main() throws InterruptedException {
-    Thread caixa1 = new Thread(() -> {
+    Thread primeira = new Thread(() -> {
         for (int i = 1; i <= 3; i++) {
-            IO.println("caixa 1, venda " + i);
+            IO.println("quinzena 1, arquivo " + i);
         }
     });
-    Thread caixa2 = new Thread(() -> {
+    Thread segunda = new Thread(() -> {
         for (int i = 1; i <= 3; i++) {
-            IO.println("caixa 2, venda " + i);
+            IO.println("quinzena 2, arquivo " + i);
         }
     });
-    caixa1.start();
-    caixa2.start();
-    caixa1.join();
-    caixa2.join();
+    primeira.start();
+    segunda.start();
+    primeira.join();
+    segunda.join();
     IO.println("fechado");
 }
 ```
 
-Em que ordem saem as seis vendas?
+Em que ordem saem as seis linhas?
 
 </div>
 
 Em ordem nenhuma garantida, e essa é a resposta certa: numa execução as
-seis podem sair intercaladas, noutra o caixa 1 inteiro antes do caixa 2, e
-duas execuções seguidas podem diferir. Quem decide qual thread avança a
-cada momento é o escalonador do sistema, e o programa correto sob
-concorrência é o que está certo em todas as intercalações possíveis, não o
-que deu certo na intercalação de hoje. Só o "fechado" tem posição prometida,
-porque `join` faz o `main` esperar a thread terminar. `start` dispara;
+seis podem sair intercaladas, noutra a quinzena 1 inteira antes da
+quinzena 2, e duas execuções seguidas podem diferir. Quem decide qual
+thread avança a cada momento é o escalonador do sistema, e o programa
+correto sob concorrência é o que está certo em todas as intercalações
+possíveis, não o que deu certo na intercalação de hoje. Só o "fechado" tem
+posição prometida, porque `join` faz o `main` esperar a thread terminar;
+`join` declara `InterruptedException`, a exceção checked da espera
+interrompida, que os `main` de laboratório repassam com `throws`. `start`
+dispara;
 `run` chamado direto seria um método comum na mesma linha de execução, sem
 paralelismo nenhum, um clássico de primeira semana.
 
@@ -58,8 +62,9 @@ paralelismo nenhum, um clássico de primeira semana.
 
 <div class="armadilha">
 
-Um contador de vendas compartilhado entre dois caixas, cada um registrando
-cem mil:
+O fechamento conta os itens vendidos no mês num contador compartilhado:
+duas tarefas, cada uma varrendo metade dos arquivos e registrando cem mil
+itens:
 
 ```java
 class Contador {
@@ -71,23 +76,23 @@ class Contador {
 }
 
 void main() throws InterruptedException {
-    Contador vendas = new Contador();
+    Contador itens = new Contador();
     Runnable tarefa = () -> {
         for (int i = 0; i < 100_000; i++) {
-            vendas.incrementar();
+            itens.incrementar();
         }
     };
-    Thread caixa1 = new Thread(tarefa);
-    Thread caixa2 = new Thread(tarefa);
-    caixa1.start();
-    caixa2.start();
-    caixa1.join();
-    caixa2.join();
-    IO.println(vendas.total);
+    Thread primeiraMetade = new Thread(tarefa);
+    Thread segundaMetade = new Thread(tarefa);
+    primeiraMetade.start();
+    segundaMetade.start();
+    primeiraMetade.join();
+    segundaMetade.join();
+    IO.println(itens.total);
 }
 ```
 
-Duzentas mil vendas registradas. Três execuções reais imprimiram:
+Duzentos mil itens registrados. Três execuções reais imprimiram:
 
 ```
 127572
@@ -197,8 +202,10 @@ primeira regra do código concorrente que envelhece bem, não compartilhe;
 combine. `synchronized` e `volatile` ficam para quando o compartilhamento é
 inevitável. O executor entra num try-with-resources porque encerrar o
 serviço é fechamento de recurso como os do capítulo 21, e `submit` aceita
-tarefas que devolvem valor e lançam exceção, com o `get` do `Future`
-repassando a exceção de quem falhou.
+tarefas que devolvem valor e lançam exceção. O `get` do `Future` declara
+duas exceções checked: a `InterruptedException` da espera e a
+`ExecutionException`, que embrulha a falha da tarefa e a entrega a quem
+resgatou o recibo.
 
 ## Virtual threads
 

@@ -29,7 +29,7 @@ definição de uma frase. A camada de domínio contém as regras do negócio, os
 tipos e as operações que existiriam em qualquer versão do mercadinho, sem
 saber que terminal, arquivo ou banco existem. A camada de infraestrutura
 contém as bordas técnicas, as classes que tocam o mundo, implementando
-contratos que o domínio declara: o `RepositorioEmArquivo` do capítulo 21
+contratos que o domínio declara: o `RepositorioEmArquivo`
 cumprindo o `RepositorioDeProdutos` do capítulo 24. A camada de apresentação
 contém a conversa com quem usa: ler comandos, mostrar resultados, e nada
 além disso.
@@ -47,9 +47,9 @@ flowchart LR
 A apresentação chama o domínio; a infraestrutura implementa interfaces do
 domínio; e o domínio compila sem que as outras duas existam, porque nenhum
 `import` dele as menciona. Todo o investimento do livro converge nessa
-regra: as interfaces do capítulo 9 são o que permite a seta da
-infraestrutura apontar para dentro, a injeção do capítulo 24 é o que poupa o
-domínio de criar as bordas, e o pacote do capítulo 7 é o muro que torna a
+regra: as interfaces são o que permite a seta da
+infraestrutura apontar para dentro, a injeção é o que poupa o
+domínio de criar as bordas, e o pacote é o muro que torna a
 regra visível numa listagem de pastas.
 
 <div class="previsao">
@@ -67,9 +67,10 @@ Um dos dois comandos funciona sozinho e o outro não. Qual, e por quê?
 </div>
 
 O primeiro compila: o domínio inteiro se resolve sem as outras camadas,
-porque não importa nada delas. O segundo falha com uma fileira de
-`cannot find symbol`, porque a apresentação importa o domínio e ele não está
-no classpath do comando. A assimetria é a arquitetura em forma executável, e
+porque não importa nada delas. O segundo falha já na primeira mensagem,
+`error: package br.com.mercadinho.dominio does not exist`, seguida da
+fileira de `cannot find symbol`, porque a apresentação importa o domínio e
+ele não está no classpath do comando. A assimetria é a arquitetura em forma executável, e
 vale como teste de saúde a qualquer momento: no dia em que o domínio parar
 de compilar sozinho, alguma seta inverteu, e a inversão tem nome na
 armadilha adiante.
@@ -117,10 +118,12 @@ public class TelaDoTerminal {
 }
 ```
 
-Cada linha vem de um capítulo, e nenhuma linha decide regra de negócio: o
-controlador pergunta, converte e repassa; quem sabe se a venda pode
+Cada linha vem de um capítulo, com uma liberdade nova de passagem: o
+`switch` também vale como instrução, executando um braço sem produzir
+valor, e aceita `String` no seletor. Nenhuma linha decide regra de negócio:
+o controlador pergunta, converte e repassa; quem sabe se a venda pode
 acontecer é o `Caixa`, e quem sabe escrever "Pago: R$ 39.80" é a
-`Impressora`, com o switch de padrões do capítulo 12 sobre o `Resultado`.
+`Impressora`, com o switch de padrões sobre o `Resultado`.
 Uma honestidade de terminal: nesta interface, visão e controlador são
 vizinhos de porta, e a fronteira entre eles é mais fina do que o padrão
 sugere; o MVC aparece em forma plena quando a interface tem eventos e
@@ -154,22 +157,26 @@ sem nenhum erro. O que o fechamento do dia vai dizer?
 </div>
 
 Que faltou dinheiro na gaveta. O desconto existe só na impressão: o `Caixa`
-registrou a venda pelo valor cheio, o relatório do capítulo 19 soma o valor
+registrou a venda pelo valor cheio, o relatório do fechamento soma o valor
 cheio, e a caderneta, os testes e o arquivo nunca souberam do desconto,
-porque a regra nasceu na camada errada. Regra de negócio na apresentação é
-uma regra que as outras vias do sistema não enxergam, e o sintoma é sempre
-uma divergência entre o que a tela disse e o que o sistema registrou. A
-correção é de endereço, não de código: a política de desconto entra no
-`Caixa`, testada no `CaixaTest`, e a tela volta a só mostrar o `Resultado`.
-O teste de saúde da previsão pega essa família inteira: regra na tela cria
-`import` de domínio a mais e lógica onde só devia haver tradução.
+porque a regra nasceu na camada errada; o padrão de registro, de passagem,
+também casa dentro do `instanceof`, fora do `case`. Regra de negócio na
+apresentação é uma regra que as outras vias do sistema não enxergam, e o
+sintoma é sempre esse: divergência entre o que a tela disse e o que o
+sistema registrou. A correção é de endereço, não de código: a política de
+desconto entra no `Caixa`, testada no `CaixaTest`, e a tela volta a só
+mostrar o `Resultado`. O que pega essa família em revisão é o próprio
+sintoma, tela e relatório dizendo valores diferentes, e o controlador
+ganhando lógica e `import` onde só devia haver tradução; o teste de
+compilação da previsão fica reservado para o defeito irmão, a seta
+invertida, quando o domínio passa a importar as bordas.
 
 ## Testes por camada
 
 A arquitetura paga o segundo dividendo na suíte. O domínio, onde mora tudo
 que pode dar errado de verdade, testa-se com teste unitário puro: dublês em
 memória via injeção, milissegundos por teste, dezenas de casos, todo o
-arsenal dos capítulos 15 e 18. A infraestrutura testa-se pouco e de outro
+arsenal de testes do livro. A infraestrutura testa-se pouco e de outro
 jeito: alguns testes que escrevem e leem um arquivo temporário de verdade,
 porque o assunto dela é exatamente o disco. E a apresentação quase não se
 testa, de propósito: um controlador que só pergunta, converte e repassa não
@@ -180,8 +187,10 @@ mais testes e mais rápidos.
 
 ## Montagem, empacotamento e o sistema de pé
 
-`Principal.java` é o ponto de montagem do capítulo 24, o jar executável é o
-do capítulo 21, e a sessão final é a razão do livro:
+`Principal.java` é o ponto de montagem do capítulo 24, e o jar executável é
+o do capítulo 21, com um ajuste: agora que as classes têm pacote, o
+`mainClass` do `pom.xml` passa a ser o nome qualificado,
+`br.com.mercadinho.Principal`. A sessão final é a razão do livro:
 
 ```console
 $ mvn package
@@ -240,12 +249,12 @@ um atravessando as camadas pelo caminho certo.
    mesmo valor.
 
 4. Acrescente o comando `relatorio`: total do dia, vendas por categoria e os
-   três mais vendidos, tudo com os pipelines do capítulo 19 sobre os dados
+   três mais vendidos, tudo com pipelines de stream sobre os dados
    do domínio.
 
 5. Acrescente o fiado como meio de pagamento no fluxo de venda, com a
-   caderneta, o limite e a exceção do capítulo 13 atravessando as camadas
-   até virarem uma mensagem digna na tela.
+   caderneta, o limite e a exceção de limite estourado atravessando as
+   camadas até virarem uma mensagem digna na tela.
 
 6. Rode o sistema inteiro pelo jar em outra pasta e em outra máquina se
    puder, com o estoque por argumento, e escreva um parágrafo sobre o que

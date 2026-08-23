@@ -35,17 +35,22 @@ void main() {
 
 ```console
 $ java Recebimento.java
-Exception in thread "main" java.lang.ClassCastException: class java.lang.String cannot be cast to class Produto
-	at Recebimento.main(Recebimento.java:24)
+Exception in thread "main" java.lang.ClassCastException: class java.lang.String cannot be cast to class Produto ...
+	at Recebimento.main(Recebimento.java:23)
 ```
 
 A prateleira aceita produto, aceita bilhete, aceita qualquer coisa, porque
 `Object` aceita qualquer coisa; e tudo que sai dela sai como `Object`,
-obrigando o downcast do capítulo 8 em cada leitura. O programa compila
+obrigando um downcast em cada leitura. O programa compila
 inteiro e cai na leitura da posição errada, em execução, longe do `guardar`
 que plantou o problema. O truque do `Object` tem exatamente esse custo:
-o compilador, que passou o livro inteiro pegando engano de tipo, fica cego
-dentro da prateleira. Generics é o mecanismo que devolve a visão a ele.
+o compilador, que passou o livro inteiro pegando engano de tipo, não
+confere nada dentro dela. Generics são tipos e métodos parametrizados por
+tipo, conferidos em compilação, e são o mecanismo que devolve essa
+conferência ao compilador. Os experimentos deste capítulo são rascunhos de
+laboratório, arquivos-fonte compactos fora do projeto Maven, para provocar
+erros sem tocar o estoque real; as conclusões voltam ao projeto na
+prática.
 
 ## O parâmetro de tipo
 
@@ -73,8 +78,7 @@ class Prateleira<T> {
 
 O `<T>` depois do nome declara um parâmetro de tipo: um nome que representa
 um tipo ainda não escolhido, usável dentro da classe onde qualquer tipo
-seria usável. É o mesmo movimento do parâmetro de método do capítulo 4,
-subido um andar: o método generaliza sobre valores, o parâmetro de tipo
+seria usável. É o mesmo movimento do parâmetro de método, subido um andar: o método generaliza sobre valores, o parâmetro de tipo
 generaliza sobre tipos. Quem escolhe o tipo é quem usa, entre os sinais de
 menor e maior, e a escolha se chama argumento de tipo:
 
@@ -86,7 +90,7 @@ docas.guardar("anotação do repositor");
 
 ```console
 $ javac Recebimento.java
-Recebimento.java:5: error: incompatible types: String cannot be converted to Produto
+Recebimento.java:3: error: incompatible types: String cannot be converted to Produto
 docas.guardar("anotação do repositor");
               ^
 ```
@@ -95,10 +99,10 @@ Com `T` valendo `Produto`, o `guardar` só aceita `Produto`, o bilhete do
 repositor morreu em compilação com arquivo e linha, e o `pegar` devolve
 `Produto` sem cast nenhum do lado de quem chama. O engano que era queda em
 execução virou recusa do compilador, que é a direção de sempre deste livro.
-O `<>` vazio do `new` pede a inferência do capítulo 3: o compilador copia o
-argumento de tipo da declaração.
+O `<>` vazio do `new` pede inferência: o compilador copia o argumento de
+tipo da declaração.
 
-Dentro da classe sobrou uma cicatriz honesta: o array interno continua de
+Dentro da classe sobrou um resto honesto: o array interno continua de
 `Object`, e o `pegar` faz um cast para `T` que o compilador não consegue
 provar, avisando com um alerta de compilação. A anotação
 `@SuppressWarnings("unchecked")`, da família do `@Override`, silencia o
@@ -175,13 +179,14 @@ subtipo dos argumentos não se propaga. O motivo é defesa, e o raciocínio
 cabe em três linhas: se a atribuição fosse aceita, uma referência
 `Prateleira<Produto>` para a prateleira dos queijos deixaria `guardar` um
 `Produto` comum ali dentro, e a prateleira dos queijos passaria a conter um
-não-queijo, com a bomba armada para o primeiro `pegar` tipado do outro
+não-queijo, com a falha adiada para o primeiro `pegar` tipado do outro
 lado. O compilador recusa a atribuição para não ter que aceitar a
 consequência.
 
 <div class="armadilha">
 
-Arrays fizeram a escolha oposta décadas antes, e ela continua na linguagem:
+Arrays fizeram a escolha oposta quase uma década antes, e ela continua na
+linguagem:
 
 ```java
 void main() {
@@ -270,4 +275,4 @@ mercadinho vai consumir.
 | type erasure | o apagamento: argumentos de tipo existem só para o compilador |
 | invariância | `Prateleira<Sub>` não é `Prateleira<Super>`; protege a escrita |
 | wildcard | `?`: argumento de tipo desconhecido com limite; `? extends` lê, `? super` escreve |
-| `@SuppressWarnings("unchecked")` | silencia o alerta de cast não provável; só com garantia por construção |
+| `@SuppressWarnings("unchecked")` | silencia o alerta de cast que o compilador não consegue provar; só com garantia por construção |

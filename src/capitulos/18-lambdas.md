@@ -11,7 +11,8 @@ List<Produto> estoque = new ArrayList<>(estoqueCompleto);
 estoque.sort((a, b) -> a.preco().compareTo(b.preco()));
 ```
 
-O trecho `(a, b) -> a.preco().compareTo(b.preco())` é uma lambda: uma função
+O `new ArrayList<>(colecao)` copia a coleção recebida, deixando a original
+em paz para o relatório ordenar à vontade. O trecho `(a, b) -> a.preco().compareTo(b.preco())` é uma lambda: uma função
 sem nome, escrita como expressão, com os parâmetros antes da seta e o
 resultado depois. Até aqui, todo comportamento do livro morava em métodos
 com nome, dentro de tipos; a lambda deixa escrever um comportamento pequeno
@@ -44,9 +45,9 @@ compilador confere tudo contra a assinatura. O `sort` espera um
 `int`; a lambda da abertura é uma implementação dele, sem classe, sem nome e
 sem cerimônia.
 
-O `MeioDePagamento` do capítulo 9 tem um único método abstrato, portanto é
-uma interface funcional sem saber, e um teste do capítulo 15 pode fabricar
-um meio de pagamento de mentira numa linha:
+O `MeioDePagamento` tem um único método abstrato, portanto é uma interface
+funcional sem saber, e um teste pode fabricar um meio de pagamento de
+mentira numa linha:
 
 ```java
 MeioDePagamento semTaxa = compra -> compra;
@@ -112,9 +113,9 @@ Sem cadastro
 
 Declarar a lambda não executa o corpo: a linha do `Supplier` só guarda o
 comportamento, e "criando" aparece apenas quando alguém chama `get`. Lambda
-é valor que carrega código adormecido, e quem decide o momento de acordá-lo
-é quem a recebe; essa inversão, modesta aqui, é o motor central do capítulo
-19.
+é um valor que carrega comportamento ainda não executado, e quem decide o
+momento da execução é quem a recebe; essa inversão, modesta aqui, é o motor
+central do capítulo 19.
 
 ## Comparator e a referência de método
 
@@ -134,36 +135,48 @@ estoque.sort(Comparator.comparing(Produto::categoria)
 só "chame este método", os dois-pontos duplos a escrevem sem inventar
 parâmetros. `p -> p.preco()` e `Produto::preco` são o mesmo comportamento; a
 referência existe para a leitura, e vale usá-la sempre que a lambda não faz
-nada além da chamada. Há referência para método de instância, como essa,
-para método estático, `Integer::parseInt`, e para um método de um objeto já
-existente, `IO::println` sendo o exemplo que o `forEach` adora.
+nada além da chamada. Há três formas: a referência a método de instância
+pelo tipo, como `Produto::preco`; a referência a método estático, família
+de `Integer::parseInt` e também de `IO::println`, e é por isso que
+`estoque.forEach(IO::println)` compila; e a referência a método de um
+objeto já existente, como `relatorio::append` com um `StringBuilder` em
+mãos. E quando a ordem desejada é a natural do `Comparable`,
+`Comparator.naturalOrder()` a entrega como comparador.
 
 Parente visual dessa sintaxe, e coisa completamente diferente, é o literal
 de classe: `Produto.class`, o objeto que representa o próprio tipo em
-execução. Ele estreia de verdade duas seções adiante e reina no capítulo 23.
+execução. Ele estreia de verdade na seção seguinte e reina no capítulo 23.
 
 <div class="armadilha">
 
-Um comparador de estoque escrito com a esperteza clássica de subtrair:
+O clube de fidelidade do mercadinho guarda o saldo de pontos como `int`, e
+estorno deixa saldo negativo. O extrato ordena os saldos subtraindo:
 
 ```java
-List<Produto> porEstoque = new ArrayList<>(estoque);
-porEstoque.sort((a, b) -> a.estoque() - b.estoque());
+List<Integer> saldos = new ArrayList<>(List.of(10, 2_000_000_000, -300_000_000));
+saldos.sort((a, b) -> a - b);
+IO.println(saldos);
 ```
 
-Para estoques comuns, a ordem sai perfeita em todos os testes. O mercadinho
-herda o galpão do atacadista, com contagens gigantes, e o relatório passa a
-sair embaralhado, sem erro nenhum. Por quê?
+```
+[10, 2000000000, -300000000]
+```
+
+A lista saiu em ordem nenhuma, sem erro nenhum.
 
 </div>
 
-A subtração devolve o sinal certo enquanto não estoura: com `a.estoque()`
-muito negativo ou `b.estoque()` gigante, `a - b` sofre o overflow do
-capítulo 3, dá a volta e devolve o sinal errado, e o `sort` ordena errado
-com a maior convicção. É a armadilha do overflow vestida de esperteza, e
-some do código com qualquer uma das duas formas honestas:
-`Integer.compare(a.estoque(), b.estoque())`, que compara sem subtrair, ou
-`Comparator.comparingInt(Produto::estoque)`, que faz o mesmo por dentro.
+A subtração devolve o sinal certo enquanto não estoura, e o estouro exige
+exatamente o que o exemplo tem: sinais opostos com magnitudes grandes.
+`2_000_000_000 - (-300_000_000)` passa do teto do `int`, sofre o overflow
+do capítulo 3, dá a volta e sai negativo, dizendo ao `sort` que dois
+bilhões vêm antes de trezentos milhões negativos. As magnitudes aqui são de
+laboratório; o mecanismo não é. Com estoques, não negativos por invariante
+desde o capítulo 7, a subtração nunca estoura; com qualquer chave que possa
+ser negativa, saldo, variação, diferença, ela é defeito latente, e como
+ninguém audita faixas a cada uso, a regra é uma só: comparador não subtrai.
+`Integer.compare(a, b)` compara sem estourar, e
+`Comparator.comparingInt` faz o mesmo por dentro.
 
 ## Captura, e o efetivamente final
 
@@ -176,21 +189,29 @@ estoque.removeIf(p -> p.preco().compareTo(teto) > 0);
 ```
 
 O `teto` não é parâmetro da lambda: veio capturado do método em volta. A
-regra que governa a captura é a segunda definição do capítulo: uma variável
-local só pode ser capturada se for efetivamente final, isto é, se nunca for
-reatribuída depois de receber valor, tenha ou não a palavra `final` escrita.
+regra que governa a captura: uma variável local só pode ser capturada se
+for efetivamente final, isto é, se nunca for reatribuída depois de receber
+valor, tenha ou não a palavra `final` escrita.
 O compilador recusa a captura de variável que muda:
+
+```java
+int contador = 0;
+estoque.forEach(p -> {
+    contador = contador + 1;
+});
+```
 
 ```console
 $ javac Relatorio.java
-Relatorio.java:9: error: local variables referenced from a lambda expression must be effectively final
+Relatorio.java:9: error: local variables referenced from a lambda expression must be final or effectively final
         contador = contador + 1;
         ^
+1 error
 ```
 
 O motivo é o tempo: a lambda pode rodar muito depois, quando o método que a
-criou já retornou e as variáveis locais dele já morreram com a pilha do
-capítulo 4. O que a lambda captura é o valor, congelado; permitir
+criou já retornou e as variáveis locais dele já morreram com a pilha de
+chamadas. O que a lambda captura é o valor, congelado; permitir
 reatribuição criaria duas verdades sobre a mesma variável. Quando a vontade
 é acumular algo dentro de uma lambda, o desenho certo quase sempre é outro:
 ou o laço comum de sempre, ou as ferramentas de agregação do capítulo 19,
@@ -229,9 +250,9 @@ mudou o mecanismo, mudou a grafia.
    criterio)` que devolva a lista dos aprovados, e use-o três vezes com
    critérios diferentes, incluindo um capturando um teto de preço.
 
-3. Reproduza a armadilha da subtração com valores que estouram, mostre a
-   ordem errada, e conserte das duas formas. Escreva o teste de regressão
-   do capítulo 15 que teria pegado o defeito.
+3. Reproduza a armadilha da subtração com os saldos de sinais opostos,
+   mostre a ordem errada, e conserte das duas formas. Escreva o teste de
+   regressão que teria pegado o defeito.
 
 4. Converta os testes de recusa do capítulo 15 para `assertThrows`, e escreva
    um novo: `ItemDeVenda` com quantidade zero, conferindo também a mensagem,

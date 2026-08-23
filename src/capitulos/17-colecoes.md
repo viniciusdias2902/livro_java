@@ -23,8 +23,8 @@ o que se usa e o que se pergunta em entrevista.
 ## List e ArrayList
 
 `List` é uma interface, no sentido pleno do capítulo 9: o contrato de uma
-sequência de tamanho variável, com posição, e os métodos que a armadilha do
-array dispensava para sempre: `add` acrescenta no fim, `get(i)` lê pela
+sequência de tamanho variável, com posição, cujos métodos aposentam o
+improviso de crescer array à mão: `add` acrescenta no fim, `get(i)` lê pela
 posição, `size()` conta, `remove` tira, `contains` procura usando `equals`.
 `ArrayList` é a implementação padrão do contrato: guarda os elementos num
 array interno e o troca por um maior quando enche, sozinha. A declaração
@@ -36,9 +36,13 @@ List<ItemDeVenda> carrinho = new ArrayList<>();
 
 A variável é do tipo da interface e o `new` escolhe a implementação, no
 mesmo desenho do `MeioDePagamento`: o resto do código depende só de `List`,
-e trocar a implementação um dia não toca linha nenhuma. O parâmetro de tipo
-vem do capítulo 16, e é ele que faz `get` devolver `ItemDeVenda` sem cast e
-o compilador recusar qualquer intruso no `add`.
+e trocar a implementação um dia não toca linha nenhuma. O parâmetro de
+tipo é quem faz `get` devolver `ItemDeVenda` sem cast e o compilador
+recusar qualquer intruso no `add`; a assinatura do construtor de cópia,
+`new ArrayList<>(colecao)`, traz o `? extends` do capítulo 16 trabalhando,
+aceitando qualquer coleção da família. `List` e `Set` partilham um
+contrato-mãe, `Collection`, que reúne o comum a sequências e conjuntos, do
+`add` ao `contains`; `Map` fica fora dele, família própria.
 
 A pergunta de entrevista mora na segunda implementação da ficha:
 `LinkedList` guarda os elementos em nós encadeados, cada um apontando para o
@@ -56,8 +60,8 @@ cada primitivo do capítulo 3 a biblioteca tem uma classe wrapper que o
 embrulha como objeto: `Integer` para `int`, `Long`, `Double`, `Boolean` e
 `Character` para os demais. O `Integer.parseInt` do capítulo 5 morava
 exatamente nessa classe, e a promessa de apresentar a família vence aqui. A
-conversão entre primitivo e wrapper é automática nas duas direções, e se
-chama autoboxing:
+conversão é automática nas duas direções: autoboxing na ida do primitivo
+para o wrapper, unboxing na volta.
 
 ```java
 List<Integer> quantidades = new ArrayList<>();
@@ -66,8 +70,7 @@ int primeira = quantidades.get(0);
 ```
 
 O `3` entra como `Integer` e sai como `int` sem cerimônia visível, e é fácil
-esquecer que wrapper é objeto, com tudo que o capítulo 5 disse sobre
-objetos:
+esquecer que wrapper é objeto, com tudo que vale para objetos:
 
 <div class="armadilha">
 
@@ -136,8 +139,8 @@ esquecido, herdado de `Object`:
 ```java
 void main() {
     Set<Produto> estoque = new HashSet<>();
-    estoque.add(new Produto("7891000100103", "Café 500g"));
-    IO.println(estoque.contains(new Produto("7891000100103", "Café 500g")));
+    estoque.add(new Produto("7891000100103", "Café 500g", new BigDecimal("19.90")));
+    IO.println(estoque.contains(new Produto("7891000100103", "Café 500g", new BigDecimal("19.90"))));
 }
 ```
 
@@ -155,9 +158,9 @@ salta para a vizinhança correspondente e só ali usa `equals`. Com o
 `hashCode` herdado, os dois cafés iguais têm hashes de identidade
 diferentes, a busca olha a vizinhança errada e o produto some sem sair do
 lugar. Pior: por coincidência de vizinhança, uma execução aqui e ali pode
-encontrar, e defeito intermitente é a pior espécie de defeito. É a cláusula
-do capítulo 10 cobrada pela estrutura que confia nela, e a correção é a de
-lá: sobrescreveu `equals`, sobrescreve `hashCode`, sobre os mesmos campos.
+encontrar, e defeito intermitente escapa do teste e volta em produção. É a cláusula
+do contrato de equals cobrada pela estrutura que confia nela, e a correção
+é a de sempre: sobrescreveu `equals`, sobrescreve `hashCode`, sobre os mesmos campos.
 
 ## Map e HashMap: de chave para valor
 
@@ -191,7 +194,7 @@ contagem, presente em todo sistema e em toda entrevista, junta as duas
 pontas:
 
 ```java
-Map<Categoria, Integer> vendasPorCategoria = new HashMap<>();
+var vendasPorCategoria = new HashMap<Categoria, Integer>();
 for (ItemDeVenda item : itensDoDia) {
     Categoria categoria = item.produto().categoria();
     int atual = vendasPorCategoria.getOrDefault(categoria, 0);
@@ -199,8 +202,20 @@ for (ItemDeVenda item : itensDoDia) {
 }
 ```
 
-Percorrer um `Map` usa `keySet()`, o conjunto das chaves, ou `entrySet()`,
-os pares inteiros, ambos aceitos pelo for-each.
+O `var` do capítulo 3, prometido para quando os nomes de tipo crescessem,
+entra em cena aqui, com uma ressalva: ele deduz o tipo concreto, `HashMap`
+e não `Map`, então serve às variáveis locais curtas e cede a vez quando a
+disciplina da interface importa. E o percurso idiomático dos pares usa
+`entrySet()`:
+
+```java
+for (Map.Entry<Categoria, Integer> entrada : vendasPorCategoria.entrySet()) {
+    IO.println(entrada.getKey() + ": " + entrada.getValue());
+}
+```
+
+Cada entrada carrega chave e valor juntos, sem a segunda busca que o par
+`keySet` e `get` faria.
 
 ## Ordem de iteração
 
@@ -238,7 +253,7 @@ regra é declarar a ordem quando ela for requisito. `TreeMap` é a
 implementação que mantém as chaves ordenadas, e a ordem vem de `Comparable`:
 a interface de quem sabe se comparar com os da própria espécie, com um único
 método, `compareTo`, devolvendo negativo, zero ou positivo, exatamente o
-protocolo que o `BigDecimal` usa desde o capítulo 7. `String` e os wrappers
+protocolo do `BigDecimal`. `String` e os wrappers
 já a implementam, e trocar `new HashMap<>()` por `new TreeMap<>()` na
 previsão faria os produtos saírem em ordem alfabética. A resposta de
 entrevista, nos mesmos moldes da de `List`: `HashMap` por padrão, pela
@@ -266,7 +281,7 @@ mudam:
 
 ```java
 List<String> diasDeFeira = List.of("terça", "sexta");
-Map<String, Integer> corredores = Map.of("MERCEARIA", 3, "HORTIFRUTI", 1);
+Map<Categoria, BigDecimal> descontosDaFeira = Map.of(Categoria.HORTIFRUTI, new BigDecimal("0.10"));
 ```
 
 Uma coleção imutável recusa `add`, `remove` e `put` com um erro de execução
@@ -274,17 +289,32 @@ imediato e barulhento, `UnsupportedOperationException`, e essa é a graça:
 ela transforma "ninguém deveria mexer nisto" em "ninguém consegue". Os usos
 que pagam a passagem: constantes de domínio, como os dias de feira, e
 retorno defensivo, devolvendo `List.copyOf(itens)` para quem pede a lista
-interna, em vez da referência viva que a armadilha do capítulo 5 mostrou os
-outros alterarem.
+interna, em vez da referência viva que outros alteram, como a armadilha do
+aliasing mostrou. E a pendência do capítulo 11 fecha aqui: sequência dentro
+de record é `List` imutável, garantida no construtor compacto:
+
+```java
+public record PesagensDoDia(List<Integer> gramas) {
+    public PesagensDoDia {
+        gramas = List.copyOf(gramas);
+    }
+}
+```
+
+O `copyOf` blinda contra a lista viva de quem chamou, o `equals` gerado
+passa a comparar conteúdo, porque `List` o faz, e a armadilha do componente
+array morre de vez.
 
 Resta um nome da ficha: o iterador é o objeto que percorre uma coleção,
 entregando um elemento por vez, e é ele que o for-each usa por baixo em
 tudo que este capítulo mostrou. O encontro direto com ele costuma acontecer
-de um jeito específico: alterar a coleção no meio de um for-each derruba o
+de um jeito específico: alterar a coleção no meio de um for-each costuma derrubar o
 programa com `ConcurrentModificationException`, um erro barulhento de
-propósito, porque a alternativa seria um percurso corrompido em silêncio. A
-remoção por critério tem forma própria e curta no capítulo 18; até lá, a
-regra é não remover de dentro do próprio for-each.
+propósito. A detecção, porém, é melhor esforço, não garantia: há casos, como
+remover o penúltimo elemento de um `ArrayList`, em que o percurso termina em
+silêncio, corrompido. A regra vale sem exceção de sorte: não alterar dentro
+do for-each, nunca; a remoção por critério tem forma própria e curta no
+capítulo 18.
 
 ## Prática
 
@@ -306,9 +336,10 @@ regra é não remover de dentro do próprio for-each.
    `NullPointerException`, e o relatório de contagem por categoria com
    `getOrDefault`.
 
-5. Imprima o mesmo estoque com `HashMap` e com `TreeMap`, compare as ordens,
-   e implemente `Comparable<Produto>` por preço em vez de nome, decidindo
-   com `compareTo` de `BigDecimal`. Anote o que muda na saída do `TreeMap`.
+5. Monte um `TreeMap<Produto, Integer>` de vendas por produto e observe a
+   ordem seguir o `compareTo` por nome. Depois troque a ordem natural de
+   `Produto` para preço, decidindo com `compareTo` de `BigDecimal`, e anote
+   o que muda na saída.
 
 6. Escreva um método que receba `List<ItemDeVenda>` e devolva uma versão
    imutável dela, e prove com uma tentativa de `add` que a devolução é
@@ -333,7 +364,7 @@ regra é não remover de dentro do próprio for-each.
 | `TreeMap` | chaves mantidas em ordem, via `Comparable` |
 | `Comparable` / `compareTo` | a ordem natural de um tipo: negativo, zero, positivo |
 | classe wrapper | o primitivo como objeto: `Integer`, `Double` e irmãos |
-| autoboxing | conversão automática primitivo↔wrapper; `==` continua proibido |
+| autoboxing / unboxing | conversão automática primitivo→wrapper e a volta; `==` continua proibido |
 | iterador | o objeto que percorre a coleção; motor do for-each |
 | ordem de iteração | `HashMap`/`HashSet` não prometem nenhuma; `TreeMap` promete a das chaves |
 | coleção imutável | nasce pronta e recusa alteração com erro imediato |

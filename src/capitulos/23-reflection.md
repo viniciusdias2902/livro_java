@@ -4,8 +4,9 @@ O capítulo 15 deixou uma pergunta armada: nenhuma linha do mercadinho chama
 `CaixaTest`, e os testes rodam. Alguém encontra as classes de teste,
 descobre quais métodos carregam `@Test` e os executa, sem conhecer nenhum
 deles de antemão. Este capítulo constrói esse alguém, com as vinte linhas
-prometidas, e no caminho apresenta o mecanismo que sustenta metade das
-ferramentas do ecossistema.
+prometidas, e no caminho apresenta o mecanismo por trás das ferramentas que
+examinam e executam código alheio: executores de teste, mapeadores,
+containers.
 
 ## Anotação própria e retenção
 
@@ -24,8 +25,10 @@ O `@interface` declara a anotação, e o corpo vazio diz que ela é pura
 marca, sem dados. Anotações também carregam dados, declarados como métodos
 no corpo: um `String nome();` ali dentro permitiria `@MeuTeste(nome =
 "desconto do dinheiro")`, e o leitor da anotação recupera o valor em
-execução; o `@SuppressWarnings("unchecked")` do capítulo 16 usa exatamente
-essa forma, com o dado entre parênteses. A linha de cima é a decisão importante: a retenção define até
+execução. O `@SuppressWarnings("unchecked")` usa essa forma com um atalho:
+quando o único elemento se chama `value`, o nome pode ser omitido no uso;
+com qualquer outro nome, como `nome`, ele é obrigatório, e `@MeuTeste("x")`
+nem compila. A linha de cima é a decisão que importa aqui: a retenção define até
 onde a anotação sobrevive. `SOURCE` vive só no fonte, para o compilador e
 ferramentas de fonte, o destino do `@Override`; `CLASS` chega ao bytecode e
 para lá; `RUNTIME` chega à execução, visível para o mecanismo da próxima
@@ -38,16 +41,49 @@ Reflexão é a capacidade de um programa examinar e manipular os próprios
 tipos em execução: perguntar a uma classe quais métodos ela tem, que
 anotações carrega, e invocá-los, tudo por objetos que representam essas
 coisas. A porta de entrada é o `Class`, o objeto que representa um tipo,
-obtido pelo literal de classe do capítulo 18, `CaixaTest.class`, ou pelo
+obtido pelo literal de classe, `CaixaTest.class`, ou pelo
 `getClass` de qualquer objeto. Dele saem os representantes dos membros:
 `Method` para métodos, `Field` para campos e `Constructor` para
 construtores, cada um sabendo o próprio nome, os tipos envolvidos e as
 anotações que carrega; do `Class` também saem a superclasse e as interfaces
-implementadas, a hierarquia inteira do capítulo 8 disponível como dado. É o
+implementadas, a hierarquia inteira disponível como dado. É o
 programa lendo a própria estrutura, e um encontro com isso o livro já teve
-sem dizer o nome: o `Produto@6f2b958e` do capítulo 10 é o `getClass` por
-trás do `toString` herdado, imprimindo o nome do tipo real. O
-executor prometido cabe inteiro numa tela:
+sem dizer o nome: o `Produto@6f2b958e` é o `getClass` por
+trás do `toString` herdado, imprimindo o nome do tipo real.
+
+O laboratório deste capítulo usa a moldura completa, cada classe em seu
+próprio arquivo: em arquivo-fonte compacto as classes viram aninhadas, e o
+executor adiante não as encontraria pelo caminho mostrado. O alvo é uma
+`CaixaTest` sem JUnit nenhum, com a asserção escrita à mão para o
+laboratório rodar com `java` puro, sem classpath de biblioteca:
+
+```java
+import java.math.BigDecimal;
+
+public class CaixaTest {
+    @MeuTeste
+    public void somaDuasVendas() {
+        BigDecimal total = new BigDecimal("19.90").add(new BigDecimal("19.90"));
+        if (!total.equals(new BigDecimal("39.80"))) {
+            throw new AssertionError("esperado: <39.80> mas foi: <" + total + ">");
+        }
+    }
+
+    @MeuTeste
+    public void descontoDoDinheiro() {
+        BigDecimal recebido = new BigDecimal("100.00").multiply(new BigDecimal("0.95"));
+        if (!recebido.equals(new BigDecimal("95.00"))) {
+            throw new AssertionError("esperado: <95.00> mas foi: <" + recebido + ">");
+        }
+    }
+}
+```
+
+O `if` com `throw new AssertionError(...)`, o erro que representa uma
+asserção violada, faz à mão o papel do `assertEquals`, e o segundo teste
+reencontra de propósito a escala do `BigDecimal`: `100.00` vezes `0.95` dá
+`95.0000`, e `equals` distingue as escalas. O executor prometido cabe
+inteiro numa tela:
 
 ```java
 import java.lang.reflect.InvocationTargetException;
@@ -77,6 +113,7 @@ public class Executor {
 ```
 
 ```console
+$ javac *.java
 $ java Executor
 PASSOU  somaDuasVendas
 FALHOU  descontoDoDinheiro: esperado: <95.00> mas foi: <95.0000>
@@ -88,14 +125,14 @@ métodos declarados na classe, em ordem não prometida, e
 `isAnnotationPresent` filtra os marcados, recebendo o literal de classe da
 anotação. `getDeclaredConstructor().newInstance()` cria a instância pelo
 construtor sem argumentos, uma por teste, que é exatamente a fixture nova
-do capítulo 15, agora explicada. O `invoke` chama o método sobre a
+do JUnit, agora explicada. O `invoke` chama o método sobre a
 instância; quando o método lança, a exceção chega embrulhada numa
 `InvocationTargetException`, e o `getCause` desembrulha a original, a
-`AssertionError` da asserção que falhou. Vinte linhas, e o `@Test`, o
+`AssertionError` do `if` da `CaixaTest`. Vinte linhas, e o `@Test`, o
 placar e a fixture do JUnit deixaram de ser mágica: a ferramenta real tem
 dez anos de recursos em volta, e este núcleo no centro.
 
-O `Class<?>`, de passagem, usa o wildcard do capítulo 16 no lugar honesto:
+O `Class<?>`, de passagem, usa o wildcard no lugar honesto:
 um tipo desconhecido, porque o executor serve para qualquer classe.
 
 <div class="armadilha">
@@ -107,6 +144,7 @@ public @interface MeuTeste { }
 ```
 
 ```console
+$ javac *.java
 $ java Executor
 0 passaram, 0 falharam
 ```
@@ -118,7 +156,7 @@ Os dois testes continuam no arquivo, compilando, marcados. Nenhum roda.
 Sem `@Retention` declarada, a retenção padrão é `CLASS`: a anotação chega ao
 bytecode e é invisível em execução, e `isAnnotationPresent` responde `false`
 para todos, sem erro, sem aviso. O placar zerado é a única pista, e é por
-isso que a armadilha do capítulo 15, o teste que não roda, tem uma prima
+isso que a armadilha do teste que não roda tem uma prima
 aqui: ferramenta baseada em anotação falha em silêncio quando a retenção
 está errada, e conferir o placar continua sendo a defesa.
 
@@ -128,8 +166,8 @@ nomes e formas em execução, e o compilador não confere nada, de modo que
 renomear um construtor ou mudar uma assinatura quebra o código reflexivo só
 quando ele rodar, a categoria de erro que o livro inteiro empurra para a
 compilação. O segundo é que ela atravessa muros: com `setAccessible`,
-código reflexivo lê e escreve até membros `private`, e o encapsulamento do
-capítulo 7 vale contra código comum, não contra ferramentas decididas. A
+código reflexivo lê e escreve até membros `private`, e o encapsulamento
+vale contra código comum, não contra ferramentas decididas. A
 regra de uso sai dos dois preços: reflexão é técnica de ferramenta e de
 infraestrutura, executores, mapeadores, injetores, e não de regra de
 negócio; o estoque do mercadinho nunca precisa dela.
@@ -169,21 +207,24 @@ IO.println(vigiado.getClass().getName());
 $Proxy0
 ```
 
-O `vigiado` é um `MeioDePagamento` legítimo: o caixa do capítulo 9 o aceita
+O `vigiado` é um `MeioDePagamento` legítimo: o caixa o aceita
 sem saber de nada, o polimorfismo funciona, e cada chamada passa pela
 auditoria antes de ser delegada ao objeto real pelo `invoke`. A última
 linha mostra a certidão de nascimento: `$Proxy0`, uma classe que não existe
-em arquivo nenhum, fabricada pela JVM na hora. O padrão, interceptar
+em arquivo nenhum, fabricada pela JVM na hora. O nome sai sem pacote porque
+a interface do laboratório vive sem pacote; num projeto com pacotes, como o
+da prática, a mesma linha imprime o nome qualificado, `jdk.proxy1.$Proxy0`. O padrão, interceptar
 chamadas de uma interface sem alterar as implementações, é o mecanismo com
-que frameworks adicionam auditoria, medição de tempo e controle de acesso
+que frameworks, as bibliotecas que invertem o controle e chamam o código de
+quem as usa, adicionam auditoria, medição de tempo e controle de acesso
 em volta de código alheio; o capítulo 24 usa a ideia por um ângulo mais
 simples, e quem encontrar um `$Proxy` num stack trace de framework agora
 sabe o que está olhando. A dupla deste capítulo fecha um circuito que vale
 enxergar de uma vez: anotação marca a intenção no código, reflexão encontra
 a marca e age, e o proxy embrulha o resultado quando o agir é interceptar.
-É a receita de praticamente toda ferramenta que parece mágica no
-ecossistema, do executor de testes ao framework que o leitor encontrar
-depois deste livro, e ela cabe numa tela de cada vez.
+É a receita do executor deste capítulo, e a das ferramentas dessa família
+que o leitor vai encontrar depois deste livro, e ela cabe numa tela de
+cada vez.
 
 <div class="aprofundamento">
 

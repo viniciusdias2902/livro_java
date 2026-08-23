@@ -1,8 +1,8 @@
 # Streams e Optional
 
 O relatório de reposição do mercadinho quer os nomes dos produtos de
-mercearia com estoque abaixo de dez, em ordem alfabética. Com os capítulos
-17 e 18, o laço sai assim:
+mercearia com estoque abaixo de dez, em ordem alfabética. Com as coleções e
+as lambdas dos dois capítulos anteriores, o laço sai assim:
 
 ```java
 List<String> reposicao = new ArrayList<>();
@@ -14,7 +14,8 @@ for (Produto p : estoque) {
 reposicao.sort(Comparator.naturalOrder());
 ```
 
-Funciona, e mistura três assuntos numa estrutura só: o critério, a
+Funciona, com `Comparator.naturalOrder()` devolvendo o comparador da ordem
+natural do tipo, e mistura três assuntos numa estrutura só: o critério, a
 transformação de produto em nome e a coleta do resultado, todos dentro do
 mesmo laço, com uma lista intermediária mutável de apoio. A biblioteca
 padrão oferece uma segunda forma de escrever exatamente isso, em que cada
@@ -40,7 +41,7 @@ zero ou mais operações intermediárias e exatamente uma operação terminal.
 
 Uma operação intermediária transforma o fluxo e devolve outro stream, o que
 permite emendar a próxima: `filter` deixa passar quem cumpre o critério, um
-`Predicate` do capítulo 18; `map` transforma cada elemento com uma
+`Predicate`; `map` transforma cada elemento com uma
 `Function`; `sorted` ordena, com a ordem natural ou com um `Comparator`;
 `limit(n)` corta o fluxo nos primeiros `n`. Uma operação terminal encerra o
 pipeline produzindo o resultado de fato: `toList()` coleta numa lista
@@ -77,15 +78,14 @@ relatório pronto
 
 Nenhuma. O pipeline foi declarado e nunca executado, porque não tem operação
 terminal: as intermediárias são preguiçosas, e essa é a avaliação
-preguiçosa, o mesmo código adormecido do `Supplier` do capítulo 18, agora em
-cadeia: declarar as etapas não processa nada, e é a operação terminal que
+preguiçosa, o mesmo comportamento guardado sem executar do `Supplier`,
+agora em cadeia: declarar as etapas não processa nada, e é a operação terminal que
 liga o motor e puxa os elementos através das etapas. Acrescentar `.count()`
 ao pipeline acima faria as quatro linhas "avaliando" aparecerem antes do
 "relatório pronto". As consequências práticas: efeito colateral dentro de
 intermediária é promessa de confusão, porque roda quando e se o terminal
 mandar; e um pipeline sem terminal é um engano silencioso que o compilador
-aceita de bom grado. Stream sem terminal não faz nada, e essa frase vale
-memorizada.
+aceita de bom grado. Stream sem terminal não faz nada.
 
 ## reduce, e o dinheiro nos streams
 
@@ -123,7 +123,8 @@ Com três vendas de dez centavos, o fechamento imprime:
 </div>
 
 O atalho converteu cada `BigDecimal` para `double` no meio do caminho, e o
-capítulo 3 voltou inteiro: um décimo não tem escrita binária exata, a soma
+problema do capítulo 3 voltou inteiro: um décimo não tem escrita binária
+exata, a soma
 acumula as sobras, e o caixa fecha com diferença de fração de centavo que
 ninguém rastreia. O `mapToDouble` e o `sum` existem e servem para medidas;
 dinheiro atravessa o pipeline como `BigDecimal` do começo ao fim, com o
@@ -151,12 +152,13 @@ por outro resumo, aqui a contagem. O relatório de vendas por categoria, que
 o capítulo 17 montou com `getOrDefault` num laço, encolhe para uma
 expressão, e as duas versões seguem corretas: o pipeline não aposenta o
 laço, dá a ele um concorrente mais legível quando o assunto é transformar e
-resumir coleções.
+resumir coleções. `Stream` e `Collectors` moram no pacote
+`java.util.stream`; `Optional`, da seção seguinte, mora em `java.util`.
 
 ## Optional: a ausência com tipo
 
-Buscar o produto mais barato da mercearia tem um caso que o capítulo 5
-ensinou a temer: a mercearia pode estar vazia. O stream não devolve `null`
+Buscar o produto mais barato da mercearia tem um caso na espreita: a
+mercearia pode estar vazia. O stream não devolve `null`
 nem lança erro; devolve o tipo feito para isso:
 
 ```java
@@ -180,14 +182,15 @@ maisBarato.ifPresent(p -> IO.println("Oferta: " + p.nome()));
 exceção do `Supplier`, para quando a ausência é violação; `ifPresent` age só
 na presença, com um `Consumer`; e `map` transforma o conteúdo sem abri-lo,
 devolvendo outro `Optional`. `IllegalStateException`, prima da
-`IllegalArgumentException` do capítulo 7, sinaliza estado inválido em vez de
-argumento inválido. Existe também o método `get`, que lança quando vazio, e
+`IllegalArgumentException`, sinaliza estado inválido em vez de argumento
+inválido. Existe também o método `get`, que lança quando vazio, e
 a regra sobre ele é curta: quem usa `get` sem conferir presença reinventou o
 `NullPointerException` com mais letras.
 
 As convenções de uso valem tanto quanto a classe. `Optional` nasceu para
 tipo de retorno, dizendo "esta busca pode não encontrar", como o
-`findFirst` e o `min` dos streams dizem; campo `Optional` e parâmetro
+`findFirst`, terminal que devolve o primeiro elemento do fluxo, se houver,
+e o `min` dos streams dizem; campo `Optional` e parâmetro
 `Optional` são desenho torto, porque a pergunta certa nesses lugares é
 outra, e a resposta de entrevista resume: `Optional` documenta ausência
 possível no retorno, e o resto continua sendo modelagem.
