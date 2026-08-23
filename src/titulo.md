@@ -6,15 +6,16 @@
 
 # Java 25
 
-Por Vinícius Dias, com texto gerado por inteligência artificial e extensa
-revisão humana
+Por Vinícius Dias
 
 Esta versão do texto assume Java 25 (a versão de suporte longo lançada em
 setembro de 2025) ou mais recente. A seção "Instalação" do capítulo 1 traz as
 instruções para instalar ou atualizar o JDK com o SDKMAN, e o restante do
 capítulo explica como as versões do Java funcionam.
 
-O formato HTML deste livro é gerado com o mdBook.
+O formato HTML deste livro é gerado com o mdBook. O livro aceita
+contribuições da comunidade em seu repositório no GitHub, acessível pelo
+ícone no topo da página.
 
 ## Sobre esta edição
 
