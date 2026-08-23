@@ -38,7 +38,9 @@ como "coisa do mundo real".
 
 - **Nenhum termo sem definição.** Nenhum termo técnico aparece antes de ter sido
   definido no livro ou definido na mesma frase. Citar um termo de passagem para dizer
-  que ele ainda não será tratado é violação, não exceção.
+  que ele ainda não será tratado é violação, não exceção. Exceção única: o apêndice
+  de JDBC declara pré-requisitos externos na abertura (SQL e banco configurado, via
+  docker-compose ou não) e não define termos de SQL nem de Docker.
 - **Código antes da explicação.** Mostre o trecho, depois explique. Em pontos-chave,
   mostre a versão errada primeiro dentro de `<div class="previsao">`, com a pergunta
   sobre o que será impresso, antes de revelar.

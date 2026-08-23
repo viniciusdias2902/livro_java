@@ -15,13 +15,16 @@ mão o mecanismo central desses frameworks; quem não quiser não perde nada,
 porque esse mesmo capítulo vale por si, como técnica de organizar programas
 grandes.
 
-São vinte e cinco capítulos e três apêndices. A ordem não é temática, é de
+São vinte e cinco capítulos e quatro apêndices. A ordem não é temática, é de
 dependência: cada capítulo assume todos os anteriores, cada termo técnico é
 definido uma única vez, no capítulo que o apresenta, e usado livremente dali
 em diante. Por isso a leitura é sequencial — pular um capítulo cobra o preço
-nos seguintes. Os apêndices, sobre a construção de interfaces gráficas com
-JavaFX, são os únicos desviáveis: dependem do livro inteiro, mas nada no livro
-depende deles.
+nos seguintes. Os apêndices são os únicos desviáveis: dependem do livro
+inteiro, mas nada no livro depende deles. O primeiro leva o projeto do livro
+para um banco de dados com JDBC, e é o único ponto em que o livro assume
+conhecimento de fora — SQL e um banco configurado —, o que ele declara na
+própria abertura, junto com material de referência para quem precisar. Os
+outros três constroem interfaces gráficas com JavaFX.
 
 ## O mercadinho
 

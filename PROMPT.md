@@ -23,7 +23,7 @@ bem. Nunca altere `lint.py` para fazer um capítulo passar; corrija o capítulo.
 
 ### Fase 1 — esqueleto
 
-Preencha, para **todos** os 28 capítulos do `manifesto.json`, os campos
+Preencha, para **todos** os 29 capítulos do `manifesto.json`, os campos
 `termos_introduzidos` (termos técnicos que o capítulo define pela primeira vez),
 `termos_adiados` (termo → id do capítulo que o define) e `conceitos_de_carga` (as duas
 ou três ideias sem as quais o capítulo não se sustenta).

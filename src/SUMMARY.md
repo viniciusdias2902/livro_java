@@ -26,10 +26,11 @@
 - [22. Concorrência: executors e virtual threads](capitulos/22-concorrencia.md)
 - [23. Annotations, reflection e proxies](capitulos/23-reflection.md)
 - [24. Injeção de dependência na unha](capitulos/24-di.md)
-- [25. Projeto integrador de terminal](capitulos/25-projeto.md)
+- [25. Projeto integrador: arquitetura e MVC no terminal](capitulos/25-projeto.md)
 
 ---
 
-- [JavaFX: janela, cena e o thread de UI](apendice/A1-javafx-basico.md)
-- [JavaFX: eventos, properties e binding](apendice/A2-javafx-eventos.md)
-- [JavaFX: ligando a tela ao domínio](apendice/A3-javafx-dominio.md)
+- [JDBC: o mercadinho num banco de dados](apendice/A1-jdbc.md)
+- [JavaFX: janela, cena e o thread de UI](apendice/A2-javafx-basico.md)
+- [JavaFX: eventos, properties e binding](apendice/A3-javafx-eventos.md)
+- [JavaFX: ligando a tela ao domínio](apendice/A4-javafx-dominio.md)

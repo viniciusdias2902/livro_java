@@ -617,22 +617,44 @@
   {
     "n": 25,
     "id": "25-projeto",
-    "titulo": "Projeto integrador de terminal",
+    "titulo": "Projeto integrador: arquitetura e MVC no terminal",
     "apendice": false,
     "termos_introduzidos": [
       "camada de dominio",
-      "camada de infraestrutura"
+      "camada de infraestrutura",
+      "camada de apresentacao",
+      "MVC"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
       "camada de domínio",
-      "invariante",
+      "MVC",
       "teste unitário"
     ]
   },
   {
     "n": null,
-    "id": "A1-javafx-basico",
+    "id": "A1-jdbc",
+    "titulo": "JDBC: o mercadinho num banco de dados",
+    "apendice": true,
+    "termos_introduzidos": [
+      "JDBC",
+      "driver JDBC",
+      "Connection",
+      "PreparedStatement",
+      "ResultSet",
+      "transacao"
+    ],
+    "termos_adiados": {},
+    "conceitos_de_carga": [
+      "driver JDBC",
+      "PreparedStatement",
+      "transação"
+    ]
+  },
+  {
+    "n": null,
+    "id": "A2-javafx-basico",
     "titulo": "JavaFX: janela, cena e o thread de UI",
     "apendice": true,
     "termos_introduzidos": [
@@ -652,7 +674,7 @@
   },
   {
     "n": null,
-    "id": "A2-javafx-eventos",
+    "id": "A3-javafx-eventos",
     "titulo": "JavaFX: eventos, properties e binding",
     "apendice": true,
     "termos_introduzidos": [
@@ -672,7 +694,7 @@
   },
   {
     "n": null,
-    "id": "A3-javafx-dominio",
+    "id": "A4-javafx-dominio",
     "titulo": "JavaFX: ligando a tela ao domínio",
     "apendice": true,
     "termos_introduzidos": [
