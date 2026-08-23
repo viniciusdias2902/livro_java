@@ -28,6 +28,14 @@ mesma coisa procura o defeito no lugar errado, às vezes por horas. Separar
 esses dois momentos é o trabalho deste capítulo, e é o que torna legíveis as
 mensagens de erro de todos os capítulos seguintes.
 
+O texto impresso, por sua vez, não é um exemplo qualquer. Uma locadora de
+livros é o sistema que este livro constrói, peça a peça, do capítulo 6 ao 24 —
+o prefácio descreve esse plano —, e ela entra em cena aqui do único jeito que
+a linguagem vista até agora permite: como uma linha de saída. Até o capítulo
+5, os exemplos seguem pequenos e avulsos, porque as peças para mais do que
+isso ainda não existem; o nome na tela fica como lembrete de para onde eles
+levam.
+
 ## As três linhas, uma a uma
 
 A primeira linha declara um método. Um método é um bloco de código que tem
