@@ -88,3 +88,10 @@ html.coal {
 .coal .hljs-symbol, .coal .hljs-bullet { color: var(--mv-green-cooler); }
 .coal .hljs-addition { color: #a0e0a0; }
 .coal .hljs-deletion { color: #ffbfbf; }
+
+/* O CSS padrão do mdBook usa `table { margin: 0 auto }`: tabelas consecutivas
+   (as fichas de fim de capítulo) ficam coladas sem isto. */
+.content .table-wrapper {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
