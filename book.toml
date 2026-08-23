@@ -8,7 +8,7 @@ src = "src"
 default-theme = "coal"
 preferred-dark-theme = "coal"
 additional-css = ["theme/modus-vivendi.css"]
-git-repository-url = "https://github.com"
+git-repository-url = "https://github.com/viniciusdias2902/java_book"
 no-section-label = false
 additional-js = ["mermaid.min.js", "mermaid-init.js"]
 
