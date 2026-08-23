@@ -37,7 +37,8 @@ pessoa, e por isso quase nenhum material técnico os mostra assim. A abertura
 usou a notação hexadecimal: um sistema de escrita de números com dezesseis
 símbolos (os algarismos de 0 a 9, seguidos das letras de a a f) no lugar dos
 dez algarismos da notação decimal, a da vida cotidiana. A escolha do dezesseis
-tem motivo: como 16 = 2 × 2 × 2 × 2, cada símbolo hexadecimal corresponde
+tem motivo: quatro bits admitem 2 × 2 × 2 × 2 = dezesseis combinações, uma
+para cada símbolo, de modo que cada símbolo hexadecimal corresponde
 exatamente a quatro bits, e um par de símbolos descreve um grupo de oito bits,
 chamado byte, a unidade em que quase tudo em computação é contado, de tamanho
 de arquivo a memória. O `89` da primeira linha da abertura e o `10001001` da
@@ -87,7 +88,8 @@ escrita.
 
 Java é uma linguagem de programação publicada em 1995 pela Sun Microsystems,
 empresa comprada pela Oracle em 2010. Hoje a linguagem é desenvolvida em um
-projeto de código aberto, o OpenJDK, do qual participam Oracle, Amazon,
+projeto de código aberto (isto é, com o código-fonte publicado, para qualquer
+um ler e propor mudança), o OpenJDK, do qual participam Oracle, Amazon,
 Microsoft, Red Hat e outras empresas, e evolui por um processo público de
 propostas: qualquer mudança na linguagem começa como um documento numerado,
 discutido em aberto antes de virar código.
@@ -135,13 +137,13 @@ pedir a versão a ele é a primeira verificação a fazer em qualquer máquina:
 
 ```
 $ java -version
-openjdk version "25.0.1" 2025-10-21 LTS
-OpenJDK Runtime Environment Temurin-25.0.1+8 (build 25.0.1+8-LTS)
-OpenJDK 64-Bit Server VM Temurin-25.0.1+8 (build 25.0.1+8-LTS, mixed mode)
+openjdk version "25.0.4" 2026-07-15 LTS
+OpenJDK Runtime Environment Corretto-25.0.4.7.1 (build 25.0.4+7-LTS)
+OpenJDK 64-Bit Server VM Corretto-25.0.4.7.1 (build 25.0.4+7-LTS, mixed mode, sharing)
 ```
 
 O número no começo da primeira linha é a versão, 25 neste caso. O nome
-Temurin, nas linhas seguintes, identifica a distribuição, e entender por que
+Corretto, nas linhas seguintes, identifica a distribuição, e entender por que
 existem várias exige apresentar a origem comum de todas. OpenJDK é o projeto
 de código aberto onde a plataforma Java é desenvolvida: o código-fonte do
 compilador, da JVM e da biblioteca padrão mora ali, e é ali que as propostas
@@ -179,9 +181,11 @@ $ sdk install java 25.0.4-amzn
 ```
 
 O identificador `25.0.4-amzn` nomeia a correção 25.0.4 do Corretto, a
-distribuição da Amazon. O número exato muda a cada trimestre; o comando
-abaixo mostra os identificadores disponíveis no dia, e qualquer um que comece
-com 25, ou mais novo, atende ao livro:
+distribuição da Amazon, exatamente a instalação da máquina em que este livro
+roda: instalado por esse caminho, `java -version` responde as mesmas linhas
+do exemplo acima. O número exato muda a cada trimestre; o comando abaixo
+mostra os identificadores disponíveis no dia, e qualquer um que comece com
+25, ou mais novo, atende ao livro:
 
 ```
 $ sdk list java
@@ -203,8 +207,7 @@ traz a distribuição; a última, o identificador que o `sdk install java`
 recebe. A linha marcada com `>>>` é a instalação que o comando `java` usa no
 momento. Identificadores com `ea` no meio, como `26.ea.36`, são montagens de
 acesso antecipado (*early access*) da versão ainda em desenvolvimento, e não
-atendem ao livro. Instalado por esse caminho, `java -version`
-dirá Corretto no lugar do Temurin do exemplo acima, e a leitura é a mesma.
+atendem ao livro.
 Quando houver mais de um JDK na máquina, o SDKMAN também faz a troca:
 `sdk default java`, seguido de um identificador, passa a apontar o comando
 `java` para a instalação escolhida.
@@ -244,8 +247,9 @@ valer sem pedido nenhum. Este livro se apoia em um recurso que percorreu esse
 caminho e foi finalizado na versão 25; essa é a razão da exigência de versão
 feita na prática deste capítulo.
 
-A cada dois anos, a versão de setembro recebe a marca LTS, de *long-term
-support*, suporte de longo prazo. Uma versão LTS continua recebendo correções
+Desde a versão 17, a cada dois anos a versão de setembro recebe a marca LTS,
+de *long-term support*, suporte de longo prazo; antes dela o intervalo era
+maior, como a tabela da ficha registra. Uma versão LTS continua recebendo correções
 de erros e de segurança por anos; uma versão comum para de recebê-las seis
 meses depois de lançada, quando a seguinte chega. São LTS as versões 11 (2018),
 17 (2021), 21 (2023) e 25 (2025), e também a 8, de 2014, anterior ao

@@ -49,7 +49,7 @@ ensina.
 
 ## Como ler este livro
 
-O livro fala com o leitor em três notações, e vale conhecê-las antes do
+O livro fala com o leitor em notações fixas, e vale conhecê-las antes do
 primeiro capítulo.
 
 Blocos de código aparecem de dois tipos. Os de fonte Java mostram o conteúdo
@@ -58,6 +58,11 @@ mostram uma sessão real: as linhas que começam com `$` são o que se digita
 (sem o `$`), e as linhas sem `$` são a resposta da máquina, copiada sem
 edição. Mensagens de erro, em particular, aparecem por extenso, porque
 aprender a lê-las é conteúdo do livro, não ruído.
+
+Em pontos escolhidos aparecem diagramas: caixas ligadas por setas com
+rótulos, lidas na direção das setas. Um diagrama resume o que a prosa acabou
+de dizer, nunca a substitui, e capítulo sem necessidade de diagrama não tem
+nenhum.
 
 Além do texto corrido, quatro caixas aparecem ao longo dos capítulos. Cada uma
 se apresenta abaixo com a mesma aparência que terá lá dentro:
@@ -112,8 +117,15 @@ para consulta rápida quando um capítulo posterior os reutilizar.
 
 Um computador com Windows, Linux ou macOS, um terminal, um editor de texto
 qualquer e um JDK da versão 25 ou mais nova; o capítulo 1 explica o que é um
-JDK, de onde baixar e como conferir a versão. Até o capítulo 14, nenhum outro
-programa é necessário.
+JDK, de onde baixar e como conferir a versão. Antes do capítulo 14, nenhum
+outro programa é necessário.
+
+Terminal é o programa de conversa em texto com o sistema: comandos
+digitados, respostas impressas, e é nele que tudo neste livro compila e
+roda. No macOS ele vem instalado com o nome Terminal; no Linux, com Terminal
+em algum lugar do nome, variando por distribuição; no Windows, o PowerShell
+faz esse papel até o capítulo 1 recomendar o WSL, que traz o terminal Linux
+para dentro do Windows.
 
 Um ambiente integrado de desenvolvimento vai ser útil mais adiante, mas os
 primeiros capítulos são feitos deliberadamente no terminal. IDE, de

@@ -107,16 +107,17 @@ versão instalada antes de procurar defeito no arquivo evita o desencontro:
 
 ```
 $ java -version
-openjdk version "26.0.2" 2026-07-21
-OpenJDK Runtime Environment Corretto-26.0.2.10.1 (build 26.0.2+10-FR)
-OpenJDK 64-Bit Server VM Corretto-26.0.2.10.1 (build 26.0.2+10-FR, mixed mode, sharing)
+openjdk version "25.0.4" 2026-07-15 LTS
+OpenJDK Runtime Environment Corretto-25.0.4.7.1 (build 25.0.4+7-LTS)
+OpenJDK 64-Bit Server VM Corretto-25.0.4.7.1 (build 25.0.4+7-LTS, mixed mode, sharing)
 ```
 
 Da saída interessa o número no começo da primeira linha, que precisa ser 25 ou
 maior; o resto identifica a distribuição, um Corretto nesta máquina, e não
-muda nada do que este livro faz. Do capítulo 7 em diante, quando os arquivos
-passam a trazer a moldura escrita por extenso, o livro roda também em JDKs
-mais antigos; até lá, não.
+muda nada do que este livro faz. A moldura que o capítulo 7 apresenta elimina
+a exigência do arquivo-fonte compacto, mas não a da versão: `IO.println`
+também nasceu no 25, e os programas do livro seguem pedindo esse mínimo do
+começo ao fim.
 
 ## Dois programas, dois momentos
 
@@ -203,7 +204,9 @@ na prática, um erro de digitação ou um nome que ainda não foi declarado. A
 segunda: quando o compilador imprime várias mensagens de uma vez, a primeira
 costuma ser a causa real e as demais costumam ser consequência dela. Corrigir
 a de cima e compilar de novo economiza mais tempo do que tentar entender todas
-de uma vez.
+de uma vez. Dois nomes nas linhas de detalhe da mensagem ainda não pertencem
+ao leitor; os capítulos 5 e 7 os apresentam, e as linhas que importam por
+enquanto são as três primeiras.
 
 Nem toda recusa aponta a falta no lugar em que ela está. Retirar o ponto e
 vírgula do fim da linha produz esta mensagem:
@@ -212,20 +215,22 @@ vírgula do fim da linha produz esta mensagem:
 $ javac Ola.java
 Ola.java:2: error: ';' expected
     IO.println("Olá, mundo.")
-                                  ^
+                             ^
 1 error
 ```
 
 A coluna apontada é o fim da linha 2, não o começo da linha 3, porque o
-compilador só percebe a ausência quando termina de ler o que veio antes. Toda
-instrução Java termina em ponto e vírgula, e as chaves marcam onde o corpo do
+compilador só percebe a ausência quando termina de ler o que veio antes. As
+instruções simples, como a chamada da linha 2, terminam em ponto e vírgula, e
+as chaves marcam onde o corpo do
 método começa e acaba: essas duas regras respondem pela maior parte dos erros
 de compilação da primeira semana, e as mensagens delas nem sempre apontam para
 onde o dedo iria.
 
-A outra família é a do erro que aparece com o programa já em execução, o erro
-de execução. Esse o compilador não tem como prever, porque depende do que
-acontece com o programa rodando, e a JVM só o encontra na hora. Os capítulos
+A outra família é a do erro de execução: o que o compilador não tem como
+prever e que só aparece do lançamento em diante, quando a JVM já está no
+comando. Alguns acontecem antes mesmo da primeira instrução do programa,
+como o da previsão a seguir; outros, no meio do trabalho. Os capítulos
 seguintes apresentam os erros de execução mais comuns, um a um, à medida que
 as construções que os provocam aparecem; o que este capítulo mostra é o
 primeiro da lista, e ele nasce de uma pergunta simples: como a JVM encontra o
@@ -282,11 +287,11 @@ torna compreensível o que a ferramenta fará depois.
 
 <div class="armadilha">
 
-Dois comandos, o mesmo diretório, saídas diferentes:
+Dois comandos, o mesmo diretório, saídas diferentes. O arquivo é compilado
+com `javac Ola.java`; em seguida, no editor, o texto do fonte é trocado por
+"Tchau, mundo."; e os dois comandos rodam:
 
 ```
-$ javac Ola.java
-$ # edite o arquivo e troque o texto por "Tchau, mundo."
 $ java Ola
 Olá, mundo.
 $ java Ola.java
@@ -357,8 +362,6 @@ execuções, sem que nada tenha mudado no programa.
 | saída padrão | canal por onde o programa escreve seu resultado comum no terminal |
 | arquivo-fonte compacto | arquivo `.java` que declara métodos diretamente, sem moldura em volta |
 | `javac` | o compilador de Java; grava bytecode e não executa nada |
-| bytecode | formato intermediário gravado pelo compilador, lido pela JVM |
-| JVM | programa que lê bytecode e o executa; iniciado pelo comando `java` |
 | classpath | lista de lugares onde a JVM procura bytecode; por omissão, o diretório atual |
 | erro de compilação | recusa do compilador; cita arquivo e linha, e nada é gravado |
-| erro de execução | falha encontrada pela JVM com o programa já rodando |
+| erro de execução | falha que o compilador não prevê; encontrada pela JVM, do lançamento em diante |
