@@ -13,7 +13,7 @@ void main() {
 }
 ```
 
-```
+```console
 $ java Sorteio.java
 73
 12
@@ -188,7 +188,7 @@ void main() {
 }
 ```
 
-```
+```console
 $ java Jogo.java
 Chute um número de 1 a 100: 50
 O segredo é maior.

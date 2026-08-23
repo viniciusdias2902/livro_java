@@ -10,7 +10,7 @@ void main() {
 }
 ```
 
-```
+```console
 $ java Recepcao.java
 Qual é o seu nome? Ana
 Bem-vindo, Ana.
@@ -99,7 +99,7 @@ o tamanho: `new int[10]` cria dez posições valendo zero, o valor padrão de
 Índice fora da faixa é um dos erros de execução clássicos da linguagem.
 Pedir `notas[3]` ao array de três posições acima produz:
 
-```
+```console
 $ java Notas.java
 Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 3 out of bounds for length 3
 	at Notas.main(Notas.java:4)
@@ -226,7 +226,7 @@ void main() {
 }
 ```
 
-```
+```console
 $ java Cofre.java
 Senha: abracadabra
 Senha errada.
@@ -314,7 +314,7 @@ void main() {
 }
 ```
 
-```
+```console
 $ java Cadastro.java
 Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "<local1>" is null
 	at Cadastro.main(Cadastro.java:3)
@@ -360,7 +360,7 @@ void main(String[] args) {
 }
 ```
 
-```
+```console
 $ java Soma.java 2 3
 5
 ```

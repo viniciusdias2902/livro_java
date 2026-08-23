@@ -11,7 +11,7 @@ void main() {
 }
 ```
 
-```
+```console
 $ java Maioridade.java
 2027
 ```
@@ -46,7 +46,7 @@ O tipo, primeira palavra da declaração, diz que espécie de valor o nome
 guarda e o que se pode fazer com ele. `int` guarda números inteiros; guardar
 outra coisa ali é recusado na hora:
 
-```
+```console
 $ javac Maioridade.java
 Maioridade.java:2: error: incompatible types: possible lossy conversion from double to int
     int idade = 17.5;

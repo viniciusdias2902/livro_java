@@ -108,3 +108,9 @@ html.coal {
 .coal h4:target::before, .coal h5:target::before, .coal h6:target::before {
   color: var(--mv-magenta-cooler);
 }
+
+/* Sessões de terminal (```console): o $ do prompt em verde, à la terminal */
+.coal .language-console .hljs-meta {
+  color: var(--mv-green-cooler);
+  font-weight: 700;
+}

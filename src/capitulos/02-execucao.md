@@ -11,7 +11,7 @@ void main() {
 O texto vai salvo em um arquivo chamado `Ola.java`, e um único comando
 no terminal o executa:
 
-```
+```console
 $ java Ola.java
 Olá, mundo.
 ```
@@ -91,7 +91,7 @@ do arquivo, e a recusa não menciona `main` nem `IO`, o que a torna difícil de
 ligar à causa verdadeira. A mesma recusa pode ser reproduzida em um JDK novo,
 mandando o compilador seguir as regras de uma versão antiga:
 
-```
+```console
 $ javac --release 24 Ola.java
 Ola.java:1: error: implicitly declared classes are not supported in -source 24
 void main() {
@@ -105,7 +105,7 @@ leitura: mensagem estranha apontando para a primeira linha de um arquivo que
 está correto é, quase sempre, sintoma de versão, não de código. Conferir a
 versão instalada antes de procurar defeito no arquivo evita o desencontro:
 
-```
+```console
 $ java -version
 openjdk version "25.0.4" 2026-07-15 LTS
 OpenJDK Runtime Environment Corretto-25.0.4.7.1 (build 25.0.4+7-LTS)
@@ -125,7 +125,7 @@ O comando da abertura, `java Ola.java`, fazia dois trabalhos de uma
 vez, e enquanto os dois dão certo não há como perceber que são dois. Estes
 comandos os separam:
 
-```
+```console
 $ javac Ola.java
 $ ls
 Ola.class  Ola.java
@@ -178,7 +178,7 @@ flowchart LR
 
 O compilador recusa o que não entende, e recusar quer dizer não gravar nada:
 
-```
+```console
 $ javac Ola.java
 Ola.java:2: error: cannot find symbol
     IO.printn("Olá, mundo.");
@@ -211,7 +211,7 @@ enquanto são as três primeiras.
 Nem toda recusa aponta a falta no lugar em que ela está. Retirar o ponto e
 vírgula do fim da linha produz esta mensagem:
 
-```
+```console
 $ javac Ola.java
 Ola.java:2: error: ';' expected
     IO.println("Olá, mundo.")
@@ -241,7 +241,7 @@ bytecode que deve executar?
 O diretório tem o fonte e o bytecode. O bytecode vai para uma subpasta e o
 comando é repetido sem nenhuma outra mudança:
 
-```
+```console
 $ ls
 Ola.class  Ola.java
 $ mkdir saida
@@ -270,7 +270,7 @@ diretório atual, então saiu da lista, e a JVM não tem por onde continuar.
 
 Dizer onde procurar resolve:
 
-```
+```console
 $ java -cp saida Ola
 Olá, mundo.
 ```
@@ -291,7 +291,7 @@ Dois comandos, o mesmo diretório, saídas diferentes. O arquivo é compilado
 com `javac Ola.java`; em seguida, no editor, o texto do fonte é trocado por
 "Tchau, mundo."; e os dois comandos rodam:
 
-```
+```console
 $ java Ola
 Olá, mundo.
 $ java Ola.java

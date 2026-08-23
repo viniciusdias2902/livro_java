@@ -14,7 +14,7 @@ void main() {
 }
 ```
 
-```
+```console
 $ java Ingresso.java
 Meia-entrada.
 ```

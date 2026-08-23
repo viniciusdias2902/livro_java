@@ -135,7 +135,7 @@ de Java Development Kit. Dele fazem parte o compilador de Java, a JVM e a
 biblioteca padrão. Instalado o JDK, o terminal passa a ter o comando `java`, e
 pedir a versão a ele é a primeira verificação a fazer em qualquer máquina:
 
-```
+```console
 $ java -version
 openjdk version "25.0.4" 2026-07-15 LTS
 OpenJDK Runtime Environment Corretto-25.0.4.7.1 (build 25.0.4+7-LTS)
@@ -174,7 +174,7 @@ recomenda um caminho único, válido para Linux e macOS: o SDKMAN, um
 gerenciador que instala, lista e troca versões de JDK pelo terminal. Dois
 comandos o instalam, e um terceiro instala o JDK:
 
-```
+```console
 $ curl -s "https://get.sdkman.io" | bash
 $ source "$HOME/.sdkman/bin/sdkman-init.sh"
 $ sdk install java 25.0.4-amzn
@@ -187,7 +187,7 @@ do exemplo acima. O número exato muda a cada trimestre; o comando abaixo
 mostra os identificadores disponíveis no dia, e qualquer um que comece com
 25, ou mais novo, atende ao livro:
 
-```
+```console
 $ sdk list java
 ================================================================================
 Available Java Versions for Linux 64bit
@@ -268,7 +268,7 @@ decide o que o código-fonte pode usar.
 Nem toda máquina é a deste livro. Num computador herdado de outra pessoa, de
 um estágio ou de um laboratório, o comando de verificação responde isto:
 
-```
+```console
 $ java -version
 openjdk version "21.0.8" 2025-07-15 LTS
 OpenJDK Runtime Environment Temurin-21.0.8+9 (build 21.0.8+9-LTS)
