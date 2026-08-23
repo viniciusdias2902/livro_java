@@ -556,7 +556,8 @@
       "try-with-resources",
       "AutoCloseable",
       "manifest",
-      "jar executavel"
+      "jar executavel",
+      "IOException"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
