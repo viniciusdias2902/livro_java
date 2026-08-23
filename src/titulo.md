@@ -30,7 +30,7 @@ que não tem.
 Com as contribuições da comunidade e com escrita minha, porque sempre gostei
 de escrever, virá a versão 2.0, mais humanizada e mais revisada. A 1.0, ainda
 assim, precisava vir ao mundo: eu legitimamente senti falta de aprender Java
-por um livro atualizado, e não encontrei no mercado uma didática que me
-agradasse.
+por um livro atualizado, e não encontrei no mercado uma abordagem que
+atendesse a todas as minhas necessidades pessoais, que bem podem ser as suas.
 
 Boa sorte a todos que vão aprender com este livro.
