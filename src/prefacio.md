@@ -62,31 +62,46 @@ mostram uma sessão real: as linhas que começam com `$` são o que se digita
 edição. Mensagens de erro, em particular, aparecem por extenso — aprender a
 lê-las é conteúdo do livro, não ruído.
 
-Além do texto corrido, quatro caixas aparecem ao longo dos capítulos, cada uma
-com um rótulo fixo e um papel diferente:
+Além do texto corrido, quatro caixas aparecem ao longo dos capítulos. Cada uma
+se apresenta abaixo com a mesma aparência que terá lá dentro:
 
-**Preveja antes de continuar** mostra um trecho de código e faz uma pergunta —
-em geral, o que será impresso — antes de revelar a resposta. Essa caixa só
-funciona com participação: pare, decida a resposta de verdade, de preferência
-por escrito, e só então continue. Acertar confirma o modelo mental; errar vale
-mais ainda, porque expõe exatamente a peça que estava montada errado, no
-momento em que corrigi-la ainda é barato. A resposta vem sempre logo depois da
-caixa. Ler a pergunta e deslizar para a resposta desperdiça o instrumento.
+<div class="previsao">
 
-**Armadilha — cai nos testes** marca comportamento da linguagem que parece uma
-coisa e faz outra, produzindo defeito silencioso: o programa roda, não avisa,
-e o resultado está errado. É o conteúdo mais importante do livro para a vida
-prática, e por isso é cobrado nos exercícios.
+Esta caixa mostra um trecho de código e faz uma pergunta — em geral, o que
+será impresso — antes de revelar a resposta. Ela só funciona com
+participação: pare, decida a resposta de verdade, de preferência por escrito,
+e só então continue. Acertar confirma o modelo mental; errar vale mais ainda,
+porque expõe exatamente a peça que estava montada errado, no momento em que
+corrigi-la ainda é barato. A resposta vem sempre logo depois da caixa. Ler a
+pergunta e deslizar para a resposta desperdiça o instrumento.
 
-**Aprofundamento — nunca cai nos testes** é contexto: explica um porquê, um
-mecanismo interno, uma história. Muda o entendimento, não muda o que se
-escreve. Pode ser pulado sem quebrar a sequência do livro e nenhum exercício
-depende dele.
+</div>
 
-**Onde a analogia quebra** acompanha as raras comparações do livro com coisas
-de fora da computação. Toda analogia mente a partir de algum ponto; essa caixa
-declara o ponto. O livro prefere explicação direta a analogia, e quando abre
-essa exceção, o limite vem junto.
+<div class="armadilha">
+
+Esta caixa marca comportamento da linguagem que parece uma coisa e faz outra,
+produzindo defeito silencioso: o programa roda, não avisa, e o resultado está
+errado. É o conteúdo mais importante do livro para a vida prática, e por isso
+é cobrado nos exercícios.
+
+</div>
+
+<div class="aprofundamento">
+
+Esta caixa é contexto: explica um porquê, um mecanismo interno, uma história.
+Muda o entendimento, não muda o que se escreve. Pode ser pulada sem quebrar a
+sequência do livro e nenhum exercício depende dela.
+
+</div>
+
+<div class="analogia">
+
+Esta caixa acompanha as raras comparações do livro com coisas de fora da
+computação. Toda analogia mente a partir de algum ponto; a caixa declara o
+ponto. O livro prefere explicação direta a analogia, e quando abre essa
+exceção, o limite vem junto.
+
+</div>
 
 Cada capítulo abre com um problema concreto e fecha com duas seções fixas. A
 **Prática** traz exercícios sem resposta publicada — de propósito, porque o
