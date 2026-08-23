@@ -21,12 +21,12 @@
       "erro de execucao"
     ],
     "termos_adiados": {
-      "class": "05-classes",
       "public": "05-classes",
       "static": "05-classes",
       "String[] args": "04-referencias",
       "return": "03-fluxo",
-      "int": "02-valores"
+      "int": "02-valores",
+      "palavra-chave class": "05-classes"
     },
     "conceitos_de_carga": [
       "classpath",
@@ -116,8 +116,8 @@
       "String[] args"
     ],
     "termos_adiados": {
-      "class": "05-classes",
-      "excecao": "11-excecoes"
+      "excecao": "11-excecoes",
+      "palavra-chave class": "05-classes"
     },
     "conceitos_de_carga": [
       "referência",
@@ -131,7 +131,7 @@
     "titulo": "Classes, construtores e encapsulamento",
     "apendice": false,
     "termos_introduzidos": [
-      "class",
+      "palavra-chave class",
       "campo",
       "instancia",
       "this",
