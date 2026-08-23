@@ -169,6 +169,18 @@ arquivo: `Mercadinho.java` vira `Mercadinho.class`, e é `Mercadinho`, sem
 extensão nenhuma, que se escreve depois de `java`. Renomear o arquivo antes de
 compilar muda as duas coisas juntas.
 
+Os dois caminhos, lado a lado:
+
+```mermaid
+flowchart LR
+    F["Mercadinho.java<br>código-fonte"]
+    C["Mercadinho.class<br>bytecode em disco"]
+    E["execução na JVM"]
+    F -->|"javac Mercadinho.java"| C
+    C -->|"java Mercadinho"| E
+    F -->|"java Mercadinho.java<br>compila na memória, nada vai ao disco"| E
+```
+
 ## O erro que não deixa nada para trás
 
 O compilador recusa o que não entende, e recusar quer dizer não gravar nada:

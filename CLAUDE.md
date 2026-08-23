@@ -56,6 +56,10 @@ e a documentação oficial, nunca o tutorial de internet.
   bug silencioso. Cai nos testes.
 - **Domínio contínuo:** um mercadinho de bairro (produtos, preços, estoque, lotes e
   validades, vendas, caderneta de fiado), do capítulo 7 ao 25. Sem `Foo` e `Bar`.
+- **Diagrama** só quando mostra estrutura que a prosa carrega mal: percursos,
+  hierarquias, ponteiros. Poucos no livro inteiro, sempre em bloco ` ```mermaid `
+  (o tema modus-vivendi já está configurado em `mermaid-init.js`). Diagrama nunca
+  substitui a explicação em prosa; resume o que ela acabou de dizer.
 - **Estrutura:** abre com o problema concreto, fecha com seção de prática e ficha de
   referência. Ambas obrigatórias, verificadas pelo lint.
 - Java 25. Capítulos 2 a 6 usam arquivo-fonte compacto nos exercícios.

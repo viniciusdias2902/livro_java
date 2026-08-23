@@ -10,7 +10,13 @@ preferred-dark-theme = "coal"
 additional-css = ["theme/modus-vivendi.css"]
 git-repository-url = ""
 no-section-label = false
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
 
 [output.html.fold]
 enable = true
 level = 1
+
+[preprocessor]
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
