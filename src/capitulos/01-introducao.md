@@ -141,15 +141,29 @@ OpenJDK 64-Bit Server VM Temurin-25.0.1+8 (build 25.0.1+8-LTS, mixed mode)
 ```
 
 O número no começo da primeira linha é a versão, 25 neste caso. O nome
-Temurin, nas linhas seguintes, identifica a distribuição: o JDK é desenvolvido
-como código aberto no projeto OpenJDK, e o que se baixa e instala é um
-empacotamento desse código feito por alguma empresa, compilado e testado para
-cada sistema. Oracle JDK, Eclipse Temurin, Amazon Corretto, Azul Zulu e
-Microsoft Build of OpenJDK são distribuições. A linguagem, a biblioteca padrão
-e o comportamento dos programas são os mesmos em todas, porque o código de
-origem é o mesmo; o que muda é quem publica correções, por quanto tempo e sob
-quais termos de licença. Para este livro, qualquer distribuição serve, e
-trocar de uma para outra não muda uma linha do que vem pela frente.
+Temurin, nas linhas seguintes, identifica a distribuição, e entender por que
+existem várias exige apresentar a origem comum de todas. OpenJDK é o projeto
+de código aberto onde a plataforma Java é desenvolvida: o código-fonte do
+compilador, da JVM e da biblioteca padrão mora ali, e é ali que as propostas
+públicas citadas na seção anterior viram código. O OpenJDK é também a
+implementação-padrão da plataforma, a chamada *reference implementation*:
+quando a especificação de uma versão fica pronta, é o código dele que a
+realiza e contra o qual as demais são conferidas.
+
+Só que código aberto não é código pronto para usar: alguém precisa compilá-lo
+para cada sistema, testar, assinar o resultado e, sobretudo, continuar
+publicando correções por anos, e esse trabalho contínuo custa dinheiro. Cada
+empresa com interesse em Java o financia à sua maneira e distribui o
+resultado, que é o que se chama de distribuição. A Amazon mantém o Corretto
+porque roda Java em escala nos próprios servidores; a Microsoft faz o mesmo
+para a nuvem dela; a Oracle vende suporte sobre o Oracle JDK; a Eclipse
+Foundation publica o Temurin como distribuição comunitária, sem dono
+comercial; a Azul vive de suporte ao seu Zulu. Todas partem do mesmo código
+de origem, e por isso a linguagem, a biblioteca padrão e o comportamento dos
+programas são os mesmos em qualquer uma; o que muda é quem publica correções,
+por quanto tempo e sob quais termos de licença. Para este livro, qualquer
+distribuição serve, e trocar de uma para outra não muda uma linha do que vem
+pela frente.
 
 ## Instalação
 
@@ -171,7 +185,25 @@ com 25, ou mais novo, atende ao livro:
 
 ```
 $ sdk list java
-``` Instalado por esse caminho, `java -version`
+================================================================================
+Available Java Versions for Linux 64bit
+================================================================================
+ Vendor        | Use | Version  | Dist | Status     | Identifier
+--------------------------------------------------------------------------------
+ Corretto      | >>> | 25.0.4   | amzn | installed  | 25.0.4-amzn
+               |     | 21.0.9   | amzn |            | 21.0.9-amzn
+ Java.net      |     | 26.ea.36 | open |            | 26.ea.36-open
+ Temurin       |     | 25.0.4   | tem  |            | 25.0.4-tem
+               |     | 21.0.9   | tem  |            | 21.0.9-tem
+...
+```
+
+A lista real é bem mais longa, com a omissão marcada acima. A primeira coluna
+traz a distribuição; a última, o identificador que o `sdk install java`
+recebe. A linha marcada com `>>>` é a instalação que o comando `java` usa no
+momento. Identificadores com `ea` no meio, como `26.ea.36`, são montagens de
+acesso antecipado (*early access*) da versão ainda em desenvolvimento, e não
+atendem ao livro. Instalado por esse caminho, `java -version`
 dirá Corretto no lugar do Temurin do exemplo acima, e a leitura é a mesma.
 Quando houver mais de um JDK na máquina, o SDKMAN também faz a troca:
 `sdk default java`, seguido de um identificador, passa a apontar o comando
@@ -299,7 +331,7 @@ máquinas antigas e em material antigo. 1.8 e 8 são a mesma versão.
 | JVM | máquina virtual Java: programa instalado em cada máquina, que executa bytecode |
 | biblioteca padrão | código pronto para tarefas comuns, distribuído junto com a linguagem |
 | JDK | conjunto instalável que reúne o compilador, a JVM e a biblioteca padrão |
-| OpenJDK | projeto de código aberto onde o JDK é desenvolvido |
+| OpenJDK | projeto de código aberto onde o JDK é desenvolvido; a implementação-padrão (*reference implementation*) da plataforma |
 | distribuição | empacotamento do OpenJDK publicado e mantido por uma empresa |
 | SDKMAN | gerenciador que instala, lista e troca versões de JDK pelo terminal |
 | WSL | Windows Subsystem for Linux: um Linux completo dentro do Windows |
