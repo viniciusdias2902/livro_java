@@ -6,11 +6,14 @@ não assume ferramenta nenhuma além de um computador com terminal. O ponto de
 chegada é o núcleo da linguagem — o que se costuma chamar de Java core: a
 linguagem em si, a orientação a objetos como o Java a pratica, a biblioteca
 padrão nas partes que todo programa usa, testes, e a capacidade de ler e
-escrever um programa de verdade. Quem termina o livro está preparado para o
-passo seguinte da maior parte das carreiras Java, que são os frameworks de
-aplicação como o Spring; o livro não os cobre, mas o penúltimo capítulo
-constrói à mão o mecanismo central deles, exatamente para que, ao encontrá-los,
-o leitor reconheça o que já viu por dentro.
+escrever um programa de verdade. O livro é uma experiência completa em si:
+termina com um sistema real, construído do zero e funcionando no terminal, e
+nada nele depende de um passo seguinte. Quem quiser dar esse passo — os
+frameworks de aplicação, como o Spring, são o rumo mais comum das carreiras
+Java — encontra o caminho preparado, porque o penúltimo capítulo constrói à
+mão o mecanismo central desses frameworks; quem não quiser não perde nada,
+porque esse mesmo capítulo vale por si, como técnica de organizar programas
+grandes.
 
 São vinte e quatro capítulos e três apêndices. A ordem não é temática, é de
 dependência: cada capítulo assume todos os anteriores, cada termo técnico é
