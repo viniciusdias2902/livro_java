@@ -163,7 +163,13 @@ public int hashCode() {
 mesmo código de barras, mesmo hash, sempre. Quando a igualdade olha mais de
 um campo, o utilitário `Objects.hash(campo1, campo2)`, do pacote `java.util`, combina os hashes de
 todos numa chamada, e a regra continua a mesma: os campos do `hashCode` são
-exatamente os campos do `equals`. Um hash também pode ser ruim sem estar
+exatamente os campos do `equals`. A mesma classe utilitária resolve o
+outro lado: `Objects.equals(a, b)` compara dois valores que podem ser
+nulos sem derrubar nada, respondendo `true` para dois nulos e `false`
+quando só um dos lados é nulo. É a chamada que substitui
+`a.equals(b)` dentro de um `equals` sempre que o campo comparado admite
+`null`, e a que evita a ironia de um método de comparação derrubar o
+programa com `NullPointerException`. Um hash também pode ser ruim sem estar
 errado: devolver sempre `42` cumpre a cláusula à risca, porque iguais têm o
 mesmo hash, e destrói a velocidade, porque tudo colide com tudo e a busca
 degenera em comparar com todos. Correção é obrigação; espalhamento é
@@ -213,6 +219,31 @@ investimento vem na primeira sessão de caça a defeito: a mensagem de uma
 hexadecimal, e a diferença entre os dois é a diferença entre ler o problema
 e caçá-lo. Vale sobrescrever `toString` em toda classe de domínio, mesmo
 quando nenhum requisito pede.
+
+## O resto de Object
+
+Os três métodos deste capítulo são os que se sobrescrevem, e não são os
+únicos que toda classe herda. A lista completa de `Object` é curta e vale
+ser conhecida, porque todo objeto do programa responde a ela:
+
+| Método | O que faz | Sobrescrever? |
+| --- | --- | --- |
+| `equals(Object)` | igualdade por conteúdo, quando sobrescrito | em todo tipo cujo valor é o conteúdo |
+| `hashCode()` | o código de hash | sempre que `equals` for sobrescrito |
+| `toString()` | a forma em texto | vale a pena em toda classe de domínio |
+| `getClass()` | o objeto que representa o tipo real | impossível: é `final` |
+| `clone()` | cópia rasa, sob um protocolo antigo e cheio de arestas | não; cópia se faz por construtor |
+| `finalize()` | resto de um mecanismo de limpeza abandonado | não; o uso dele foi desativado |
+| `wait()`, `notify()`, `notifyAll()` | coordenação entre execuções simultâneas | não; é assunto do capítulo 22 |
+
+`getClass` devolve o tipo real do objeto em execução, o mesmo nome que
+aparece no `Produto@6f2b958e` da seção anterior, e é a porta de entrada
+das ferramentas do capítulo 23. As três últimas linhas da tabela
+existem para serem reconhecidas e deixadas em paz: `clone` e `finalize`
+são decisões antigas da linguagem que o código moderno não usa, e o trio
+de espera pertence ao vocabulário de outro capítulo. Sobra o que este
+capítulo tratou, e a razão de ele ter tratado: os três primeiros são os
+únicos cuja versão herdada dá resposta errada para tipos do domínio.
 
 ## O caso BigDecimal
 
@@ -294,7 +325,9 @@ feitos para chave serem imutáveis por inteiro.
 | `hashCode` | devolve o código de hash; iguais por `equals` têm o mesmo hash |
 | código de hash | `int` que acompanha o objeto; sobrescrito, deriva dos campos do `equals` |
 | colisão de hash | objetos diferentes com o mesmo hash; permitida e inevitável |
-| `toString` | a forma em texto do objeto; usada por `IO.println`; para depuração |
+| contrato de `toString` | descrição do objeto em texto, para gente ler; sem formato obrigatório |
+| `Objects.equals(a, b)` | comparação que aceita `null` dos dois lados sem derrubar |
+| `getClass()` | o tipo real do objeto em execução; herdado e `final` |
 
 | Regra prática | |
 | --- | --- |
