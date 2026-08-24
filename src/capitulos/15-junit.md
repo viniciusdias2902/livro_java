@@ -85,8 +85,8 @@ primeiro, e trocá-los não quebra nada hoje, mas inverte a mensagem de erro
 de todas as falhas futuras, apontando o certo como errado. O `import static`
 da abertura é a novidade de sintaxe: importa o método, em vez do tipo, para
 `assertEquals` dispensar prefixo. Existem asserções irmãs para os demais
-casos, `assertTrue`, `assertFalse` e `assertNotNull` entre elas, todas na
-ficha.
+casos, `assertTrue`, `assertFalse` e `assertNotNull` entre elas, e a
+terceira seção deste capítulo reúne o repertório inteiro.
 
 Quando a asserção falha, o teste conta exatamente o quê e onde:
 
@@ -163,6 +163,22 @@ class CaixaTest {
 }
 ```
 
+Três parentes completam o ciclo. `@AfterEach` roda depois de cada teste, e
+serve à limpeza do que o teste deixou fora da memória, um arquivo, uma
+pasta. `@BeforeAll` e `@AfterAll` rodam uma vez por classe, antes do
+primeiro teste e depois do último, e por isso são declarados `static`:
+existem antes de haver instância. O que cabe neles é o preparo caro e
+compartilhado que nenhum teste altera; estado alterável ali dentro
+reintroduz exatamente a dependência entre testes que o `@BeforeEach` existe
+para eliminar.
+
+| Anotação | Quando roda |
+| --- | --- |
+| `@BeforeAll` | uma vez, antes do primeiro teste da classe; método `static` |
+| `@BeforeEach` | antes de cada teste |
+| `@AfterEach` | depois de cada teste |
+| `@AfterAll` | uma vez, depois do último teste da classe; método `static` |
+
 O "de novo antes de cada" é a parte que importa: cada teste recebe uma
 fixture recém-criada, e a ordem em que os testes rodam deixa de ter
 importância, porque nenhum herda o estado sujo do anterior. Um teste que só
@@ -224,6 +240,88 @@ subir, e desconfiar de teste que nasce passando. Um teste novo deve falhar
 pelo menos uma vez, na frente de quem o escreveu, antes de valer alguma
 coisa; teste que nunca falhou não provou que sabe falhar.
 
+## O nome no placar e as asserções que faltavam
+
+O placar é lido por gente, e o que aparece nele é o nome do método. Quando
+a frase que descreve o caso não cabe num nome de método,
+`@DisplayName` escreve a descrição em português corrido, com espaço e
+acento, e é ela que o executor imprime:
+
+```java
+@Test
+@DisplayName("venda em dinheiro aplica 5% de desconto")
+void aplicaDescontoDoDinheiro() {
+```
+
+`@Disabled` desliga um teste, com o motivo no argumento, e o placar passa a
+contá-lo na coluna `Skipped`, que é a coluna que ninguém lê: teste
+desligado sem data para voltar é proteção perdida com aparência de
+proteção mantida.
+
+Ao lado do `assertEquals`, o repertório que o dia a dia usa:
+
+| Asserção | Falha quando |
+| --- | --- |
+| `assertEquals(esperado, obtido)` | os dois diferem, pelo `equals` |
+| `assertNotEquals(inesperado, obtido)` | os dois são iguais |
+| `assertTrue(condição)` / `assertFalse(condição)` | a condição não é o que se afirmou |
+| `assertNull(valor)` / `assertNotNull(valor)` | há objeto onde se esperava nada, ou o contrário |
+| `assertSame(esperado, obtido)` / `assertNotSame(...)` | não são, ou são, o mesmo objeto |
+| `assertArrayEquals(esperado, obtido)` | os arrays diferem no tamanho ou em alguma posição |
+| `fail(mensagem)` | sempre, ao ser alcançada |
+
+Toda asserção aceita uma mensagem como último argumento, e ela paga a
+digitação quando a falha sozinha não diz o bastante:
+`assertTrue(produto.estoque() > 0, "estoque deveria ter sobrado depois da
+venda")` explica o que se esperava, enquanto o `assertTrue` pelado falha
+informando apenas que `false` não é `true`. `assertSame` é a pergunta de
+identidade do capítulo 5, e serve quando o assunto do teste é justamente o
+compartilhamento de referência: dois pedidos ao mesmo repositório devolvem
+o mesmo objeto ou dois iguais?
+
+## Um teste, muitos casos
+
+Cinco testes iguais que só mudam o valor de entrada são cinco cópias para
+manter. O teste parametrizado é o teste que roda uma vez por conjunto de
+argumentos, declarado com `@ParameterizedTest` no lugar de `@Test` e
+acompanhado da fonte dos valores:
+
+```java
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+@ParameterizedTest
+@CsvSource({
+    "1,  19.90",
+    "2,  39.80",
+    "10, 199.00"
+})
+void calculaOPrecoPorQuantidade(int quantidade, BigDecimal esperado) {
+    Produto cafe = new Produto("7891000100103", "Café 500g", new BigDecimal("19.90"));
+    assertEquals(0, esperado.compareTo(cafe.precoPara(quantidade)));
+}
+```
+
+```console
+$ mvn test
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+```
+
+Três testes no placar, um por linha da tabela, cada um com os próprios
+argumentos no nome; um caso novo passa a custar uma linha, e não um método.
+`@CsvSource` entrega uma linha de valores separados por vírgula a cada
+execução, convertendo cada coluna para o tipo do parâmetro
+correspondente, inclusive para `BigDecimal`. `@ValueSource` é a forma curta
+para um parâmetro só, como `@ValueSource(ints = { 1, 2, 10 })`, e
+`@EnumSource` roda uma vez por constante de um enum, que é a versão
+executável do percurso por `values()` do capítulo 12.
+
+A régua de uso: parametrizar quando os casos são o mesmo comportamento com
+dados diferentes, e escrever testes separados quando cada caso existe por
+uma razão própria. A tabela de preços acima é o primeiro caso; "recusa nome
+vazio" e "recusa estoque negativo" são o segundo, porque falham por motivos
+diferentes e merecem nomes diferentes no placar.
+
 ## Regressão: o bug vira teste
 
 O uso mais valioso do JUnit num sistema vivo tem nome. Um teste de regressão
@@ -284,6 +382,22 @@ do zero, em vinte linhas.
    do capítulo 13: vender dentro do limite passa, estourar o limite lança, e
    a mensagem carrega o limite. Decida na fixture qual limite usar.
 
+6. Acrescente a `CaixaTest` um `@BeforeAll` que imprima uma linha e um
+   `@AfterEach` que imprima outra, rode a classe e cole a saída, mostrando
+   a ordem exata em que os quatro momentos do ciclo aconteceram. Tente
+   declarar o `@BeforeAll` sem `static` e anote o que o executor diz.
+
+7. Converta os cinco casos de preço por quantidade de `ProdutoTest` num
+   único teste parametrizado com `@CsvSource`, dê a ele um `@DisplayName`
+   em português e rode com `mvn test -Dtest=ProdutoTest`. Confira que o
+   número no placar subiu de um para cinco.
+
+8. Escreva um teste com `assertSame` que prove que duas buscas do mesmo
+   código no seu estoque em memória devolvem o mesmo objeto, e outro com
+   `assertNotSame` que prove o contrário para duas leituras de arquivo.
+   Acrescente mensagem a cada asserção e provoque a falha das duas para ler
+   o que o placar imprime.
+
 ## Ficha do capítulo
 
 | Anotação / chamada | O que faz |
@@ -293,7 +407,13 @@ do zero, em vinte linhas.
 | `assertEquals(esperado, obtido)` | falha se diferentes; esperado vem primeiro |
 | `assertTrue` / `assertFalse` / `assertNotNull` | asserções sobre condição e presença |
 | `fail(mensagem)` | derruba o teste ao ser alcançado |
+| `@AfterEach` / `@BeforeAll` / `@AfterAll` | depois de cada teste / uma vez antes / uma vez depois |
+| `@DisplayName("...")` | a descrição que aparece no placar |
+| `@Disabled("motivo")` | desliga o teste; conta como `Skipped` |
+| `assertNull` / `assertSame` / `assertArrayEquals` | ausência, identidade e conteúdo de array |
+| `@ParameterizedTest` + `@CsvSource` / `@ValueSource` / `@EnumSource` | um teste por conjunto de argumentos |
 | `mvn test` | compila e roda todos os testes de `src/test/java` |
+| `mvn test -Dtest=ProdutoTest` | roda só a classe de teste indicada |
 
 | Termo | Definição |
 | --- | --- |
@@ -303,3 +423,4 @@ do zero, em vinte linhas.
 | `assertEquals` | asserção de igualdade, via `equals`; dinheiro pede `compareTo` |
 | fixture | objetos de partida dos testes, recriados antes de cada um |
 | teste de regressão | teste nascido de um defeito, para ele não voltar despercebido |
+| teste parametrizado | um método de teste executado uma vez por conjunto de argumentos |
