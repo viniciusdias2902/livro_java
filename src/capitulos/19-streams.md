@@ -151,7 +151,8 @@ aceita de bom grado. Stream sem terminal não faz nada.
 
 Somar é o exemplo canônico de agregação, e agregação em stream tem nome:
 `reduce` combina todos os elementos num único resultado, a partir de um
-valor inicial e de uma operação de dois em um:
+valor inicial e de uma operação de dois em um, que é o `BinaryOperator` do
+capítulo 18:
 
 ```java
 BigDecimal totalDoDia = vendas.stream()
