@@ -63,8 +63,9 @@ existe para empurrar enganos nessa direção.
 ## Oito primitivos, cinco em uso
 
 Os tipos mais simples da linguagem chamam-se primitivos: neles, a variável
-guarda o próprio valor, direto. Existem oito; este livro trabalha com cinco,
-e os outros três ficam registrados na ficha do capítulo por completude.
+guarda o próprio valor, direto. Existem oito, e cinco deles respondem por
+quase todo o código deste livro e da maior parte dos sistemas; os outros
+três aparecem ao fim da seção, com o pouco que há para dizer sobre eles.
 
 Cada primitivo ocupa um número fixo de bits na memória, e é esse número que
 determina quantos valores cabem no tipo. O capítulo 1 apresentou o bit como
@@ -106,6 +107,18 @@ caractere de cada escrita do mundo tem um código na tabela Unicode, a tabela
 que dá um número a cada caractere, e `'A'` é o 65. Essa natureza numérica
 reaparece daqui a duas seções.
 
+Os três primitivos restantes cabem num parágrafo, porque o lugar deles é
+estreito. `byte` ocupa 8 bits e guarda de −128 a 127; é o tipo do dado
+bruto, o pedaço de arquivo ou de rede tratado como está, sem
+interpretação. `short` ocupa 16 bits, guarda de −32.768 a 32.767 e quase
+não aparece em código novo: a economia de dois bytes por valor não paga a
+conta que estoura cedo demais. `float` ocupa 32 bits e é o ponto
+flutuante de metade da largura do `double`, com menos casas confiáveis;
+sobrevive em processamento gráfico e em memória apertada, e fora disso a
+escolha é `double`. Um literal com ponto, sem sufixo, é `double`, e por
+isso `float taxa = 0.05;` é recusado na compilação: `float` exige o
+sufixo `f`, como em `0.05f`, do mesmo modo que `long` exige o `L`.
+
 ## Expressões e operadores
 
 Uma expressão é qualquer trecho de código que produz um valor: `17` é uma
@@ -142,15 +155,24 @@ Duas linhas de saída. Quais valores aparecem?
 A divisão entre dois `int` produz um `int`: a parte fracionária é descartada,
 sem arredondamento (7 dividido por 2 daria 3,5; o resultado é 3, e 3,9
 viraria 3 do mesmo jeito). O `%` entrega o que a divisão descartou como
-resto inteiro: 2 cabe 3 vezes em 7, sobra 1. O custo de não saber disso é
+resto inteiro: 2 cabe 3 vezes em 7, sobra 1. Com zero à direita não há
+resposta possível, e a execução não segue: `7 / 0` e `7 % 0` derrubam o
+programa na própria linha, com um erro de execução, e o capítulo 4 traz a
+proteção que barra a conta antes de ela acontecer. O custo de não saber disso é
 concreto: média de avaliações, porcentual de desconto e rateio de conta saem
 errados, sem erro nenhum na tela, sempre que os dois lados da divisão são
 inteiros. O conserto aparece na seção de promoção, logo adiante.
 
 Três atalhos completam o conjunto. Os operadores compostos aplicam a conta
 sobre a própria variável: `total += 2` soma 2 a `total`, e `-=`, `*=`, `/=`
-seguem o padrão. `total++` soma 1 e `total--` subtrai 1; este livro os usa
-como instrução isolada, que é o uso que não guarda surpresa.
+seguem o padrão. `total++` soma 1 e `total--` subtrai 1. As duas formas
+existem também antes da variável, `++total` e `--total`, e a diferença
+aparece quando o incremento acontece dentro de outra expressão: `++total`
+soma e entrega o valor já somado, enquanto `total++` entrega o valor
+antigo e soma depois, de modo que `IO.println(total++)` imprime o número
+anterior ao acréscimo. Este livro escreve as duas formas como instrução
+isolada, uma linha inteira dedicada ao incremento, porque nessa posição
+elas coincidem e nenhuma leitura fica ambígua.
 
 As comparações produzem `boolean`: `==` pergunta se dois valores são iguais,
 `!=` se são diferentes, e `<`, `<=`, `>`, `>=` comparam ordem.
@@ -158,6 +180,28 @@ As comparações produzem `boolean`: `==` pergunta se dois valores são iguais,
 fixar a diferença de papéis: `=` guarda, `==` compara. Combinar comparações
 entre si, com "e", "ou" e "não", pede operadores próprios, que chegam no
 capítulo 4 junto das estruturas que decidem.
+
+Com aritmética, comparação e atribuição na mesma linha, a ordem de
+resolução deixa de ser evidente, e ela é fixa. Precedência é a ordem em
+que os operadores de uma expressão são resolvidos, do primeiro para o
+último:
+
+| Nível | Operadores | O que sai disso |
+| --- | --- | --- |
+| 1 | `(...)` | os parênteses vencem tudo |
+| 2 | `++` `--` `(tipo)` | agem sobre um valor só |
+| 3 | `*` `/` `%` | `a + b * c` é `a + (b * c)` |
+| 4 | `+` `-` | `a - b + c` |
+| 5 | `<` `<=` `>` `>=` | `a + 1 > b` é `(a + 1) > b` |
+| 6 | `==` `!=` | `a + 1 == b` é `(a + 1) == b` |
+| 7 | `=` `+=` `-=` `*=` `/=` | `total = a + b` |
+
+Dentro de um mesmo nível a avaliação corre da esquerda para a direita, e
+daí vem `10 - 3 - 2` valendo 5. A atribuição ocupa o último lugar por
+necessidade: o `=` só tem o que guardar depois de a expressão à direita
+inteira virar um valor. A tabela existe para consulta, não para decorar,
+e parênteses escritos tornam a ordem visível sem que o próximo leitor
+precise dela.
 
 ## Promoção e casting
 
@@ -276,6 +320,20 @@ dinheiro se representa em Java é assunto do capítulo 7, junto do sistema que
 vai precisar disso. O lugar do `double` é a medida física, peso, distância,
 temperatura, onde o valor já nasce aproximado por natureza.
 
+O formato guarda ainda três valores que não são números comuns, e eles
+nascem justamente onde o inteiro cai. `1.0 / 0` não derruba nada: produz
+`Infinity`, o infinito positivo, e `-1.0 / 0` produz o negativo. Já
+`0.0 / 0` produz `NaN`, sigla de *not a number*, "não é um número", o
+valor que marca conta sem resultado definido. O que faz de `NaN` um
+problema prático é a regra que ele carrega: `NaN` não é igual a nada,
+nem a si mesmo, e `NaN == NaN` responde `false`, de modo que nem o teste
+de igualdade consigo mesmo o denuncia; as comparações de ordem com ele
+respondem `false` do mesmo jeito. Uma média calculada sobre nenhuma
+avaliação sai `NaN`, o valor contamina toda conta que o toque, porque
+qualquer aritmética com `NaN` devolve `NaN`, e o relatório imprime a
+sigla no lugar do número em vez de parar. A defesa é a mesma da divisão
+inteira: conferir o divisor antes, não o resultado depois.
+
 ## var
 
 Quando o valor inicial já deixa o tipo evidente, a palavra `var` declara a
@@ -322,6 +380,15 @@ capítulos o livro escreve os tipos por extenso, para eles ficarem visíveis;
    os três em variáveis e imprima os três, provando que a base muda a
    escrita e não o valor.
 
+7. Imprima `1.0 / 0`, depois `0.0 / 0`, e depois o resultado de comparar
+   `0.0 / 0` consigo mesmo com `==`. Em seguida calcule a média de zero
+   avaliações, com soma e contagem em `double`, e escreva a conferência
+   que impede o relatório de imprimir a sigla que sair.
+
+8. Sem executar, escreva num papel o valor de `2 + 3 * 4 - 6 / 3` e o de
+   `10 - 3 - 2`. Confira imprimindo, e reescreva as duas expressões com
+   parênteses que deixem a ordem visível para quem ler depois.
+
 ## Ficha do capítulo
 
 | Tipo | Bits | Guarda | Literal de exemplo |
@@ -331,15 +398,21 @@ capítulos o livro escreve os tipos por extenso, para eles ficarem visíveis;
 | `double` | 64 | ponto flutuante | `19.90`, `0.5` |
 | `boolean` | a JVM decide | `true` ou `false` | `true` |
 | `char` | 16 | um caractere (código Unicode) | `'A'` |
-| `byte`, `short`, `float` | 8, 16, 32 | versões menores de `int` e `double`; raras fora de arquivo e rede | |
+| `byte` | 8 | dado bruto de arquivo e rede, de −128 a 127 | `100` |
+| `short` | 16 | inteiro curto, de −32.768 a 32.767; raro em código novo | `(short) 30_000` |
+| `float` | 32 | ponto flutuante de metade da largura; exige sufixo | `0.05f` |
 
 | Operador | O que faz |
 | --- | --- |
 | `+` `-` `*` `/` `%` | aritmética; `/` entre inteiros descarta a fração, `%` dá o resto |
 | `+=` `-=` `*=` `/=` | aplica a conta sobre a própria variável |
-| `++` `--` | soma ou subtrai 1, como instrução |
+| `++` `--` | soma ou subtrai 1; à frente entrega o valor novo, atrás o antigo |
 | `==` `!=` `<` `<=` `>` `>=` | comparações; produzem `boolean` |
 | `(tipo)` | casting: conversão explícita, cortando o que não couber |
+
+A ordem de resolução, do primeiro para o último: parênteses; `++`, `--` e
+casting; `*`, `/`, `%`; `+`, `-`; comparações de ordem; `==` e `!=`;
+atribuições. Empate resolve-se da esquerda para a direita.
 
 | Termo | Definição |
 | --- | --- |
@@ -355,5 +428,8 @@ capítulos o livro escreve os tipos por extenso, para eles ficarem visíveis;
 | casting | conversão explícita, escrita como `(tipo)`, por conta de quem pede |
 | overflow | conta que passa do limite do tipo e dá a volta, sem aviso |
 | ponto flutuante | formato binário aproximado do `double` |
+| precedência | a ordem em que os operadores de uma expressão são resolvidos |
+| `Infinity` | resultado de dividir um `double` diferente de zero por zero |
+| `NaN` | conta sem resultado definido; diferente de tudo, inclusive de si |
 | `var` | declaração cujo tipo o compilador infere do valor inicial |
 | inferência de tipo | dedução do tipo pelo compilador a partir do valor inicial |
