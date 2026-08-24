@@ -121,7 +121,13 @@
       "decomposicao",
       "pilha de chamadas",
       "ArithmeticException",
-      "StackOverflowError"
+      "StackOverflowError",
+      "do-while",
+      "instrucao continue",
+      "laco aninhado",
+      "instrucao switch",
+      "yield",
+      "varargs"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -155,7 +161,14 @@
       "ArrayIndexOutOfBoundsException",
       "laco for-each",
       "String[] args",
-      "NumberFormatException"
+      "NumberFormatException",
+      "sequencia de escape",
+      "bloco de texto",
+      "String.format",
+      "String.join",
+      "classe utilitaria",
+      "classe Arrays",
+      "array multidimensional"
     ],
     "termos_adiados": {
       "excecao": "13-excecoes",
@@ -209,11 +222,17 @@
       "throw",
       "IllegalArgumentException",
       "representacao de dinheiro",
-      "BigDecimal"
+      "BigDecimal",
+      "protected",
+      "visibilidade de pacote",
+      "encadeamento de construtores",
+      "classe aninhada",
+      "classe interna"
     ],
     "termos_adiados": {
       "excecao": "13-excecoes",
-      "interface": "09-interfaces"
+      "interface": "09-interfaces",
+      "classe anonima": "18-lambdas"
     },
     "conceitos_de_carga": [
       "encapsulamento",
@@ -266,7 +285,9 @@
       "classe abstrata",
       "metodo abstrato",
       "metodo default",
-      "acoplamento"
+      "acoplamento",
+      "constante de interface",
+      "metodo estatico de interface"
     ],
     "termos_adiados": {
       "generics": "16-generics"
@@ -336,7 +357,12 @@
       "pattern matching",
       "padrao de tipo",
       "padrao de registro",
-      "exaustividade"
+      "exaustividade",
+      "values()",
+      "ordinal",
+      "EnumSet",
+      "EnumMap",
+      "padrao com guarda"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -360,7 +386,11 @@
       "unchecked",
       "RuntimeException",
       "stack trace",
-      "propagacao"
+      "propagacao",
+      "multi-catch",
+      "encadeamento de excecoes",
+      "Objects.requireNonNull",
+      "printStackTrace"
     ],
     "termos_adiados": {
       "try-with-resources": "21-io"
@@ -384,7 +414,9 @@
       "repositorio",
       "dependencia transitiva",
       "convencao de diretorios",
-      "jar"
+      "jar",
+      "ciclo de vida da construcao",
+      "escopo de dependencia"
     ],
     "termos_adiados": {
       "JUnit": "15-junit"
@@ -406,7 +438,8 @@
       "assercao",
       "assertEquals",
       "fixture",
-      "teste de regressao"
+      "teste de regressao",
+      "teste parametrizado"
     ],
     "termos_adiados": {
       "lambda": "18-lambdas"
@@ -429,7 +462,8 @@
       "metodo generico",
       "type erasure",
       "invariancia",
-      "wildcard"
+      "wildcard",
+      "limite de tipo"
     ],
     "termos_adiados": {
       "List": "17-colecoes",
@@ -466,7 +500,9 @@
       "autoboxing",
       "iterador",
       "ordem de iteracao",
-      "colecao imutavel"
+      "colecao imutavel",
+      "Collections",
+      "PriorityQueue"
     ],
     "termos_adiados": {
       "lambda": "18-lambdas",
@@ -494,7 +530,11 @@
       "Comparator",
       "captura de variavel",
       "efetivamente final",
-      "literal de classe"
+      "literal de classe",
+      "classe anonima",
+      "BiFunction",
+      "UnaryOperator",
+      "BinaryOperator"
     ],
     "termos_adiados": {
       "stream": "19-streams"
@@ -517,7 +557,9 @@
       "avaliacao preguicosa",
       "Collectors",
       "reduce",
-      "Optional"
+      "Optional",
+      "flatMap",
+      "IntStream"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -540,7 +582,11 @@
       "ZoneId",
       "fuso horario",
       "ChronoUnit",
-      "DateTimeFormatter"
+      "DateTimeFormatter",
+      "LocalTime",
+      "ZonedDateTime",
+      "DayOfWeek",
+      "TemporalAdjusters"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -562,7 +608,9 @@
       "AutoCloseable",
       "manifest",
       "jar executavel",
-      "IOException"
+      "IOException",
+      "StandardOpenOption",
+      "arquivo temporario"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -585,7 +633,10 @@
       "volatile",
       "ExecutorService",
       "Future",
-      "virtual thread"
+      "virtual thread",
+      "Callable",
+      "impasse",
+      "AtomicInteger"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -623,7 +674,8 @@
       "inversao de controle",
       "grafo de objetos",
       "container",
-      "singleton"
+      "singleton",
+      "injecao por setter"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
