@@ -135,6 +135,22 @@ dez anos de recursos em volta, e este núcleo no centro.
 O `Class<?>`, de passagem, usa o wildcard no lugar honesto:
 um tipo desconhecido, porque o executor serve para qualquer classe.
 
+Duas extensões do mesmo caminho aparecem em toda ferramenta dessa família.
+A primeira lê os dados da anotação: `metodo.getAnnotation(MeuTeste.class)`
+devolve o objeto da anotação encontrada, e cada elemento declarado nela
+vira um método a chamar, de modo que um `@MeuTeste(nome = "desconto do
+dinheiro")` se lê com `marca.nome()`. É assim que um executor de verdade
+descobre o nome de exibição de um teste, o tempo limite e as demais opções,
+e é o que o `@DisplayName` do capítulo 15 faz por dentro.
+
+A segunda vai além dos métodos. `getDeclaredFields` devolve os campos
+declarados, e cada `Field` sabe o próprio nome, o próprio tipo e o valor
+que ele tem num objeto dado, com `campo.get(objeto)`;
+`getDeclaredConstructors` faz o mesmo pelos construtores, com os tipos dos
+parâmetros de cada um, que é justamente o que o capítulo 24 vai percorrer.
+Um mapeador entre objeto e linha de tabela é esse laço e mais nada: para
+cada campo, o nome vira coluna e o valor vira dado.
+
 <div class="armadilha">
 
 O executor pronto, a anotação declarada, e uma distração de uma linha:
@@ -269,6 +285,8 @@ reflexão na borda do sistema, nunca no miolo do cálculo.
 | `@Retention(RetentionPolicy.RUNTIME)` | anotação visível em execução; exigida por executores |
 | `Tipo.class` / `getClass()` | o objeto `Class` que representa o tipo |
 | `getDeclaredMethods` / `isAnnotationPresent` | lista métodos; pergunta pela marca |
+| `getAnnotation(Tipo.class)` | devolve a anotação encontrada, com os dados dela |
+| `getDeclaredFields` / `campo.get(objeto)` | os campos declarados; o valor de um deles num objeto |
 | `getDeclaredConstructor().newInstance()` | cria instância pelo construtor |
 | `Method.invoke(instancia, args)` | chama o método representado |
 | `Proxy.newProxyInstance(loader, interfaces, handler)` | fabrica o proxy dinâmico |

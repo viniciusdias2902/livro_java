@@ -118,9 +118,9 @@ public class TelaDoTerminal {
 }
 ```
 
-Cada linha vem de um capítulo, com uma liberdade nova de passagem: o
-`switch` também vale como instrução, executando um braço sem produzir
-valor, e aceita `String` no seletor. Nenhuma linha decide regra de negócio:
+Cada linha vem de um capítulo: a instrução switch e o laço do capítulo 4,
+o seletor de `String` do 12, a leitura de teclado do 5, a injeção do 24.
+Nenhuma linha decide regra de negócio:
 o controlador pergunta, converte e repassa; quem sabe se a venda pode
 acontecer é o `Caixa`, e quem sabe escrever "Pago: R$ 39.80" é a
 `Impressora`, com o switch de padrões sobre o `Resultado`.
