@@ -61,7 +61,7 @@ palavra `extends` declara a relação: `Produto` é a superclasse,
 `Produto` no sentido pleno: carrega os campos da superclasse e responde a
 todos os métodos dela.
 
-O que se herda tem fronteiras precisas, e três delas evitam surpresa.
+O que se herda tem fronteiras precisas, e quatro delas evitam surpresa.
 Primeira: construtores não são herdados. Cada classe declara os seus, e o
 construtor da subclasse abre com `super(...)`, a chamada ao construtor da
 superclasse, obrigatória antes de qualquer outra coisa; é por ela que as
@@ -76,7 +76,44 @@ modificador `final`, aplicado a uma classe, veta o `extends`
 dela é uma garantia, não um costume); aplicado a um método, veta a
 sobrescrita daquele método, deixando o resto da classe aberto. Uma classe
 que não foi desenhada para ser estendida declara isso com `final`, e o
-compilador passa a defender a decisão.
+compilador passa a defender a decisão. Quarta: `extends` aceita uma
+superclasse só. Java não tem herança múltipla de classes, e a razão é a
+ambiguidade que ela criaria: se duas superclasses trouxessem um método de
+mesma assinatura com corpos diferentes, a chamada pela subclasse não teria
+resposta definida, e se as duas trouxessem um campo de mesmo nome, o
+objeto teria dois. Linguagens que permitem herança múltipla carregam
+regras extensas para desempatar esses casos; Java proibiu o empate, e o
+capítulo 9 traz o mecanismo que ocupa esse lugar quando o que se quer
+receber de vários lados é a promessa, e não a implementação.
+
+## protected, o quarto nível de visibilidade
+
+O capítulo 7 fechou a tabela de visibilidade com um nível em aberto, e a
+herança é o que o justifica. `protected` libera o membro para as classes
+do mesmo pacote e para as subclasses, estejam elas no pacote que estiverem:
+
+| Escrito | Quem enxerga o membro |
+| --- | --- |
+| `private` | apenas a própria classe |
+| nada | a própria classe e as demais do mesmo pacote |
+| `protected` | as do mesmo pacote, mais as subclasses, em qualquer pacote |
+| `public` | todo o programa |
+
+O uso legítimo é o membro que existe para a subclasse usar e não para o
+resto do programa: um método auxiliar que só faz sentido dentro da
+família, um passo de cálculo que os herdeiros completam.
+`ProdutoPorPeso` não precisa de nenhum, porque o preço lhe chega por
+`preco()`, que é público, e é assim na maior parte dos casos.
+
+O preço de `protected` é o mesmo que o `public` cobra, com outro público:
+cada membro protegido é uma promessa feita a toda subclasse presente e
+futura, e promessa publicada não se retira sem quebrar quem confiou nela.
+Campo `protected` é o caso pior, porque entrega à subclasse a
+representação interna, exatamente o que o encapsulamento existe para
+esconder, e a superclasse perde a liberdade de trocar o campo sem quebrar
+os herdeiros. A régua: `private` por padrão, `protected` quando a
+subclasse precisa de fato, de preferência em método, e nunca em campo
+mutável.
 
 ## Sobrescrita e @Override
 
@@ -294,6 +331,13 @@ quantos subtipos existem.
    conjunto de produtos, com `total()` delegando o preço a cada um. Escreva
    em um parágrafo por que `Combo extends Produto` seria uma modelagem pior.
 
+6. Ponha `Produto` e `ProdutoPorPeso` em pacotes diferentes e tente, da
+   subclasse, ler um campo `private` da superclasse; anote a recusa do
+   compilador. Troque o campo para `protected`, confirme que passa a
+   compilar, e depois volte atrás substituindo o acesso direto por um
+   método `protected`. Escreva em duas frases o que a superclasse ganhou
+   ao trocar o campo protegido pelo método protegido.
+
 ## Ficha do capítulo
 
 | Termo | Definição |
@@ -301,6 +345,8 @@ quantos subtipos existem.
 | herança (`extends`) | uma classe estende outra, herdando campos e métodos |
 | superclasse / subclasse | a classe estendida / a classe que estende |
 | `super` | chamada ao construtor ou ao método da superclasse |
+| `protected` | visível ao pacote e às subclasses; promessa feita a quem herda |
+| herança múltipla | inexistente entre classes: `extends` aceita uma superclasse só |
 | sobrescrita | redefinição, na subclasse, de um método herdado; mesma assinatura |
 | anotação | marca no código lida por ferramentas; `@Override` confere a sobrescrita |
 | polimorfismo | referências do tipo base atendidas pela versão do objeto real |
