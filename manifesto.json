@@ -362,8 +362,6 @@
       "exaustividade",
       "values()",
       "ordinal",
-      "EnumSet",
-      "EnumMap",
       "padrao com guarda"
     ],
     "termos_adiados": {},
@@ -504,7 +502,9 @@
       "ordem de iteracao",
       "colecao imutavel",
       "Collections",
-      "PriorityQueue"
+      "PriorityQueue",
+      "EnumMap",
+      "EnumSet"
     ],
     "termos_adiados": {
       "lambda": "18-lambdas",

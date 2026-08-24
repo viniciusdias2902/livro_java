@@ -107,7 +107,74 @@ public enum Categoria {
 
 O construtor de enum roda uma vez por constante, na carga do tipo, e não é
 chamável com `new`: as constantes só nascem na lista do topo. Campos e métodos
-seguem as regras normais dos capítulos 7 em diante.
+seguem as regras normais dos capítulos 7 em diante. Um enum também
+implementa interface como qualquer classe, e cada constante pode ter corpo
+próprio, escrito entre chaves logo depois do valor, quando o comportamento
+muda de constante para constante; é a forma de escrever uma família
+fechada de comportamentos sem uma classe por membro, e ela aparece pouco,
+porque comportamento que cresce lê melhor na hierarquia selada da próxima
+seção.
+
+## O que todo enum já sabe fazer
+
+Um enum nasce com métodos que ninguém escreve, e são eles que tornam a
+lista fechada utilizável fora do switch:
+
+```java
+void main() {
+    for (Categoria categoria : Categoria.values()) {
+        IO.println(categoria.name() + " no corredor " + categoria.corredor());
+    }
+    Categoria lida = Categoria.valueOf("LIMPEZA");
+    IO.println(lida.ordinal());
+}
+```
+
+```
+MERCEARIA no corredor 3
+HORTIFRUTI no corredor 1
+LIMPEZA no corredor 4
+BEBIDAS no corredor 2
+2
+```
+
+`values()` devolve um array com todas as constantes, na ordem em que foram
+declaradas, e é o que permite percorrer o domínio inteiro sem escrever a
+lista de novo: o relatório com uma linha por categoria, o menu de opções,
+a conferência de que nada ficou de fora. `name()` devolve o nome escrito
+na declaração, e é também o que o `toString` de um enum entrega por
+padrão. `valueOf(texto)` faz o caminho de volta, do nome para a constante,
+e é assim que um enum é reconstruído a partir de um arquivo ou de uma
+resposta digitada; texto que não casa com constante nenhuma lança
+`IllegalArgumentException`, e a diferença entre maiúsculas e minúsculas
+conta. `ordinal()` devolve a posição da constante na declaração, contada
+do zero, e é o método desta lista que dá trabalho.
+
+<div class="armadilha">
+
+O relatório de vendas grava a categoria de cada venda pelo número que o
+enum dá a ela:
+
+```java
+gravarNoArquivo(venda.produto().categoria().ordinal());
+```
+
+Meses depois, `PADARIA` entra na lista entre `HORTIFRUTI` e `LIMPEZA`,
+para os corredores ficarem em ordem. Nenhum arquivo antigo foi tocado, e
+nenhum código de gravação mudou. O que o relatório do ano passado passa a
+dizer?
+
+</div>
+
+Que o mercadinho vendeu limpeza onde vendeu padaria, e bebidas onde vendeu
+limpeza. O `ordinal` de cada constante a partir da nova subiu um, e os
+números gravados no ano passado passaram a apontar para a constante
+seguinte, sem que nada falhasse. O `ordinal` é posição na declaração, não
+identidade: ele muda quando a lista muda, e lista de domínio muda. A
+regra: `ordinal` serve para uso interno e imediato, dentro de uma
+execução; o que sai do programa para arquivo, banco ou outra máquina é o
+`name()`, que só muda se alguém renomear a constante de propósito, e aí
+muda à vista de todos.
 
 ## sealed: hierarquia fechada
 
@@ -180,6 +247,33 @@ return switch (resultado) {
 componente na variável `valor`, sem acessor e sem variável intermediária: é
 a resposta à promessa deixada no capítulo 11.
 
+Dois refinamentos completam a construção. O primeiro é o padrão com
+guarda: uma condição escrita depois do padrão, aberta pela palavra `when`,
+que só deixa o caso casar quando ela também vale.
+
+```java
+return switch (resultado) {
+    case Aprovado(BigDecimal valor) when valor.compareTo(new BigDecimal("500.00")) > 0 ->
+            "Pago, com conferência do gerente: R$ " + valor;
+    case Aprovado(BigDecimal valor) -> "Pago: R$ " + valor;
+    case Recusado(String motivo) -> "Recusado: " + motivo;
+};
+```
+
+A ordem passa a importar, como no `else if` do capítulo 4: o caso com
+guarda vem antes do caso geral do mesmo tipo, porque o primeiro que casa
+ganha, e invertidos o compilador recusa o segundo por ser inalcançável.
+Caso com guarda também não conta para a exaustividade, porque o compilador
+não avalia a condição para saber se ela sempre vale; é por isso que a
+segunda linha, o `Aprovado` sem guarda, não pode faltar.
+
+O segundo refinamento é o `null`. Um switch sobre referência derruba o
+programa com `NullPointerException` quando o valor é nulo, comportamento
+herdado das versões antigas da construção; escrever um `case null ->`
+muda isso, e a ausência passa a ser um caso tratado dentro do switch, no
+lugar de um `if` antes dele. E o seletor aceita mais do que os inteiros do
+capítulo 4: `char`, `String`, enum e, com padrões, qualquer referência.
+
 <div class="previsao">
 
 O mercadinho passa a aceitar estorno, e `Estornado` entra na hierarquia:
@@ -236,6 +330,17 @@ degenerado, soma de valores sem dados; sealed com records é a forma geral.
    `instanceof` com cast para a forma com padrão de tipo, comparando as duas
    versões por escrito.
 
+6. Escreva o relatório que percorre `Categoria.values()` e imprime uma
+   linha por categoria com o corredor, sem repetir a lista de constantes.
+   Depois reproduza a armadilha do `ordinal`: grave as categorias de cinco
+   vendas por número, insira uma constante no meio do enum, releia o
+   arquivo e mostre o relatório errado. Conserte gravando `name()` e
+   relendo com `valueOf`, e trate o texto desconhecido.
+
+7. Acrescente ao `linhaDoRecibo` um caso com guarda para aprovação acima de
+   um limite e um `case null`. Depois inverta a ordem dos dois casos de
+   `Aprovado` e anote a mensagem exata do compilador.
+
 ## Ficha do capítulo
 
 | Termo | Definição |
@@ -248,8 +353,12 @@ degenerado, soma de valores sem dados; sealed com records é a forma geral.
 | pattern matching | comparar contra um padrão que, casando, extrai as partes |
 | padrão de tipo | `instanceof Tipo nome`: pergunta e converte num passo |
 | padrão de registro | `case Tipo(componentes)`: casa e desestrutura o record |
+| padrão com guarda | `case Tipo t when condição`: casa só quando a condição vale |
+| `values()` / `valueOf(texto)` | todas as constantes, na ordem declarada / a constante de nome dado |
+| `name()` / `ordinal()` | o nome declarado / a posição na declaração, contada do zero |
 
 | Regra prática | |
 | --- | --- |
 | switch sobre enum ou sealed | sem `default`, para o compilador cobrar os casos novos |
+| o que sai do programa | `name()`, nunca `ordinal()`: posição muda quando a lista cresce |
 | ramos de hierarquia selada | de preferência records, imutáveis e com contrato pronto |
