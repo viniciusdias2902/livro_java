@@ -91,6 +91,24 @@ segue vivo depois dele. O laço em volta transforma o tratamento em política:
 pergunta de novo até vir número. Um `try` aceita vários `catch`, um por
 tipo, avaliados na ordem, e o polimorfismo vale aqui: `catch (Exception erro)`
 apanha qualquer exceção do livro, porque todas descendem de `Exception`.
+A ordem entre eles é conferida pelo compilador: um `catch` de tipo geral
+escrito antes de um mais específico deixa o segundo inalcançável, e a
+compilação falha. Quando dois tipos diferentes pedem o mesmo tratamento,
+o multi-catch os junta num bloco só, com barra vertical entre eles:
+
+```java
+try {
+    registrar(linha);
+} catch (NumberFormatException | ArrayIndexOutOfBoundsException erro) {
+    IO.println("Linha malformada, ignorada: " + linha);
+}
+```
+
+A variável de um multi-catch é `final` sem que se escreva, e o tipo dela é
+o ancestral comum dos tipos listados, de modo que só os métodos desse
+ancestral estão disponíveis dentro do bloco. Os tipos listados também não
+podem ter parentesco entre si: com um sendo subclasse do outro, o mais
+geral já cobriria o caso, e a lista seria redundante.
 Existe uma família irmã, `Error`, das falhas da própria JVM, como o
 `StackOverflowError` do capítulo 4; ela fica fora dessa rede, e é melhor
 assim, porque não há tratamento sensato para a pilha estourada. A armadilha
@@ -166,7 +184,12 @@ Engolir exceção é o bug silencioso em estado puro, e a rede
 `catch (Exception ...)` agrava, porque apanha até os erros de programação
 que deveriam derrubar e ser corrigidos. As duas regras que evitam o buraco:
 captura-se o tipo mais específico que se sabe tratar, e todo `catch` faz
-alguma coisa, nem que seja registrar e relançar. Cair com stack trace é
+alguma coisa, nem que seja registrar e relançar. O registro mínimo, num
+programa sem biblioteca de registro configurável, é
+`erro.printStackTrace()`, que imprime o mesmo retrato da queda sem
+derrubar o programa; sistemas maiores trocam a chamada por um registrador
+que decide destino e nível, e o que não muda é a exigência de o erro
+deixar rastro em algum lugar. Cair com stack trace é
 melhor do que errar em silêncio: a queda tem endereço, o silêncio não.
 
 ## Checked, unchecked e throws
@@ -178,7 +201,13 @@ que descende dela, a família inteira das conhecidas deste livro:
 `NumberFormatException`, `IllegalArgumentException`, `ArithmeticException`,
 `ClassCastException`. O compilador não exige nada sobre elas, porque em
 geral denunciam erro de programação, e a correção é consertar o código, não
-tratar. As checked são as demais descendentes de `Exception`: o compilador
+tratar. Para a violação mais comum dessa família a biblioteca traz a
+guarda pronta: `Objects.requireNonNull(valor, "produto é obrigatório")`
+devolve o valor quando ele existe e lança `NullPointerException` com a
+mensagem quando é nulo. Escrita na primeira linha de um construtor, ela
+transforma um `null` que entraria calado no objeto numa queda imediata, no
+ponto de entrada e com a mensagem de quem escreveu a regra, e é a forma
+consagrada de dizer "este argumento é obrigatório". As checked são as demais descendentes de `Exception`: o compilador
 obriga cada método em que elas podem nascer ou passar a escolher entre
 tratar com `catch` ou declarar com `throws` que as deixa propagar:
 
@@ -211,6 +240,48 @@ esperável do domínio que o chamador precisa decidir, e com parcimônia,
 porque cada `throws` se espalha pelas assinaturas acima. Grande parte do
 código moderno usa quase só unchecked; o encontro inevitável com as checked
 da biblioteca acontece no capítulo 21, quando o programa tocar arquivos.
+
+## A causa
+
+Um método que trata uma exceção e lança outra no lugar dela apaga o rastro
+do problema original, a não ser que o leve junto. Toda exceção pode
+carregar uma causa: a exceção que a provocou, entregue no construtor.
+
+```java
+try {
+    return Integer.parseInt(coluna);
+} catch (NumberFormatException erro) {
+    throw new EstoqueCorrompidoException("Quantidade inválida na linha " + numero, erro);
+}
+```
+
+O segundo argumento é a causa, e ela sobrevive à troca. O stack trace
+impresso na queda mostra a exceção nova e, abaixo dela, uma seção aberta
+por `Caused by:` com o tipo, a mensagem e a pilha da original, e assim por
+diante enquanto houver causa encadeada. É a diferença entre saber que o
+estoque está corrompido e saber que ele está corrompido porque o
+`parseInt` recusou o texto " cristal 5kg" na linha 42 do arquivo. Quem
+trata recupera o objeto da causa com `getCause`, e o capítulo 23 encontra
+essa mecânica outra vez, quando uma chamada indireta embrulha o que o
+método chamado lançou.
+
+Para uma exceção própria aceitar causa, o construtor precisa recebê-la e
+repassá-la:
+
+```java
+public class EstoqueCorrompidoException extends RuntimeException {
+    public EstoqueCorrompidoException(String mensagem, Throwable causa) {
+        super(mensagem, causa);
+    }
+}
+```
+
+`Throwable` é o topo dessa família inteira, superclasse comum de
+`Exception` e de `Error`, e é o tipo que aparece nas assinaturas que
+aceitam qualquer exceção, esta inclusive. A regra que fecha a seção:
+quem troca uma exceção por outra passa a causa adiante, sempre. Exceção
+que perde a causa muda o problema de endereço sem levar a informação
+junto, e quem investiga recomeça do zero.
 
 ## finally
 
@@ -269,7 +340,23 @@ uso normal, provavelmente era um retorno, não uma exceção.
 5. Escreva um método que provoque, de propósito, três exceções unchecked
    diferentes deste livro, conforme o argumento recebido, e um `main` com
    três `catch` específicos que identifique cada uma. Acrescente um quarto
-   caso que nenhum `catch` cubra e descreva o que acontece.
+   caso que nenhum `catch` cubra e descreva o que acontece. Depois junte
+   dois dos três num multi-catch, e tente também escrever
+   `catch (Exception erro)` antes dos específicos, anotando a recusa do
+   compilador.
+
+6. Escreva `EstoqueCorrompidoException` com construtor de mensagem e causa,
+   e um método de leitura de linha que embrulhe nela a
+   `NumberFormatException` do preço. Derrube o programa de propósito e cole
+   o stack trace inteiro, apontando onde termina a exceção nova e onde
+   começa o `Caused by:`. Depois remova a causa do construtor e compare os
+   dois rastros.
+
+7. Ponha `Objects.requireNonNull` nos argumentos obrigatórios do construtor
+   de `Produto` e escreva o teste que prova a recusa. Compare a mensagem
+   com a da versão que lançava `IllegalArgumentException` à mão, e decida
+   por escrito qual das duas você prefere encontrar num relatório de erro
+   de madrugada.
 
 ## Ficha do capítulo
 
@@ -284,6 +371,12 @@ uso normal, provavelmente era um retorno, não uma exceção.
 | checked | o compilador obriga a tratar ou declarar; condição esperável do domínio |
 | unchecked | `RuntimeException` e descendentes; em geral, erro de programação |
 | `RuntimeException` | a raiz da família unchecked |
+| `Throwable` | o topo da família: superclasse de `Exception` e de `Error` |
+| multi-catch | `catch (A \| B erro)`: um bloco para tipos sem parentesco entre si |
+| encadeamento de exceções | a causa entregue no construtor e impressa em `Caused by:` |
+| `getCause` | devolve a exceção que provocou esta |
+| `printStackTrace` | imprime o retrato da queda sem derrubar o programa |
+| `Objects.requireNonNull` | devolve o valor ou lança na hora, com mensagem |
 
 | Regra prática | |
 | --- | --- |
