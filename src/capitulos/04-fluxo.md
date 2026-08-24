@@ -34,8 +34,8 @@ As estruturas de controle quebram essa sequência de três maneiras: por
 seleção, escolhendo um entre dois ou mais caminhos, que é o território do
 `if` e do switch deste capítulo; por repetição, voltando a um trecho
 enquanto uma condição valer, que é o território dos laços; e por desvio,
-abandonando o fluxo corrente, como fazem o `return` e as palavras de
-controle de laço. Qualquer programa, em qualquer linguagem dessa família, se
+abandonando o fluxo corrente, como fazem o `return` e as instruções de
+desvio dos laços. Qualquer programa, em qualquer linguagem dessa família, se
 descreve com sequência, seleção, repetição e desvio, e o resto do capítulo
 apresenta as formas que Java dá a cada uma.
 
@@ -128,7 +128,46 @@ resto. O switch expression exige que algum caminho exista para qualquer
 valor possível, e com um `int` na entrada isso obriga o `default`: sem ele,
 erro de compilação. Essa exigência é uma proteção, e ela cresce de
 importância no capítulo 12, quando a entrada do switch passa a ser um tipo
-com lista fechada de valores. Material antigo mostra um `switch` de outro
+com lista fechada de valores.
+
+Ao lado da forma que produz valor existe a instrução switch, que executa
+um braço em vez de entregar um resultado:
+
+```java
+switch (opcao) {
+    case 1 -> IO.println("Depósito");
+    case 2 -> IO.println("Saque");
+    default -> IO.println("Opção inválida");
+}
+```
+
+Sem o `=` na frente e sem o ponto e vírgula que fecha uma atribuição,
+cada seta aponta uma ação, não um valor. A exigência de cobrir todos os
+casos possíveis vale só para a forma que produz valor, porque não
+executar braço nenhum é um desfecho legítimo de uma instrução: sem
+`default`, uma opção fora da lista simplesmente não faz nada.
+
+Quando um braço precisa de mais de uma linha, ele vira bloco entre
+chaves, e bloco não entrega valor por conta própria. Quem entrega é a
+palavra `yield`:
+
+```java
+int minutosDeTreino = switch (dia) {
+    case 1, 7 -> {
+        IO.println("fim de semana");
+        yield 60;
+    }
+    case 6 -> 30;
+    default -> 45;
+};
+```
+
+`yield` encerra o braço entregando o valor à expressão inteira, no papel
+que o `return` cumpre num método. Os dois não se trocam: `return` dentro
+de um switch expression é erro de compilação, porque abandonar o método
+em volta e produzir o valor da expressão são coisas diferentes.
+
+Material antigo mostra um `switch` de outro
 formato, com dois-pontos no lugar da seta e uma regra de continuação em que
 a execução atravessa também os casos seguintes por omissão; este livro usa
 apenas a forma nova.
@@ -170,9 +209,79 @@ for (int volta = 1; volta <= 5; volta++) {
 
 A primeira parte declara e inicia o contador, a segunda é a condição
 conferida antes de cada volta, a terceira roda ao fim de cada volta. O
-trecho imprime a tabuada do 7 até 35. Dentro de qualquer laço valem duas
-palavras de controle, definidas aqui de passagem: `break` abandona o laço na
-hora, e `continue` pula direto para a próxima volta.
+trecho imprime a tabuada do 7 até 35.
+
+A terceira forma inverte a ordem da pergunta: o `do-while` executa o
+corpo primeiro e confere a condição depois.
+
+```java
+int tentativa = 0;
+do {
+    tentativa++;
+    IO.println(tentativa);
+} while (tentativa < 3);
+```
+
+O corpo de um `do-while` roda pelo menos uma vez, aconteça o que
+acontecer com a condição, enquanto o `while` de condição inicial `false`
+não roda nenhuma. O ponto e vírgula depois do `while` final faz parte da
+forma. O uso que justifica a existência dele é aquele em que a condição
+só pode ser avaliada depois da primeira volta, como pedir um valor e
+conferir se serve; fora desse caso o `while` comum se lê melhor, porque
+mostra a condição antes do corpo, e é por isso que o `do-while` aparece
+pouco em código real.
+
+Dentro de qualquer laço valem duas instruções de desvio. `break` abandona
+o laço na hora, sem terminar a volta corrente e sem voltar a conferir a
+condição. A instrução `continue` abandona apenas a volta corrente e salta
+para a seguinte, o que num `for` significa passar antes pela terceira
+parte do cabeçalho:
+
+```java
+for (int numero = 1; numero <= 10; numero++) {
+    if (numero % 2 == 0) {
+        continue;
+    }
+    if (numero > 7) {
+        break;
+    }
+    IO.println(numero);
+}
+```
+
+```
+1
+3
+5
+7
+```
+
+Os pares caem no `continue` e nunca chegam à impressão; o 9 chega ao
+`break` e encerra o laço inteiro antes dela, deixando o contador em 9
+para sempre. As duas evitam condições aninhadas dentro do corpo, e as
+duas cobram atenção na leitura, porque criam saídas do laço fora do
+cabeçalho: quem lê `numero <= 10` no topo e conclui que o laço vai até 10
+erra por causa de um `break` escrito trinta linhas abaixo.
+
+Laços também encaixam. Um laço aninhado é o laço cujo corpo contém outro
+laço, e as voltas se multiplicam em vez de somar: o de fora dá uma volta,
+o de dentro dá todas as suas, e só então o de fora avança.
+
+```java
+for (int tabuada = 1; tabuada <= 10; tabuada++) {
+    for (int multiplicador = 1; multiplicador <= 10; multiplicador++) {
+        IO.println(tabuada * multiplicador);
+    }
+}
+```
+
+Cem resultados impressos, dez voltas de fora vezes dez de dentro. Cada laço
+precisa do próprio contador, e reaproveitar `tabuada` no laço de dentro
+faria o de fora perder a conta. Duas consequências valem ser sabidas
+antes do primeiro aninhamento: o custo cresce por multiplicação, de modo
+que três laços encaixados sobre mil elementos são um bilhão de voltas; e
+o `break` tem alcance de um laço só, o que está escrito, abandonando o de
+dentro e deixando o de fora seguir para a próxima volta.
 
 <div class="armadilha">
 
@@ -391,7 +500,24 @@ primeiro dia.
 
 6. Escreva um switch expression que receba o número de um mês e devolva
    quantos dias ele tem num ano comum, agrupando os meses de mesma duração.
-   Fevereiro fica com 28.
+   Fevereiro fica com 28. Depois transforme um dos braços em bloco, com uma
+   impressão antes do `yield`, e confira que o valor devolvido não mudou.
+
+7. Escreva a mesma contagem regressiva duas vezes, uma com `while` e outra
+   com `do-while`, e execute as duas começando de 3 e começando de 0. Anote
+   qual das quatro execuções imprime alguma coisa que a outra forma não
+   imprime, e explique por escrito de onde vem a diferença.
+
+8. Com dois laços aninhados, imprima um triângulo de cinco linhas de
+   asteriscos, uma na primeira linha e cinco na última. Depois, no laço de
+   dentro, use `continue` para pular as colunas pares e descreva o que
+   acontece com a forma do triângulo.
+
+9. Escreva um método que receba o número de uma opção de menu e use a
+   instrução switch para imprimir a ação correspondente, sem `default`.
+   Chame-o com uma opção fora da lista e explique por escrito por que o
+   programa não reclama, ao contrário do que aconteceria na forma que
+   produz valor.
 
 ## Ficha do capítulo
 
@@ -400,8 +526,11 @@ primeiro dia.
 | `if` / `else if` / `else` | executa o primeiro bloco cuja condição vale |
 | `cond ? a : b` | operador ternário: escolhe um valor pela condição |
 | `switch (v) { case ... -> ... }` | switch expression: escolhe um valor entre casos |
+| `switch (v) { case ... -> ação; }` | instrução switch: executa um braço, sem produzir valor |
+| `yield valor;` | entrega o valor de um braço escrito em bloco |
 | `while (cond) { }` | repete enquanto a condição valer; confere antes de cada volta |
 | `for (início; cond; passo) { }` | laço com contador empacotado |
+| `do { } while (cond);` | confere depois do corpo; roda pelo menos uma vez |
 | `break` / `continue` | abandona o laço / pula para a próxima volta |
 | `return expr;` | devolve o valor e encerra o método |
 
@@ -414,6 +543,11 @@ primeiro dia.
 | operador ternário | decisão em forma de expressão: `cond ? a : b` |
 | switch expression | escolha entre vários casos, produzindo um valor |
 | laço | repetição de um bloco controlada por condição |
+| `do-while` | laço que confere a condição depois do corpo |
+| instrução `continue` | abandona a volta corrente e salta para a seguinte |
+| laço aninhado | laço cujo corpo contém outro laço; as voltas se multiplicam |
+| instrução switch | a forma que executa um braço em vez de produzir valor |
+| `yield` | entrega o valor de um braço em bloco à expressão switch |
 | parâmetro | variável do método que recebe o argumento da chamada |
 | `return` | devolve um valor e encerra o método no ato |
 | assinatura | nome do método mais os tipos dos parâmetros |

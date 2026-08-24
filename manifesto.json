@@ -126,8 +126,7 @@
       "instrucao continue",
       "laco aninhado",
       "instrucao switch",
-      "yield",
-      "varargs"
+      "yield"
     ],
     "termos_adiados": {},
     "conceitos_de_carga": [
@@ -168,7 +167,8 @@
       "String.join",
       "classe utilitaria",
       "classe Arrays",
-      "array multidimensional"
+      "array multidimensional",
+      "varargs"
     ],
     "termos_adiados": {
       "excecao": "13-excecoes",
