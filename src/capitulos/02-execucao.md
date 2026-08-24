@@ -171,7 +171,8 @@ flowchart TB
     F -->|"javac Ola.java"| C["Ola.class<br/>bytecode em disco"]
     C -->|"java Ola"| E["execução na JVM"]
 
-    F -->|"java Ola.java<br/>compila e executa na memória"| E
+    F -->|"java Ola.java"| M["bytecode em memória"]
+    M --> E
 ```
 
 ## O erro que não deixa nada para trás
