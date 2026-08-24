@@ -58,6 +58,14 @@ dispara;
 `run` chamado direto seria um método comum na mesma linha de execução, sem
 paralelismo nenhum, um clássico de primeira semana.
 
+Uma peça acompanha os experimentos deste capítulo: `Thread.sleep(500)` faz
+a thread corrente parar pelo número de milissegundos dado e depois seguir.
+Ela declara a mesma `InterruptedException` do `join`, pela mesma razão,
+porque quem espera pode ser acordado antes da hora, e serve aqui para
+simular trabalho demorado sem inventar cálculo. No código de verdade,
+`sleep` aparece pouco: esperar por tempo fixo em vez de esperar pelo evento
+é quase sempre sinal de coordenação mal desenhada.
+
 ## A condição de corrida
 
 <div class="armadilha">
@@ -132,12 +140,49 @@ class Contador {
 ```
 
 O modificador `synchronized` pendura no método uma tranca: cada objeto tem
-uma, só uma thread por vez a segura, e as demais esperam na porta. Com a
+uma, só uma thread por vez a segura, e as demais esperam na porta. A mesma
+tranca também se pede por bloco, `synchronized (objeto) { ... }`, quando o
+trecho a proteger é menor que o método inteiro ou quando o objeto que
+guarda a tranca não é o `this`. Com a
 tranca, o ler-somar-gravar acontece inteiro antes de a próxima thread
 entrar, e o programa imprime 200000 em toda execução. O preço está no
 próprio desenho: dentro do trecho trancado, o paralelismo deixa de existir,
 e trancar demais devolve o programa lento que motivou a divisão. A tranca
 protege o dado; o desenho decide onde ela é inevitável.
+
+## Impasse
+
+A tranca resolve a corrida e traz um problema próprio. A caderneta de fiado
+permite transferir saldo entre dois clientes, e a transferência tranca as
+duas contas envolvidas:
+
+```java
+void transferir(Conta origem, Conta destino, BigDecimal valor) {
+    synchronized (origem) {
+        synchronized (destino) {
+            origem.debitar(valor);
+            destino.creditar(valor);
+        }
+    }
+}
+```
+
+Duas threads, duas transferências simultâneas em sentidos opostos, de Ana
+para Bruno e de Bruno para Ana. A primeira tranca Ana e fica esperando
+Bruno; a segunda tranca Bruno e fica esperando Ana; nenhuma das duas solta
+o que já tem. Isso é um impasse (*deadlock*): duas ou mais threads paradas
+para sempre, cada uma esperando uma tranca que a outra segura. Não há
+exceção, não há mensagem e não há fim: o programa simplesmente para de
+responder, e no servidor o sintoma é o pedido que nunca volta.
+
+A regra que evita a família inteira desse defeito é de disciplina e cabe
+numa frase: quando duas trancas precisam ser tomadas juntas, tome-as
+sempre na mesma ordem, em todo o código do sistema. Ordenar as contas por
+um critério fixo, como o código do cliente, e trancar sempre a menor
+primeiro faz as duas transferências pedirem as trancas na mesma sequência,
+e o impasse deixa de ser possível. A alternativa melhor continua sendo a
+deste capítulo inteiro: não trancar duas coisas, desenhando o trabalho para
+não haver disputa.
 
 ## Visibilidade e volatile
 
@@ -170,6 +215,31 @@ tabela mental: `synchronized` para operações compostas sobre dado
 compartilhado; `volatile` para bandeiras simples que uma thread escreve e
 outras leem.
 
+Entre os dois existe um meio-termo que a biblioteca já resolveu. Os tipos
+atômicos, do pacote `java.util.concurrent.atomic`, tornam a operação
+composta indivisível sem tranca nenhuma: `AtomicInteger` tem
+`incrementAndGet`, que lê, soma e grava numa operação só, garantida pelo
+processador.
+
+```java
+AtomicInteger itens = new AtomicInteger();
+Runnable tarefa = () -> {
+    for (int i = 0; i < 100_000; i++) {
+        itens.incrementAndGet();
+    }
+};
+```
+
+Duzentos mil em toda execução, sem `synchronized` e sem a fila na porta que
+ele cria. A mesma prateleira traz `AtomicLong`, `AtomicBoolean` e
+`AtomicReference`, e ao lado dela ficam as coleções concorrentes, com
+`ConcurrentHashMap` à frente: é o mapa feito para escrita simultânea, e ele
+substitui o `HashMap` compartilhado do capítulo 17 sempre que mais de uma
+thread grava. A troca não é preciosismo. `HashMap` sob escrita simultânea
+não perde apenas entradas: ele pode corromper a própria estrutura interna,
+e o estrago aparece como entrada que some ou como laço que não termina,
+longe da causa e sem erro nenhum.
+
 ## ExecutorService, Future e o desenho que evita tudo isso
 
 Criar threads à mão espalha `new Thread` pelo sistema; o executor centraliza.
@@ -201,8 +271,21 @@ valores imutáveis de retorno, `BigDecimal` do capítulo 7, e essa é a
 primeira regra do código concorrente que envelhece bem, não compartilhe;
 combine. `synchronized` e `volatile` ficam para quando o compartilhamento é
 inevitável. O executor entra num try-with-resources porque encerrar o
-serviço é fechamento de recurso como os do capítulo 21, e `submit` aceita
-tarefas que devolvem valor e lançam exceção. O `get` do `Future` declara
+serviço é fechamento de recurso como os do capítulo 21: o `close` espera as
+tarefas em andamento terminarem antes de liberar as threads. Quem não usa a
+forma com recurso chama `shutdown`, que faz o mesmo pedido sem esperar, ou
+`shutdownNow`, que tenta interromper o que estiver rodando; executor
+esquecido sem fechamento nenhum mantém as threads vivas, e o programa não
+termina, que é o tropeço de primeira semana com executores.
+
+O `submit` aceita as duas formas de tarefa. O `Runnable` da primeira seção
+não recebe nem devolve nada; `Callable<T>` é a irmã que devolve valor: uma
+interface funcional de um método só, `call`, que produz um `T` e pode
+lançar exceção checked, o que o `Runnable` não pode. É um `Callable` que o
+fechamento acima entrega em cada `submit`, e é dele que o `Future` tira o
+que devolver. Quando as tarefas já estão todas montadas, `invokeAll` recebe
+a coleção inteira de uma vez e devolve a lista de `Future` na mesma ordem,
+dispensando o laço de `submit`. O `get` do `Future` declara
 duas exceções checked: a `InterruptedException` da espera e a
 `ExecutionException`, que embrulha a falha da tarefa e a entrega a quem
 resgatou o recibo.
@@ -234,12 +317,14 @@ cada palavra.
 
 <div class="aprofundamento">
 
-**A caixa de ferramentas pronta.** O pacote `java.util.concurrent` tem
-peças prontas para os padrões comuns: `AtomicInteger` incrementa sem tranca
-e sem corrida, coleções concorrentes substituem `HashMap` compartilhado, e
-filas conectam threads produtoras a consumidoras. A regra de quem sabe o
-básico deste capítulo: antes de escrever `synchronized`, procurar a peça
-pronta que já resolve o padrão.
+**O resto da caixa de ferramentas.** Além dos tipos atômicos e das
+coleções concorrentes, `java.util.concurrent` traz peças para os padrões de
+coordenação: `BlockingQueue` liga threads produtoras a consumidoras, com
+quem consome esperando na fila vazia em vez de girar; `CountDownLatch` faz
+um grupo esperar até um contador zerar; e `CompletableFuture` encadeia
+tarefas assíncronas sem o `get` que bloqueia. A regra de quem sabe o básico
+deste capítulo: antes de escrever `synchronized`, procurar a peça pronta que
+já resolve o padrão.
 
 </div>
 
@@ -267,6 +352,21 @@ pronta que já resolve o padrão.
    você usaria para: somar arquivos locais; consultar trezentos fornecedores
    pela rede.
 
+6. Provoque um impasse de propósito: duas contas, duas threads, duas
+   transferências em sentidos opostos, com um `Thread.sleep(100)` entre as
+   duas trancas para tornar o encontro provável. Confirme que o programa
+   trava sem erro, encerre-o à força, e conserte ordenando as trancas pelo
+   código do cliente.
+
+7. Refaça o contador da armadilha com `AtomicInteger` e confirme os duzentos
+   mil em dez execuções. Meça o tempo das três versões, a com corrida, a
+   com `synchronized` e a atômica, e escreva o que os números dizem.
+
+8. Troque, num fechamento que escreve num mapa compartilhado, o `HashMap`
+   por `ConcurrentHashMap`, e rode as duas versões com oito tarefas
+   gravando ao mesmo tempo. Anote quantas entradas cada versão terminou
+   com, em dez execuções.
+
 ## Ficha do capítulo
 
 | Peça | O que faz |
@@ -275,7 +375,12 @@ pronta que já resolve o padrão.
 | `synchronized` | tranca por objeto: um método trancado por vez |
 | `volatile` | visibilidade da escrita; não dá atomicidade |
 | `ExecutorService` / `submit` | serviço de execução; recebe tarefas |
+| `Callable<T>` / `Runnable` | tarefa que devolve valor e pode lançar / tarefa sem retorno |
 | `Future` / `get` | o recibo da tarefa; espera e devolve o resultado |
+| `shutdown` / `close` | encerra o serviço; sem isso o programa não termina |
+| `Thread.sleep(ms)` | para a thread corrente pelo tempo dado |
+| `AtomicInteger.incrementAndGet` | soma indivisível, sem tranca |
+| `ConcurrentHashMap` | o mapa para escrita simultânea; `HashMap` compartilhado corrompe |
 | `Executors.newFixedThreadPool(n)` | pool de tamanho fixo, para trabalho de cálculo |
 | `Executors.newVirtualThreadPerTaskExecutor()` | uma virtual thread por tarefa, para trabalho que espera |
 
@@ -286,9 +391,11 @@ pronta que já resolve o padrão.
 | atomicidade | operação indivisível; `total++` não é |
 | visibilidade entre threads | garantia de que uma escrita apareça para as outras |
 | virtual thread | thread barata da JVM; milhões, para tarefas que esperam |
+| impasse | threads paradas para sempre, cada uma esperando a tranca da outra |
 
 | Regra prática | |
 | --- | --- |
 | primeiro desenho | não compartilhe; confine e combine resultados imutáveis |
 | compartilhou | `synchronized` para operação composta; `volatile` para bandeira |
+| duas trancas | tomadas sempre na mesma ordem, em todo o sistema |
 | antes de trancar à mão | procurar a peça pronta em `java.util.concurrent` |
