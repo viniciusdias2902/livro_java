@@ -195,6 +195,58 @@ compilador a sobrescrever e decidir. O método default existe para evolução
 de contrato publicado, e não para virar depósito de lógica: interface que acumula corpos está
 fazendo o trabalho da construção da próxima seção.
 
+## O que mais cabe numa interface
+
+Além do método abstrato e do default, uma interface aceita mais três
+espécies de membro, e todas as três aparecem na biblioteca padrão.
+
+A primeira é a constante de interface. Todo campo declarado numa interface
+é `public static final`, escrevam-se as três palavras ou não:
+
+```java
+public interface MeioDePagamento {
+    BigDecimal LIMITE_SEM_SENHA = new BigDecimal("50.00");
+
+    BigDecimal valorFinal(BigDecimal compra);
+}
+```
+
+`MeioDePagamento.LIMITE_SEM_SENHA` fica disponível a quem implementa e a
+quem chama, com a grafia de constante do capítulo 7. O que não existe é
+campo de instância: uma interface não guarda estado, e é essa a fronteira
+que a separa da classe abstrata da próxima seção. A constante serve ao
+valor que pertence ao contrato e não a uma implementação, como um limite
+regulamentar; valor que muda com a configuração do sistema não é constante
+e não mora aqui.
+
+A segunda é o método estático de interface: um método com corpo, chamado
+pelo nome da interface, que não é herdado por quem implementa e não faz
+parte do contrato.
+
+```java
+public interface MeioDePagamento {
+    BigDecimal valorFinal(BigDecimal compra);
+
+    static MeioDePagamento doCaixaRapido() {
+        return new Dinheiro();
+    }
+}
+```
+
+`MeioDePagamento.doCaixaRapido()` entrega um exemplar pronto sem que quem
+chama precise saber qual classe atendeu, e esse é o uso típico da forma: a
+fábrica, o método que cria por baixo do contrato, e a conveniência que
+acompanha a promessa em vez de morar numa classe utilitária à parte. É
+assim que boa parte das fábricas da biblioteca padrão é declarada, incluindo
+as que os capítulos 17 e 18 usam.
+
+A terceira é o método `private` de interface, que só existe para os
+defaults. Quando dois métodos default repetem um pedaço de lógica, ele sai
+para um método privado da própria interface, invisível de fora, com o
+mesmo papel do auxiliar privado de uma classe. É o membro menos usado dos
+quatro, e existe para o default não ter que escolher entre duplicar código
+e publicar um método que ninguém deveria chamar.
+
 ## Classe abstrata
 
 Entre a interface, que não carrega implementação de estado nenhuma, e a
@@ -286,6 +338,12 @@ noventa.
    por uma nova classe `CestaBasica`. Escreva um método que receba um array
    de `Pesavel` e some o peso, sem `instanceof`.
 
+6. Acrescente a `MeioDePagamento` uma constante com o limite de compra sem
+   senha e um método estático que devolva o meio padrão do caixa rápido.
+   Tente declarar um campo de instância na interface e anote a recusa do
+   compilador. Depois escreva dois métodos default que repitam uma conta e
+   extraia a repetição para um método `private` da interface.
+
 ## Ficha do capítulo
 
 | Termo | Definição |
@@ -297,3 +355,6 @@ noventa.
 | método default | método de interface com corpo padrão; permite evoluir contrato publicado |
 | classe abstrata | classe não instanciável, feita para ser estendida; aceita campos e código |
 | método abstrato | método sem corpo em classe abstrata; sobrescrita obrigatória |
+| constante de interface | campo de interface; `public static final` por definição |
+| método estático de interface | método com corpo chamado pelo nome da interface; fábrica típica |
+| método `private` de interface | auxiliar dos defaults, invisível de fora |
