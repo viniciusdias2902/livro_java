@@ -131,6 +131,39 @@ nada, exatamente como no capítulo 2. A diferença é que o hábito protetor
 ficou barato: um único comando reconstrói o projeto inteiro, sempre, e
 "editou, rodou `mvn`, executou" vira o ciclo padrão de trabalho.
 
+## As fases da construção
+
+`mvn compile` e `mvn package` não são dois comandos avulsos: são duas
+fases de uma sequência fixa. O ciclo de vida da construção é a sequência
+ordenada de fases que o Maven conhece, com a regra de que pedir uma fase
+executa antes todas as anteriores:
+
+| Fase | O que acontece |
+| --- | --- |
+| `validate` | confere se o projeto está completo e o `pom.xml` é legível |
+| `compile` | compila `src/main/java` para `target/classes` |
+| `test` | compila e roda o que estiver em `src/test/java` |
+| `package` | monta o jar em `target/` |
+| `verify` | roda as verificações adicionais que o projeto configurar |
+| `install` | copia o artefato para o repositório local, em `~/.m2/repository` |
+| `deploy` | publica o artefato num repositório remoto |
+
+Da regra da sequência sai uma consequência que evita confusão: `mvn
+package` roda as verificações da fase `test`, sempre, porque `test` vem
+antes na lista, e uma delas falhando interrompe a construção sem gerar jar
+nenhum. `mvn install` é o comando de quem tem dois projetos na mesma
+máquina, um usando o outro: instalado no repositório local, o mercadinho
+vira uma coordenada que o outro projeto declara como dependência, do mesmo
+jeito que declara as de fora.
+
+O `clean` fica fora dessa sequência, num ciclo próprio, e apaga a pasta
+`target/` inteira. É por isso que se escreve `mvn clean package`, os dois
+na mesma linha: apagar o que foi produzido antes e reconstruir do zero. A
+construção do dia a dia dispensa o `clean`, porque o Maven refaz o que
+mudou; a construção que precisa ser confiável, antes de publicar ou no
+meio de uma investigação de comportamento estranho, começa por ele, e o
+custo é só o tempo de compilar tudo de novo.
+
 ## Dependências
 
 O ganho que justifica a cerimônia é declarar código de fora:
@@ -154,6 +187,38 @@ o coloca no classpath de compilação e de execução. O exemplo acima traz uma
 biblioteca de conversão de dados apenas para mostrar a forma; a primeira
 dependência que o mercadinho vai realmente usar chega no capítulo 15, com a
 ferramenta de testes.
+
+Toda dependência tem ainda um escopo, e omiti-lo escolhe `compile`, o
+padrão. O escopo de dependência responde a duas perguntas: em que momentos
+o artefato entra no classpath, e se ele acompanha o projeto quando outro
+projeto depender dele.
+
+| Escopo | Onde o artefato entra |
+| --- | --- |
+| `compile` | compilação, verificação e execução; acompanha quem depender do projeto |
+| `test` | apenas na compilação e na execução das verificações; não entra no jar |
+| `provided` | compilação e verificação; na execução, quem fornece é o ambiente |
+| `runtime` | verificação e execução, não na compilação |
+
+O `test` é o escopo que o capítulo 15 declara, para a ferramenta de
+verificação não viajar dentro do jar do mercadinho, que não a executa.
+`provided` é o escopo do que o servidor ou a plataforma de destino já
+traz. E `runtime` é o do artefato que o código nunca menciona por nome e
+que precisa existir quando o programa roda, como o tradutor de banco de
+dados que o primeiro apêndice usa. Números de versão repetidos em mais de uma
+dependência saem para uma propriedade, declarada uma vez e usada com
+`${...}`, a substituição do Maven que já aparecia no
+`maven.compiler.release`:
+
+```xml
+<properties>
+    <gson.version>2.11.0</gson.version>
+</properties>
+```
+
+```xml
+<version>${gson.version}</version>
+```
 
 Junto da dependência declarada vêm as dela: se o artefato pedido depende de
 outros, o Maven os baixa também, e esses são as dependências transitivas. É
@@ -252,12 +317,25 @@ custa só o novo download.
 5. Troque o `maven.compiler.release` para 21 e reconstrua. Anote o erro,
    explique-o com o capítulo 2, e desfaça.
 
+6. Rode `mvn compile`, depois `mvn package`, e observe na saída quais fases
+   cada um executou. Apague `target/` com `mvn clean`, confirme com `ls`, e
+   reconstrua. Escreva em duas frases quando vale a pena escrever
+   `mvn clean package` em vez de `mvn package`.
+
+7. Declare a dependência de exemplo com `<scope>test</scope>`, tente usá-la
+   numa classe de `src/main/java` e anote o erro de compilação. Depois mova
+   a versão para uma propriedade e confirme que a construção continua
+   igual. Por fim, rode `mvn install` e localize o mercadinho dentro de
+   `~/.m2/repository`.
+
 ## Ficha do capítulo
 
 | Comando | O que faz |
 | --- | --- |
 | `mvn compile` | compila os fontes de `src/main/java` para `target/classes` |
-| `mvn package` | compila e empacota o jar em `target/` |
+| `mvn package` | passa por todas as fases anteriores e empacota o jar em `target/` |
+| `mvn clean` | apaga a pasta `target/` inteira; combina-se como `mvn clean package` |
+| `mvn install` | põe o artefato no repositório local, para outros projetos da máquina |
 | `mvn dependency:tree` | imprime a árvore de dependências, transitivas incluídas |
 | `jar tf arquivo.jar` | lista o conteúdo de um jar |
 
@@ -270,4 +348,6 @@ custa só o novo download.
 | coordenada | endereço único de um artefato: grupo, nome e versão |
 | repositório | servidor que hospeda artefatos; o central é o padrão do ecossistema |
 | dependência transitiva | dependência trazida por outra dependência |
+| ciclo de vida da construção | a sequência de fases; pedir uma executa todas as anteriores |
+| escopo de dependência | em que momentos o artefato entra no classpath; `compile` é o padrão |
 | jar | arquivo único com bytecode e metadados, pronto para o classpath |
