@@ -21,6 +21,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: producao
+      url: https://java.viniciusdias.tech
     steps:
       - uses: actions/checkout@v4
 
