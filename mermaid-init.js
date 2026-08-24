@@ -1,6 +1,6 @@
 // Mermaid vestido com a paleta modus-vivendi (mesmos valores de
-// theme/modus-vivendi.css). O livro usa o tema "coal" fixo, então a
-// inicialização é única, sem alternância clara/escura.
+// theme/modus-vivendi.css). O mdBook usa internamente a vaga "coal" para o
+// tema personalizado; no seletor, ela é apresentada como Modus Vivendi.
 mermaid.initialize({
   startOnLoad: true,
   theme: 'base',
@@ -23,7 +23,7 @@ mermaid.initialize({
 
     lineColor: '#989898',           // fg-dim: setas
     textColor: '#ffffff',
-    edgeLabelBackground: '#1e1e1e',
+    edgeLabelBackground: '#000000',
 
     clusterBkg: '#1e1e1e',
     clusterBorder: '#646464',
@@ -33,3 +33,8 @@ mermaid.initialize({
     noteBorderColor: '#fec43f'      // yellow-warmer
   }
 });
+
+// O mdBook só reconhece seus temas internos. Como o CSS substitui por completo
+// a vaga "coal", mostre ao leitor o nome do tema que ele realmente seleciona.
+const modusVivendiButton = document.getElementById('mdbook-theme-coal');
+if (modusVivendiButton) modusVivendiButton.textContent = 'Modus Vivendi';

@@ -1,5 +1,5 @@
 /* Modus Vivendi — paleta de Protesilaos Stavrou (CC0).
-   Aplicada sobre o tema "coal" do mdBook. Selecione "Coal" no seletor de temas. */
+   Usa internamente a vaga "coal" do mdBook. */
 
 :root {
   --mv-bg-main: #000000;  --mv-bg-dim: #1e1e1e;  --mv-bg-inactive: #303030;
@@ -116,4 +116,12 @@ html.coal {
 .coal .language-console .hljs-meta {
   color: var(--mv-green-cooler);
   font-weight: 700;
+}
+
+/* Mermaid envolve rótulos de arestas em elementos HTML. O fundo acompanha a
+   página para que os comandos pareçam pertencer às setas, não a caixas. */
+.coal .mermaid .edgeLabel,
+.coal .mermaid .edgeLabel p {
+  background: var(--mv-bg-main) !important;
+  color: var(--mv-fg-main) !important;
 }

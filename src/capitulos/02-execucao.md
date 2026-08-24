@@ -162,16 +162,16 @@ arquivo: `Ola.java` vira `Ola.class`, e é `Ola`, sem
 extensão nenhuma, que se escreve depois de `java`. Renomear o arquivo antes de
 compilar muda as duas coisas juntas.
 
-Os dois caminhos, lado a lado:
+Os dois caminhos:
 
 ```mermaid
-flowchart LR
-    F["Ola.java<br>código-fonte"]
-    C["Ola.class<br>bytecode em disco"]
-    E["execução na JVM"]
-    F -->|"javac Ola.java"| C
-    C -->|"java Ola"| E
-    F -->|"java Ola.java (compila na memória)"| E
+flowchart TB
+    F["Ola.java<br/>código-fonte"]
+
+    F -->|"javac Ola.java"| C["Ola.class<br/>bytecode em disco"]
+    C -->|"java Ola"| E["execução na JVM"]
+
+    F -->|"java Ola.java<br/>compila e executa na memória"| E
 ```
 
 ## O erro que não deixa nada para trás
