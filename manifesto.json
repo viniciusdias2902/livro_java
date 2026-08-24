@@ -224,7 +224,6 @@
       "IllegalArgumentException",
       "representacao de dinheiro",
       "BigDecimal",
-      "protected",
       "visibilidade de pacote",
       "encadeamento de construtores",
       "classe aninhada",
@@ -233,7 +232,8 @@
     "termos_adiados": {
       "excecao": "13-excecoes",
       "interface": "09-interfaces",
-      "classe anonima": "18-lambdas"
+      "classe anonima": "18-lambdas",
+      "protected": "08-heranca"
     },
     "conceitos_de_carga": [
       "encapsulamento",
@@ -262,7 +262,8 @@
       "downcast",
       "ClassCastException",
       "composicao",
-      "delegacao"
+      "delegacao",
+      "protected"
     ],
     "termos_adiados": {
       "interface": "09-interfaces",

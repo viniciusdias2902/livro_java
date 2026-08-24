@@ -139,8 +139,36 @@ negativo entra sem aviso e o efeito aparece longe, num relatório qualquer;
 com ela, o
 programa cai no instante e na linha em que o valor ruim tentou entrar, com o
 valor impresso. O mecanismo completo por trás do `throw`, incluindo como um
-programa reage a ele em vez de cair, é o capítulo 13; `isBlank`, usado ali,
-apenas pergunta se o texto está vazio ou só com espaços.
+programa reage a ele em vez de cair, é o capítulo 13.
+
+Uma classe costuma ter mais de uma forma de nascer, e a validação não se
+duplica por causa disso. Um construtor chama outro da mesma classe com a
+linha `this(...)`, passando os argumentos do construtor chamado, e isso se
+chama encadeamento de construtores:
+
+```java
+Produto(String nome) {
+    this(nome, 0);
+}
+
+Produto(String nome, int estoque) {
+    if (nome == null || nome.isBlank()) {
+        throw new IllegalArgumentException("Produto precisa de nome.");
+    }
+    if (estoque < 0) {
+        throw new IllegalArgumentException("Estoque não pode ser negativo: " + estoque);
+    }
+    this.nome = nome;
+    this.estoque = estoque;
+}
+```
+
+O produto criado só com o nome nasce com estoque zero, e as duas
+validações continuam existindo num lugar só. A chamada `this(...)` é
+obrigatoriamente a primeira linha do construtor, o que garante que não
+haja objeto pela metade circulando entre um construtor e outro. O
+construtor que recebe tudo, e para o qual os demais delegam, é o lugar em
+que as invariantes moram; os outros são atalhos de escrita para ele.
 
 ## Encapsulamento
 
@@ -148,8 +176,26 @@ A defesa do construtor tem um furo: qualquer código pode escrever
 `cafe.estoque = -8` depois do nascimento, por engano ou por atalho. A
 solução é controlar o acesso. Os modificadores de acesso definem quem
 enxerga cada membro da classe, o nome coletivo de campos, métodos e
-construtores: `private` restringe à própria classe,
-`public` libera para todo o programa. Campo fica `private`; o que o resto do
+construtores, e três deles bastam para este capítulo:
+
+| Escrito | Quem enxerga o membro |
+| --- | --- |
+| `private` | apenas a própria classe |
+| nada | a própria classe e as demais do mesmo pacote |
+| `public` | todo o programa |
+
+A linha do meio é a que passa despercebida: não escrever modificador
+nenhum não é falta de decisão, é a visibilidade de pacote, também chamada
+de padrão, que libera o membro para as classes do mesmo pacote, o espaço
+de nomes que agrupa classes relacionadas e que a última seção deste
+capítulo apresenta por inteiro. Ela serve ao detalhe compartilhado por um
+grupo de classes que trabalham juntas, sem virar promessa pública: os
+construtores dos exemplos deste capítulo estão exatamente nesse nível.
+Existe ainda um quarto nível, que só faz sentido junto do mecanismo de
+reaproveitamento entre classes do capítulo 8, e ele entra lá, com o que o
+justifica.
+
+Campo fica `private`; o que o resto do
 programa pode fazer vira método `public`, e passa pela regra:
 
 ```java
@@ -190,7 +236,10 @@ arquivo, as classes dali de dentro se enxergam por inteiro, `private`
 incluído, e a recusa só vale com cada classe no seu arquivo, que é o
 formato da última seção e de todo o livro daqui em diante. O `final` no campo `nome` acrescenta outra trava, do próprio
 compilador: o modificador `final` marca o que recebe valor uma vez e nunca
-mais, e produto que muda de nome não existe neste domínio. A regra prática
+mais, e produto que muda de nome não existe neste domínio. O mesmo
+modificador vale em variável local e em parâmetro, com o mesmo efeito de
+recusar a segunda atribuição, e o capítulo 18 mostra um lugar em que essa
+propriedade deixa de ser estilo para virar exigência do compilador. A regra prática
 do capítulo: campo `private` sempre; `public` é decisão, tomada método a
 método, e cada método `public` é uma promessa de comportamento que o resto
 do sistema vai usar.
@@ -317,6 +366,59 @@ próprios.
 
 </div>
 
+## Classes dentro de classes
+
+Uma classe pode ser declarada dentro de outra, e existem duas formas com
+regras diferentes. A classe aninhada é a declarada dentro de outra com o
+modificador `static`: um tipo comum, que por acaso mora no espaço de nomes
+da classe externa, sem vínculo nenhum com os objetos dela.
+
+```java
+public class Caixa {
+    private BigDecimal totalDoDia = BigDecimal.ZERO;
+
+    public static class Cupom {
+        private final BigDecimal valor;
+
+        Cupom(BigDecimal valor) {
+            this.valor = valor;
+        }
+    }
+
+    public class Fechamento {
+        public BigDecimal total() {
+            return totalDoDia;
+        }
+    }
+}
+```
+
+`Cupom` se cria como qualquer classe, com o nome da externa na frente
+apenas para localizá-la: `new Caixa.Cupom(new BigDecimal("39.80"))`. O
+ganho é de organização e de leitura: o cupom só existe para o caixa, e
+declará-lo ali diz isso a quem abre o arquivo, sem gastar um arquivo
+próprio e sem espalhar o nome pelo pacote.
+
+`Fechamento`, sem o `static`, é a classe interna, e a diferença aparece na
+terceira linha dela: o método lê `totalDoDia`, um campo `private` do
+`Caixa`, sem receber nada. Cada objeto de uma classe interna nasce ligado
+a um objeto da externa, enxerga os membros privados dele e não existe sem
+ele, o que se reflete na grafia da criação:
+
+```java
+Caixa caixa = new Caixa();
+Caixa.Fechamento fechamento = caixa.new Fechamento();
+```
+
+O `caixa.new Fechamento()` é raro o bastante para causar estranheza na
+primeira leitura, e é a assinatura da classe interna. O vínculo é
+conveniente e cobra duas coisas: cada objeto interno carrega uma
+referência escondida ao externo, e quem lê o código passa a precisar
+saber de qual `Caixa` aquele `Fechamento` é. A regra prática deste livro:
+aninhar quando o tipo só faz sentido dentro do outro, com `static` sempre
+que possível, e reservar a classe interna para o caso em que o vínculo com
+o objeto externo é justamente o assunto.
+
 ## Prática
 
 1. Escreva a classe `Produto` completa deste capítulo, com nome, estoque e
@@ -345,6 +447,24 @@ próprios.
    uma classe pública com `main`, em arquivo próprio, compilada com `javac`
    e executada com `java`.
 
+7. Dê a `Produto` um segundo construtor, que receba só nome e preço e
+   delegue com `this(...)` ao construtor completo, com estoque zero.
+   Prove com duas criações que a validação de nome vazio continua valendo
+   pelos dois caminhos, e depois inverta a ordem, pondo a validação no
+   construtor curto, para ver o que o compilador diz sobre a posição do
+   `this(...)`.
+
+8. Com `Produto` e `Caixa` em arquivos separados e no mesmo pacote,
+   experimente as três visibilidades num campo: `private`, sem
+   modificador e `public`. Anote, para cada uma, se o `Caixa` compila ao
+   ler o campo direto. Depois mova `Caixa` para outro pacote e refaça a
+   experiência, anotando o que mudou.
+
+9. Transforme o `Cupom` numa classe aninhada de `Caixa` e escreva o
+   `Fechamento` como classe interna que lê o total do dia. Tente criar o
+   `Fechamento` com `new Caixa.Fechamento()`, anote a mensagem do
+   compilador, e conserte com a grafia correta.
+
 ## Ficha do capítulo
 
 | Termo | Definição |
@@ -357,10 +477,14 @@ próprios.
 | invariante | condição que todo objeto válido do tipo sustenta sempre |
 | `throw` | dispara um erro de execução no ponto do problema |
 | `IllegalArgumentException` | erro padrão para argumento que viola as regras de quem recebe |
-| modificador de acesso | `public` (visível a todos) e `private` (só a própria classe) |
+| modificador de acesso | quem enxerga o membro: `private`, sem modificador, `public` |
 | encapsulamento | esconder a representação e expor operações que mantêm as invariantes |
 | modificador `final` | campo que recebe valor uma vez e nunca mais |
 | `static` / membro estático | membro que pertence à classe, único, acessado pelo nome do tipo |
+| encadeamento de construtores | `this(...)` como primeira linha; a validação mora num construtor só |
+| visibilidade de pacote | sem modificador escrito: visível às classes do mesmo pacote |
+| classe aninhada | classe declarada dentro de outra com `static`; criada sem a externa |
+| classe interna | aninhada sem `static`; cada objeto pertence a um objeto da externa |
 | representação de dinheiro | centavos em inteiros, ou `BigDecimal`; nunca `double` |
 | `BigDecimal` | decimal exato e imutável; nasce de `String`, opera por métodos |
 | pacote | espaço de nomes que agrupa classes; declarado com `package` |
