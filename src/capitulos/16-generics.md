@@ -124,6 +124,71 @@ Chamado com um array de `Produto`, devolve `Produto`; com um array de
 `String`, devolve `String`; e o compilador infere o `T` pelo argumento, sem
 ninguém escrever o `<>`.
 
+## Limite de tipo, e mais de um parâmetro
+
+Um parâmetro de tipo sem restrição não promete nada: dentro da classe, `T`
+só responde ao que `Object` oferece, porque qualquer tipo pode ocupar o
+lugar dele. Somar os preços de uma prateleira precisa de mais, e a
+exigência se declara. Limite de tipo é a restrição imposta a um parâmetro
+de tipo, escrita com `extends`:
+
+```java
+static <T extends Produto> BigDecimal valorDaPrateleira(T[] itens) {
+    BigDecimal total = BigDecimal.ZERO;
+    for (T item : itens) {
+        total = total.add(item.preco());
+    }
+    return total;
+}
+```
+
+`T extends Produto` lê-se "algum tipo que é `Produto`", e o efeito é
+duplo: quem chama só pode escolher `Produto` ou um subtipo, e dentro do
+método `T` passa a responder a tudo que `Produto` promete, o que faz
+`item.preco()` compilar. Sem o limite, essa mesma linha é recusada, com a
+mensagem de que `Object` não tem `preco()`.
+
+A palavra é `extends` também quando o limite é uma interface, e o
+`Pesavel` do capítulo 9 serve de exemplo: `<T extends Pesavel>` aceita
+qualquer implementador e libera, dentro do corpo, os métodos do contrato.
+Um parâmetro pode ainda ter mais de um limite, separados por `&`, exigindo
+que o tipo escolhido cumpra todos.
+
+Uma classe ou um método declara quantos parâmetros de tipo precisar,
+separados por vírgula, e as letras têm significado consagrado: `T` de
+tipo, `E` de elemento, `K` de chave, `V` de valor, `R` de resultado.
+
+```java
+public record Par<A, B>(A primeiro, B segundo) { }
+
+Par<Produto, BigDecimal> maisVendido = new Par<>(cafe, new BigDecimal("1240.50"));
+```
+
+Interfaces também se parametrizam, e é assim que se declara um contrato
+que vale para qualquer tipo:
+
+```java
+public interface Repositorio<T> {
+    void salvar(T item);
+    T buscar(String codigo);
+}
+
+public class RepositorioDeProdutos implements Repositorio<Produto> {
+    @Override
+    public void salvar(Produto item) { }
+
+    @Override
+    public Produto buscar(String codigo) {
+        return null;
+    }
+}
+```
+
+Quem implementa escolhe o argumento de tipo e recebe as assinaturas já
+concretas, `salvar(Produto)` e `buscar` devolvendo `Produto`, conferidas
+pelo compilador contra a interface. É o desenho que o capítulo 24 usa para
+separar o domínio do lugar onde os dados ficam guardados.
+
 ## Type erasure: o tipo que a execução não vê
 
 <div class="previsao">
@@ -236,10 +301,27 @@ wildcard, o `?`, é exatamente isso: um argumento de tipo desconhecido, com
 um limite declarado. O método aceita `Prateleira<Produto>` e
 `Prateleira<ProdutoPorPeso>`, e paga com uma restrição coerente: dá para ler
 como `Produto`, e não dá para `guardar` coisa nenhuma, porque o tipo exato
-guardável é desconhecido. O espelho para escrita, `? super`, fica registrado
-na ficha; no dia a dia, o `? extends` de leitura responde pela maioria
-esmagadora dos usos, e o capítulo 17 o traz embutido nas assinaturas que o
-mercadinho vai consumir.
+guardável é desconhecido. O espelho dele resolve o problema oposto, escrever em vez de ler:
+
+```java
+static void encher(Prateleira<? super ProdutoPorPeso> prateleira, ProdutoPorPeso[] queijos) {
+    for (ProdutoPorPeso queijo : queijos) {
+        prateleira.guardar(queijo);
+    }
+}
+```
+
+`? super ProdutoPorPeso` lê-se "prateleira de algum supertipo de
+`ProdutoPorPeso`", e aceita a prateleira de queijos, a de produtos e a de
+`Object`: em qualquer uma delas cabe um queijo, porque prateleira mais
+geral aceita o valor mais específico. O que se perde é a leitura, já que o
+que sai de uma prateleira assim só é garantidamente um `Object`. Os dois
+curingas se resumem numa regra com sigla própria, PECS, do inglês para
+"produtor com `extends`, quem consome com `super`": a estrutura de onde se lê declara `? extends`, a
+estrutura para onde se escreve declara `? super`, e a que faz as duas
+coisas não leva curinga nenhum, porque precisa do tipo exato. No dia a dia
+o `? extends` de leitura responde por quase todos os usos, e o capítulo 17
+o traz embutido nas assinaturas que o mercadinho vai consumir.
 
 ## Prática
 
@@ -264,6 +346,16 @@ mercadinho vai consumir.
    usando `compareTo`. Confirme que aceita prateleiras de `Produto` e de
    `ProdutoPorPeso`.
 
+6. Escreva `valorDaPrateleira` com limite de tipo e prove os dois efeitos:
+   remova o `extends Produto` e anote a mensagem sobre `preco()`; depois
+   devolva o limite e tente chamar o método com um array de `String`,
+   anotando a segunda mensagem.
+
+7. Declare `Repositorio<T>` com `salvar` e `buscar`, implemente-a para
+   `Produto` guardando os itens num array interno, e escreva um método que
+   receba `Repositorio<? super Produto>` e guarde três produtos nele.
+   Explique por escrito por que `? extends` não serviria nesse método.
+
 ## Ficha do capítulo
 
 | Termo | Definição |
@@ -274,5 +366,7 @@ mercadinho vai consumir.
 | método genérico | método com parâmetro de tipo próprio: `static <T> T ultimoDe(T[])` |
 | type erasure | o apagamento: argumentos de tipo existem só para o compilador |
 | invariância | `Prateleira<Sub>` não é `Prateleira<Super>`; protege a escrita |
+| limite de tipo | `<T extends Tipo>`: restringe a escolha e libera os métodos do limite no corpo |
 | wildcard | `?`: argumento de tipo desconhecido com limite; `? extends` lê, `? super` escreve |
+| PECS | de onde se lê, `? extends`; para onde se escreve, `? super`; nos dois, nenhum |
 | `@SuppressWarnings("unchecked")` | silencia o alerta de cast que o compilador não consegue provar; só com garantia por construção |
