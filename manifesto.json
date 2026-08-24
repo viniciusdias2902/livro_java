@@ -168,7 +168,8 @@
       "classe utilitaria",
       "classe Arrays",
       "array multidimensional",
-      "varargs"
+      "varargs",
+      "toString"
     ],
     "termos_adiados": {
       "excecao": "13-excecoes",
@@ -311,7 +312,7 @@
       "hashCode",
       "codigo de hash",
       "colisao de hash",
-      "toString"
+      "contrato de toString"
     ],
     "termos_adiados": {
       "HashMap": "17-colecoes"

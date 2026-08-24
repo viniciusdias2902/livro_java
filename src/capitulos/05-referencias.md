@@ -65,6 +65,48 @@ os dois emendados, e isso se chama concatenação: `"Bem-vindo, " + nome`
 produziu `"Bem-vindo, Ana"`. Números entram na emenda já convertidos para
 texto: `"Total: " + 7` é o texto `"Total: 7"`.
 
+Alguns caracteres não podem ser escritos direto entre as aspas: uma aspa
+dupla fecharia o literal antes da hora, e uma quebra de linha não cabe
+numa linha. Para eles existe a sequência de escape, a dupla de caracteres
+aberta por contrabarra que vale por um caractere só:
+
+| Escrita | Caractere |
+| --- | --- |
+| `\n` | quebra de linha |
+| `\t` | tabulação |
+| `\"` | aspa dupla |
+| `\'` | aspa simples |
+| `\\` | a própria contrabarra |
+
+`IO.println("Café\t19,90")` imprime os dois valores separados por
+tabulação, e `"C:\\dados"` é o texto de oito caracteres com uma
+contrabarra só. Esquecer a duplicação da contrabarra dá erro de
+compilação quando a letra seguinte não forma escape nenhum, e um
+caractere que ninguém pediu quando forma.
+
+Texto de várias linhas tem forma própria, o bloco de texto: três aspas
+duplas abrem, três fecham, e o conteúdo entre elas vale como está, com as
+quebras de linha que tiver.
+
+```java
+String ajuda = """
+        Comandos:
+          vender   registra uma venda
+          sair     encerra o programa
+        """;
+```
+
+A indentação comum a todas as linhas é descartada pelo compilador, que a
+mede pela linha menos indentada, contando também a linha que fecha o
+bloco; isso permite alinhar o texto com o código em volta sem que o
+alinhamento entre no valor, e recuar a linha de fechamento é o jeito de
+pedir margem à esquerda no texto final. É a forma de
+escrever tela de ajuda, mensagem longa e trecho de outro formato sem
+encher a linha de `\n`.
+
+O resto do repertório de `String` fica para duas seções adiante, porque um
+dos métodos dele devolve um array, e array é o assunto da próxima.
+
 ## Arrays: vários valores sob um nome
 
 Guardar as avaliações de um filme em variáveis `nota1`, `nota2`, `nota3`
@@ -122,6 +164,150 @@ for (int nota : notas) {
 
 Lê-se: para cada `nota` em `notas`. A cada volta, a variável recebe o valor
 da posição seguinte, do primeiro ao último.
+
+Um array também guarda arrays, e é assim que a linguagem representa
+tabela. Um array multidimensional é o array cujos elementos são outros
+arrays, declarado com um par de colchetes por dimensão:
+
+```java
+void main() {
+    int[][] vendasPorDiaEHora = new int[7][24];
+    vendasPorDiaEHora[0][9] = 12;
+    IO.println(vendasPorDiaEHora.length);
+    IO.println(vendasPorDiaEHora[0].length);
+    IO.println(vendasPorDiaEHora[0][9]);
+}
+```
+
+```
+7
+24
+12
+```
+
+`new int[7][24]` cria sete arrays de 24 posições e mais um array que
+guarda os sete. `vendasPorDiaEHora[0]` é um array inteiro, e
+`vendasPorDiaEHora[0][9]` é a posição 9 dele; percorrer a tabela toda pede
+o laço aninhado do capítulo 4, um laço por dimensão. As linhas não
+precisam ter o mesmo tamanho, porque cada uma é um array independente:
+`new int[7][]` cria as sete posições sem as linhas, e cada linha nasce
+depois com o tamanho que precisar. Daí o nome honesto da estrutura, array
+de arrays, e a diferença em relação à matriz retangular de outras
+linguagens.
+
+## O repertório de String
+
+Os quatro métodos da primeira seção são a ponta de um conjunto grande, e o
+que importa dele se organiza em quatro trabalhos: perguntar sobre o texto,
+procurar dentro dele, produzir texto novo e partir o texto em pedaços. Uma
+etiqueta digitada por gente, com o espaço sobrando que todo formulário
+produz, serve de bancada:
+
+```java
+void main() {
+    String etiqueta = "  Café 500g  ";
+    IO.println(etiqueta.strip() + "|");
+    IO.println(etiqueta.isBlank());
+    IO.println(etiqueta.contains("500"));
+    IO.println(etiqueta.indexOf("500"));
+    IO.println(etiqueta.strip().startsWith("Café"));
+    IO.println(etiqueta.replace("500g", "1kg").strip());
+}
+```
+
+```
+Café 500g|
+false
+true
+7
+true
+Café 1kg
+```
+
+`strip` devolve o texto sem os espaços das pontas, e a barra impressa
+logo depois existe para o resultado ficar visível. `isBlank` pergunta se o
+texto está vazio ou tem apenas espaço, a conferência que separa a resposta
+ausente da resposta feita só de espaço; `isEmpty` é o parente estrito,
+que só responde `true` para comprimento zero. `contains` responde se um
+trecho aparece em algum lugar, e `indexOf` responde onde: a posição da
+primeira ocorrência, ou `-1` quando não há nenhuma, a convenção de "não
+achei" das buscas por posição. `startsWith` e `endsWith` perguntam pelas
+pontas, o par que reconhece prefixo de código e extensão de arquivo.
+`replace` troca todas as ocorrências de um trecho por outro. As chamadas
+se emendam porque cada uma devolve um `String` novo, e é isso que faz
+`etiqueta.replace(...).strip()` funcionar em cadeia.
+
+| Chamada | O que devolve |
+| --- | --- |
+| `texto.length()` | a quantidade de caracteres |
+| `texto.isEmpty()` / `texto.isBlank()` | comprimento zero / vazio ou só com espaço |
+| `texto.charAt(i)` | o `char` da posição `i` |
+| `texto.substring(a)` / `texto.substring(a, b)` | de `a` até o fim / de `a` até antes de `b` |
+| `texto.indexOf(t)` / `texto.lastIndexOf(t)` | posição da primeira / da última ocorrência; `-1` se não houver |
+| `texto.contains(t)` | se o trecho aparece |
+| `texto.startsWith(t)` / `texto.endsWith(t)` | se começa / termina com o trecho |
+| `texto.toUpperCase()` / `texto.toLowerCase()` | a versão em maiúsculas / em minúsculas |
+| `texto.strip()` | o texto sem espaço nas pontas |
+| `texto.replace(a, b)` | com todas as ocorrências de `a` trocadas por `b` |
+| `texto.repeat(n)` | o texto repetido `n` vezes |
+| `texto.equals(o)` / `texto.equalsIgnoreCase(o)` | conteúdo igual / igual ignorando maiúsculas |
+| `texto.compareTo(o)` | negativo, zero ou positivo, na ordem alfabética |
+| `texto.split(s)` | o array dos pedaços entre as ocorrências de `s` |
+| `String.join(s, partes)` | os pedaços emendados com `s` entre eles |
+| `String.format(molde, valores)` | o texto montado a partir de um molde |
+
+O quarto trabalho é o que precisava do array. `split` parte o texto onde
+encontra o separador e devolve os pedaços; `String.join` faz o caminho de
+volta:
+
+```java
+void main() {
+    String linha = "7891000100103;Café 500g;19.90";
+    String[] campos = linha.split(";");
+    IO.println(campos.length);
+    IO.println(campos[1]);
+    IO.println(String.join(" | ", campos));
+}
+```
+
+```
+3
+Café 500g
+7891000100103 | Café 500g | 19.90
+```
+
+É o formato de arquivo de texto que mais se encontra por aí, uma linha por
+registro com as colunas separadas por um caractere, e o capítulo 21 grava o
+estoque do mercadinho exatamente assim.
+`String.join` é chamado pelo nome do tipo, sem objeto na frente, porque
+não age sobre um texto existente: monta um novo a partir das partes.
+
+A última chamada da tabela monta texto por molde, e aposenta a emenda de
+pedaços com `+` quando a saída precisa ficar alinhada:
+
+```java
+void main() {
+    IO.println(String.format("%-12s %3d un", "Café 500g", 25));
+    IO.println(String.format("%-12s %3d un", "Sabão", 7));
+}
+```
+
+```
+Café 500g     25 un
+Sabão          7 un
+```
+
+Cada marca começa com `%` e diz o tipo e a largura do valor que entra ali:
+`%s` recebe texto, `%d` recebe inteiro, `%f` recebe ponto flutuante e `%n`
+quebra a linha. O número antes da letra reserva a largura em colunas, e o
+sinal de menos alinha à esquerda em vez de à direita, que é o padrão; foi
+o `%-12s` que deixou as duas linhas com o número na mesma coluna. Para
+ponto flutuante, `%6.2f` pede seis colunas com duas casas decimais, com
+uma ressalva: a vírgula ou o ponto que separa as casas sai do idioma
+configurado na máquina, e fixar a escrita em toda máquina pede a versão do
+método que recebe um primeiro argumento `Locale`, o objeto que representa
+uma convenção regional. O método `formatted`, chamado sobre o próprio
+molde, faz o mesmo com a ordem invertida: `"%s: %d".formatted(nome, quantidade)`.
 
 ## Referências: o que a variável guarda de verdade
 
@@ -262,6 +448,102 @@ uma regra de igualdade em que se possa apoiar.
 
 </div>
 
+## A classe Arrays, e o parâmetro que aceita quantos vierem
+
+Imprimir um array direto não dá o que se espera:
+
+```java
+int[] notas = { 8, 10, 7 };
+IO.println(notas);
+```
+
+```
+[I@6f2b958e
+```
+
+O que sai é `[I`, a marca interna de "array de `int`", seguida de um
+número derivado da identidade do objeto, o mesmo assunto da seção
+anterior: sem instrução em contrário, um objeto se apresenta por
+identidade, não por conteúdo. A biblioteca padrão resolve isso, e mais uma
+dúzia de tarefas de array, na classe `Arrays`, que é uma classe
+utilitária: a classe da qual nunca se cria objeto, existente só para
+reunir métodos chamados pelo nome dela.
+
+```java
+void main() {
+    int[] notas = { 8, 10, 7 };
+    IO.println(Arrays.toString(notas));
+    Arrays.sort(notas);
+    IO.println(Arrays.toString(notas));
+
+    int[] copia = Arrays.copyOf(notas, notas.length);
+    IO.println(Arrays.equals(notas, copia));
+    IO.println(notas == copia);
+}
+```
+
+```
+[8, 10, 7]
+[7, 8, 10]
+true
+false
+```
+
+`toString` produz a forma legível, e é a chamada que falta em todo
+programa que imprime array. `sort` ordena o array recebido no lugar,
+alterando o próprio objeto, com a consequência que a armadilha da seção
+anterior já cobrou: quem passa um array para `sort` não fica com o
+original. `copyOf` devolve um array novo com o conteúdo copiado e o
+tamanho pedido, completando com o valor padrão do tipo ou cortando o
+excesso quando o tamanho pedido difere do original; é a resposta pronta
+para o desfazer-o-compartilhamento que o exercício 2 pede à mão. E as duas
+últimas linhas põem as duas perguntas lado a lado sobre os mesmos dois
+arrays: mesmo conteúdo, sim; mesmo objeto, não.
+
+| Chamada | O que faz |
+| --- | --- |
+| `Arrays.toString(a)` | a forma legível do conteúdo |
+| `Arrays.deepToString(a)` | a forma legível de array multidimensional |
+| `Arrays.sort(a)` | ordena o próprio array, no lugar |
+| `Arrays.copyOf(a, n)` | array novo de `n` posições, com o conteúdo de `a` |
+| `Arrays.copyOfRange(a, i, f)` | array novo com o trecho de `i` até antes de `f` |
+| `Arrays.equals(a, b)` | conteúdo igual, posição a posição |
+| `Arrays.fill(a, v)` | grava `v` em todas as posições |
+
+O array também sustenta uma forma de declarar parâmetro que aparece na
+biblioteca inteira. Varargs é o parâmetro que aceita zero ou mais valores
+do mesmo tipo, declarado com três pontos entre o tipo e o nome:
+
+```java
+int soma(int... valores) {
+    int total = 0;
+    for (int valor : valores) {
+        total += valor;
+    }
+    return total;
+}
+
+void main() {
+    IO.println(soma(3, 4));
+    IO.println(soma(1, 2, 3, 4, 5));
+    IO.println(soma());
+}
+```
+
+```
+7
+15
+0
+```
+
+Dentro do método, `valores` é um array comum, com `length` e índice; quem
+embrulha os argumentos soltos num array é o compilador, na hora da
+chamada, e a chamada sem argumento nenhum recebe um array de tamanho zero,
+não `null`. Duas regras acompanham a forma: o varargs é o último parâmetro
+da lista, porque nada poderia vir depois de "quantos vierem", e cada
+método tem no máximo um. É assim que `String.format` aceita qualquer
+quantidade de valores depois do molde.
+
 ## Imutabilidade e StringBuilder
 
 Nenhum método de `String` altera o texto: todos devolvem um `String` novo, e
@@ -299,6 +581,17 @@ IO.println(relatorio);
 `IO.println` o aceita diretamente. Como qualquer objeto vira texto na hora
 de imprimir é assunto do capítulo 10. A regra prática: concatenação com `+`
 para emendas pontuais; `StringBuilder` para montagem dentro de laço.
+
+O objeto tem mais do que o `append`. `insert(posicao, valor)` enfia um
+valor no meio do que já está montado; `delete(inicio, fim)` remove um
+trecho e `deleteCharAt(posicao)` remove um caractere, que é a saída para a
+vírgula sobrando no fim de uma lista montada em laço; `reverse()` inverte
+a ordem; `length()` conta o que já entrou; `setLength(0)` esvazia o objeto
+para ele ser reaproveitado na montagem seguinte; e `toString()` fecha a
+montagem devolvendo o `String` final, que é o tipo esperado por quem
+recebe texto. O `append` aceita valor de qualquer tipo, convertendo-o em
+texto, e devolve o próprio `StringBuilder`, o que permite emendar chamadas
+numa linha só: `relatorio.append(nome).append(": ").append(quantidade)`.
 
 ## null e a entrada que vira número
 
@@ -401,19 +694,53 @@ prefere a que declara o array quando as duas existem no arquivo.
    uma instrução de uso em vez de cair. Anote qual erro de execução ele
    sofria antes da sua proteção.
 
+7. Escreva um método que receba o nome de um produto digitado com sujeira,
+   como `"  café 500G  "`, e devolva a versão limpa e padronizada: sem
+   espaço nas pontas, com a primeira letra maiúscula e o resto minúsculo.
+   Use `strip`, `substring`, `toUpperCase` e `toLowerCase`, e recuse com
+   uma mensagem o texto que `isBlank` reprovar.
+
+8. Parta a linha `"7891000100103;Café 500g;19.90;25"` com `split`, imprima
+   cada pedaço numerado, converta o último para `int` e o remonte com
+   `String.join` usando vírgula no lugar do ponto e vírgula. Depois repita
+   com uma linha em que o nome do produto contém um ponto e vírgula, e
+   descreva por escrito o que acontece com a contagem de pedaços.
+
+9. Imprima uma tabela de cinco produtos com `String.format`, em três
+   colunas alinhadas: nome à esquerda em doze colunas, quantidade à
+   direita em três, e a palavra `un`. Depois monte a mesma tabela com
+   concatenação e `+` e compare as duas versões por escrito.
+
+10. Com um array de cinco notas, imprima o array direto, depois com
+    `Arrays.toString`, ordene com `Arrays.sort`, copie com `Arrays.copyOf`
+    e prove com duas impressões que a cópia tem o mesmo conteúdo e não é o
+    mesmo objeto. Refaça o exercício 2 usando `copyOf` no lugar do laço.
+
+11. Escreva `int soma(int... valores)` e `double media(int... valores)`,
+    com a média recusando a chamada sem argumento nenhum em vez de dividir
+    por zero. Chame as duas com nenhum, um e cinco valores.
+
+12. Monte a tabuada de 1 a 10 num `int[10][10]` com laços aninhados,
+    imprima-a com `Arrays.deepToString` e depois linha a linha com
+    `Arrays.toString`. Explique por escrito por que `Arrays.toString`
+    sozinho não serve para a tabela inteira.
+
 ## Ficha do capítulo
 
 | Chamada | O que faz |
 | --- | --- |
-| `texto.length()` | quantidade de caracteres |
-| `texto.toUpperCase()` | devolve a versão em maiúsculas |
-| `texto.charAt(i)` | o `char` da posição `i` |
-| `texto.substring(a, b)` | o trecho da posição `a` até antes de `b` |
-| `a.equals(b)` | compara conteúdo, não identidade |
-| `montagem.append(x)` | acrescenta ao fim do `StringBuilder` |
+| `texto.length()` / `charAt(i)` / `substring(a, b)` | tamanho, caractere da posição, trecho |
+| `texto.strip()` / `isBlank()` / `isEmpty()` | limpeza das pontas e as duas perguntas de vazio |
+| `texto.contains(t)` / `indexOf(t)` / `startsWith(t)` | se aparece, onde aparece, se começa assim |
+| `texto.toUpperCase()` / `toLowerCase()` / `replace(a, b)` | as versões de caixa e a troca de trecho |
+| `texto.equals(o)` / `equalsIgnoreCase(o)` / `compareTo(o)` | conteúdo igual, igual sem caixa, ordem alfabética |
+| `texto.split(s)` / `String.join(s, partes)` | parte o texto num array / emenda as partes |
+| `String.format(molde, valores)` | monta texto por molde: `%s`, `%d`, `%f`, largura e alinhamento |
+| `montagem.append(x)` / `insert` / `deleteCharAt` / `toString()` | montagem em etapas no `StringBuilder` |
+| `Arrays.toString(a)` / `sort` / `copyOf` / `equals` / `fill` | as operações de array na classe utilitária |
 | `Integer.parseInt(texto)` | converte o texto num `int` |
 | `IO.readln(pergunta)` | escreve a pergunta e devolve a linha digitada |
-| `new int[n]` | array de `n` posições com o valor padrão do tipo |
+| `new int[n]` / `new int[l][c]` | array de `n` posições / tabela de `l` linhas por `c` colunas |
 
 | Termo | Definição |
 | --- | --- |
@@ -429,6 +756,15 @@ prefere a que declara o array quando as duas existem no arquivo.
 | concatenação | o `+` entre `String` e outro valor, produzindo `String` novo |
 | imutabilidade | propriedade do objeto que nunca muda após criado |
 | `StringBuilder` | objeto de texto alterável, para montagem em etapas |
+| `toString` | a forma em texto de um objeto; o capítulo 10 volta a ele |
+| sequência de escape | `\n`, `\t`, `\"`, `\\`: um caractere escrito com dois |
+| bloco de texto | literal de várias linhas entre três aspas duplas |
+| `String.format` | monta texto a partir de um molde com marcas `%` |
+| `String.join` | emenda partes com um separador entre elas |
+| classe utilitária | classe da qual não se cria objeto; só reúne métodos chamados pelo nome dela |
+| classe `Arrays` | a utilitária dos arrays: forma legível, ordenação, cópia, igualdade |
+| array multidimensional | array cujos elementos são arrays; um colchete por dimensão |
+| varargs | parâmetro que aceita zero ou mais valores; é um array por dentro |
 | `Integer.parseInt` | converte `String` em `int`; recusa texto malformado |
 | `IO.readln` | lê uma linha do terminal e a devolve como `String` |
 | array | sequência de tamanho fixo de valores do mesmo tipo |

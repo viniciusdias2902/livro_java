@@ -199,7 +199,10 @@ public String toString() {
 }
 ```
 
-A regra de uso: `toString` existe para depuração e registro, para gente
+O contrato de `toString` é mais frouxo que o de `equals`, e cabe numa
+frase: devolver uma descrição do objeto em texto, concisa e legível para
+quem lê. Nenhuma cláusula obriga formato, e é por isso que a regra de uso
+importa tanto: `toString` existe para depuração e registro, para gente
 lendo saída de programa, e não para dado que outro código interprete. Um
 formato de verdade, recibo ou relatório, é método próprio com nome próprio;
 o `toString` fica livre para mudar sem quebrar ninguém. O retorno do
