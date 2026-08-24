@@ -118,7 +118,16 @@ bancada:
 | `cartaz.indexOf("tomate")` | posição da primeira ocorrência; `-1` se não achar |
 | `cartaz.size()` / `cartaz.isEmpty()` | quantos elementos / se está vazia |
 | `cartaz.addAll(outroCartaz)` | despeja outra coleção inteira no fim |
+| `cartaz.subList(1, 3)` | vista das posições de 1 até antes de 3 |
 | `cartaz.clear()` | esvazia |
+
+Uma chamada da tabela devolve algo diferente das outras: `cartaz.subList(1, 3)`
+entrega as posições de 1 até antes de 3 como uma vista, e vista quer dizer
+que os dois objetos compartilham o mesmo conteúdo. Alterar um elemento
+pela vista altera a lista original, e alterar o tamanho da original
+invalida a vista, que passa a lançar erro no primeiro uso. Serve para
+trabalhar num trecho sem copiar; para levar o trecho embora, copia-se com
+`new ArrayList<>(cartaz.subList(1, 3))`.
 
 As duas formas de `remove`, pela posição e pelo elemento, carregam uma
 armadilha guardada para a seção dos wrappers. Sobre o custo, o suficiente
@@ -151,8 +160,15 @@ quantidades.add(3);
 int primeira = quantidades.get(0);
 ```
 
-O `3` entra como `Integer` e sai como `int` sem cerimônia visível, e é fácil
-esquecer que wrapper é objeto, com tudo que vale para objetos:
+O `3` entra como `Integer` e sai como `int` sem cerimônia visível. Cada
+classe wrapper carrega também o que o primitivo não tem onde guardar: as
+constantes `Integer.MAX_VALUE` e `Integer.MIN_VALUE`, que são os limites do
+capítulo 3 escritos em código em vez de digitados à mão; as conversões
+`Integer.parseInt` e `Double.parseDouble`, com uma irmã por tipo; e
+comparações prontas como `Integer.compare(a, b)`, que devolve negativo,
+zero ou positivo sem o risco que uma armadilha do capítulo 18 vai
+mostrar. E é fácil esquecer que wrapper é objeto, com tudo que vale para
+objetos:
 
 <div class="armadilha">
 
@@ -252,6 +268,38 @@ todos. O estoque do mercadinho não deve ter o mesmo produto duas vezes, e o
 | `estoque.remove(produto)` | tira o elemento igual, se houver |
 | `estoque.size()` / `estoque.isEmpty()` | herdados de `Collection`, como em `List` |
 
+As três operações de conjunto da matemática têm método próprio, e cada uma
+altera o conjunto que recebe a chamada: `addAll` faz a união, `retainAll`
+guarda só o que existe nos dois, a interseção, e `removeAll` tira tudo que
+existe no outro, a diferença; `containsAll` pergunta se um contém o outro
+inteiro. A promoção da semana que ainda tem estoque sai de uma linha:
+
+```java
+void main() {
+    Set<String> emPromocao = new TreeSet<>(Set.of("Arroz 5kg", "Café 500g", "Sabão em pó"));
+    Set<String> emFalta = Set.of("Arroz 5kg", "Queijo minas");
+
+    Set<String> promocaoDisponivel = new TreeSet<>(emPromocao);
+    promocaoDisponivel.removeAll(emFalta);
+    IO.println(promocaoDisponivel);
+}
+```
+
+```
+[Café 500g, Sabão em pó]
+```
+
+A cópia antes do `removeAll` existe porque a operação altera o conjunto
+que a recebe, e a promoção da semana não deveria encolher por causa de uma
+consulta. `TreeSet`, usado ali para a saída ter ordem previsível, é o
+`Set` que mantém os elementos ordenados, e `LinkedHashSet` é o que lembra
+a ordem de inserção: o mesmo trio dos mapas, que a seção de ordem de
+iteração fecha. E quando os elementos são constantes de um enum existem
+implementações dedicadas, `EnumSet` e `EnumMap`, que guardam os valores
+num vetor indexado pela posição da constante: ocupam menos memória, são
+mais rápidas e iteram na ordem de declaração do enum, o que as torna a
+escolha padrão para chave de enum.
+
 O capítulo 10 prometeu mostrar ao vivo o preço de sobrescrever `equals` sem
 `hashCode`, e o palco é este:
 
@@ -329,6 +377,17 @@ antigo; código novo empilha com `ArrayDeque`.
 | `encomendas.peek()` | espia a frente sem tirar; `null` se vazia |
 | `pilha.push(pedido)` | empilha, com o `Deque` servindo de pilha |
 | `pilha.pop()` | desempilha da mesma ponta |
+
+Uma segunda implementação de `Queue` troca a ordem de chegada por outra
+disciplina. `PriorityQueue` entrega sempre o menor elemento primeiro, pela
+ordem natural do tipo, e não pela ordem de entrada: é a fila do
+pronto-socorro, não a da padaria. As encomendas do mercadinho atendidas da
+mais urgente para a menos, ou os produtos ordenados por dias até vencer,
+são os casos que a pedem. A advertência que acompanha vale mais que a
+apresentação: a ordem prometida existe na saída, `poll` a `poll`, e não no
+percurso. Imprimir um `PriorityQueue` inteiro, ou percorrê-lo com
+for-each, mostra os elementos na ordem interna da estrutura, que não é a
+ordenada, e essa é a surpresa clássica de quem a usa pela primeira vez.
 
 No uso real a fila aparece
 menos que `List` e `Map`; na entrevista, FIFO contra LIFO é pergunta de
@@ -438,7 +497,13 @@ a interface de quem sabe se comparar com os da própria espécie, com um único
 método, `compareTo`, devolvendo negativo, zero ou positivo, exatamente o
 protocolo do `BigDecimal`. `String` e os wrappers
 já a implementam, e trocar `new HashMap<>()` por `new TreeMap<>()` na
-previsão faria os produtos saírem em ordem alfabética. Existe ainda o meio-termo, e ele cai em entrevista: `LinkedHashMap` guarda
+previsão faria os produtos saírem em ordem alfabética. A ordem mantida
+abre consultas que o `HashMap` não tem como responder: `firstKey` e
+`lastKey` entregam os extremos, `headMap(chave)` e `tailMap(chave)`
+recortam a faixa antes e a faixa a partir de uma chave, e `floorKey` e
+`ceilingKey` respondem "a maior chave até esta" e "a menor chave a partir
+desta". É o que transforma o mapa ordenado na estrutura das consultas por
+faixa, de preço, de data ou de código. Existe ainda o meio-termo, e ele cai em entrevista: `LinkedHashMap` guarda
 os pares com a mecânica do `HashMap` e lembra a ordem de inserção; na
 previsão acima, devolveria os quatro produtos na ordem em que entraram. A
 resposta de entrevista vira um trio, nos mesmos moldes da de `List`:
@@ -459,6 +524,57 @@ public class Produto implements Comparable<Produto> {
 
 E quando a ordem desejada não é a natural do tipo, ou o tipo não tem
 nenhuma, o capítulo 18 traz a peça que falta.
+
+## A classe Collections
+
+Assim como `Arrays` reúne as operações de array, `Collections` reúne as
+que valem para qualquer coleção, e é a segunda classe utilitária do livro.
+O `s` final é o que separa a classe utilitária `Collections` da interface
+`Collection` do topo da árvore, e a confusão entre as duas é frequente o
+bastante para o aviso valer a linha.
+
+```java
+void main() {
+    List<String> fila = new ArrayList<>(List.of("Ana", "Bruno", "Carla"));
+    Collections.reverse(fila);
+    IO.println(fila);
+    IO.println(Collections.max(fila));
+    IO.println(Collections.frequency(fila, "Ana"));
+}
+```
+
+```
+[Carla, Bruno, Ana]
+Carla
+1
+```
+
+`reverse` inverte a lista no lugar, alterando o objeto recebido, como quase
+tudo nesta classe; `max` e `min` percorrem qualquer coleção devolvendo o
+extremo pela ordem natural do tipo, a mesma de `Comparable`; `frequency`
+conta ocorrências.
+
+| Chamada | O que faz |
+| --- | --- |
+| `Collections.sort(lista)` | ordena no lugar, pela ordem natural do tipo |
+| `Collections.reverse(lista)` | inverte a ordem dos elementos |
+| `Collections.shuffle(lista, aleatorio)` | embaralha, com o gerador do capítulo 6 |
+| `Collections.max(colecao)` / `min(colecao)` | o maior / o menor pela ordem natural |
+| `Collections.frequency(colecao, valor)` | quantas vezes o valor aparece |
+| `Collections.swap(lista, i, j)` | troca duas posições entre si |
+| `Collections.unmodifiableList(lista)` | vista da lista que recusa alteração |
+| `Collections.emptyList()` | a lista vazia imutável, para devolver em vez de `null` |
+
+O `shuffle` com o gerador do capítulo 6 é o embaralhamento reprodutível:
+com semente fixa, a mesma ordem em toda execução, que é o que torna um
+teste possível. E as duas últimas linhas da tabela pedem cuidado com uma
+diferença que a leitura rápida apaga. `Collections.unmodifiableList` devolve
+uma vista, no sentido do `subList`: o objeto recusa `add` e `remove`, e
+continua enxergando a lista original, de modo que uma alteração feita por
+quem tem a referência de dentro aparece através dela. `List.copyOf`, da
+próxima seção, copia, e o que acontecer depois com a original não afeta a
+cópia. Para devolver a lista interna de um objeto sem deixar ninguém
+alterá-la, a cópia é a defesa inteira e a vista é meia defesa.
 
 ## Coleções imutáveis
 
@@ -494,8 +610,25 @@ array morre de vez.
 
 Resta pagar o topo da árvore: o iterador, que o `iterator()` de `Iterable`
 entrega, é o objeto que percorre uma coleção, um elemento por vez, e é ele
-que o for-each usa por baixo em tudo que este capítulo mostrou. O encontro direto com ele costuma acontecer
-de um jeito específico: alterar a coleção no meio de um for-each costuma derrubar o
+que o for-each usa por baixo em tudo que este capítulo mostrou. Escrito por extenso, o percurso mostra o que o for-each esconde, e essa
+forma longa é também a única maneira de remover elementos durante a volta
+sem as peças do capítulo 18:
+
+```java
+Iterator<Produto> percurso = estoque.iterator();
+while (percurso.hasNext()) {
+    Produto produto = percurso.next();
+    if (produto.estoque() == 0) {
+        percurso.remove();
+    }
+}
+```
+
+`hasNext` pergunta se ainda há elemento pela frente, `next` entrega o
+próximo e avança, e `remove` tira da coleção o elemento que o `next`
+acabou de entregar, avisando a estrutura da alteração. É justamente esse
+aviso que falta quando a remoção é feita por fora: alterar a coleção no meio
+de um for-each costuma derrubar o
 programa com `ConcurrentModificationException`, um erro barulhento de
 propósito. A detecção, porém, é melhor esforço, não garantia: há casos, como
 remover o penúltimo elemento de um `ArrayList`, em que o percurso termina em
@@ -535,7 +668,25 @@ capítulo 18.
 
 7. Escreva um método que receba `List<ItemDeVenda>` e devolva uma versão
    imutável dela, e prove com uma tentativa de `add` que a devolução é
-   segura.
+   segura. Depois compare `Collections.unmodifiableList` com `List.copyOf`:
+   altere a lista original depois de devolver as duas e mostre qual das
+   devoluções mudou junto.
+
+8. Modele com `Set` a promoção da semana e a lista de produtos em falta, e
+   produza os três resultados com operações de conjunto: o que está em
+   promoção e disponível, o que está nas duas listas e a união das duas.
+   Guarde-os em `TreeSet` para a saída sair em ordem e explique por escrito
+   por que a cópia antes de `removeAll` é necessária.
+
+9. Percorra o estoque com um `Iterator` explícito e remova os produtos
+   zerados. Depois reescreva a mesma remoção dentro de um for-each, rode, e
+   anote o erro. Explique em duas frases o que o `remove` do iterador faz
+   que a remoção por fora não faz.
+
+10. Ponha cinco encomendas com prazos diferentes num `PriorityQueue`,
+    esvazie-o com `poll` anotando a ordem de saída, e depois imprima um
+    `PriorityQueue` cheio com `IO.println`. Explique a diferença entre as
+    duas ordens.
 
 ## Ficha do capítulo
 
@@ -547,6 +698,10 @@ capítulo 18.
 | `push` / `pop` | pilha sobre `Deque`: empilha e desempilha na mesma ponta |
 | `put` / `get` / `getOrDefault` / `containsKey` | o essencial de `Map`; `get` ausente devolve `null` |
 | `keySet()` / `entrySet()` | as chaves / os pares, para percorrer |
+| `addAll` / `retainAll` / `removeAll` | união, interseção e diferença entre conjuntos |
+| `firstKey` / `headMap` / `floorKey` | consultas de faixa, exclusivas do mapa ordenado |
+| `Collections.sort` / `reverse` / `shuffle` / `max` / `frequency` | a utilitária das coleções |
+| `iterator()` / `hasNext` / `next` / `remove` | o percurso por extenso, com remoção segura |
 | `List.of`, `Set.of`, `Map.of`, `List.copyOf` | coleções imutáveis prontas |
 
 | Termo | Definição |
@@ -561,6 +716,11 @@ capítulo 18.
 | `LinkedHashMap` | mecânica de `HashMap` lembrando a ordem de inserção |
 | `TreeMap` | chaves mantidas em ordem, via `Comparable` |
 | `Queue` / `ArrayDeque` | a fila FIFO: sai na ordem de chegada / implementação padrão |
+| `PriorityQueue` | sai sempre o menor; a ordem vale na saída, não no percurso |
+| `TreeSet` / `LinkedHashSet` | conjunto ordenado / conjunto que lembra a inserção |
+| `EnumSet` / `EnumMap` | implementações dedicadas a constantes de enum |
+| `Collections` | a classe utilitária das coleções; não confundir com `Collection` |
+| vista | objeto que compartilha o conteúdo de outro: `subList`, `unmodifiableList` |
 | `Deque` | fila de duas pontas; serve de fila e de pilha (LIFO) |
 | `Comparable` / `compareTo` | a ordem natural de um tipo: negativo, zero, positivo |
 | classe wrapper | o primitivo como objeto: `Integer`, `Double` e os demais |
