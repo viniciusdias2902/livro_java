@@ -30,6 +30,34 @@ por métodos, `plusDays`, `plusMonths`, `minusWeeks`, e as comparações por
 `isBefore`, `isAfter` e o `compareTo` de `Comparable`, que o tipo implementa;
 produto vencido é `validade.isBefore(hoje)`, sem conta manual nenhuma.
 
+Além de somar e subtrair, `LocalDate` responde sobre si mesma.
+`getDayOfWeek` devolve um `DayOfWeek` e `getMonth` devolve um `Month`, e os
+dois são enums da biblioteca, com as constantes `SUNDAY`, `FEBRUARY` e as
+demais, o que põe o switch exaustivo do capítulo 12 à disposição de quem
+decide por dia da semana. `lengthOfMonth` responde quantos dias tem o mês
+daquela data, `isLeapYear` diz se o ano é bissexto, e `getDayOfYear` dá a
+posição no ano. A família `with` troca uma parte e mantém o resto,
+`withDayOfMonth(1)` levando ao primeiro dia do mês. E para os ajustes que
+não cabem numa troca simples existe `TemporalAdjusters`, a classe
+utilitária dos ajustes de data:
+
+```java
+LocalDate hoje = LocalDate.of(2026, 8, 23);
+IO.println(hoje.getDayOfWeek());
+IO.println(hoje.with(TemporalAdjusters.lastDayOfMonth()));
+IO.println(hoje.with(TemporalAdjusters.next(DayOfWeek.FRIDAY)));
+```
+
+```
+SUNDAY
+2026-08-31
+2026-08-28
+```
+
+`lastDayOfMonth`, `firstDayOfNextMonth` e `next(diaDaSemana)` cobrem a
+maior parte das políticas de vencimento e de fechamento sem nenhuma conta
+de calendário escrita à mão, que é a razão de a biblioteca existir.
+
 Todo tipo deste capítulo é imutável, na tradição do `String` e do
 `BigDecimal`: cada `plus` devolve um objeto novo e o original permanece. A
 consequência já tem cicatriz conhecida no livro, e aqui ela reaparece com
@@ -78,6 +106,31 @@ política, como "primeiro dia do mês seguinte", escreve a política. A lição
 transferível: aritmética de calendário tem casos de borda por natureza, e a
 biblioteca os resolve com regras declaradas, não com aproximações.
 
+## LocalTime, LocalDateTime e ZonedDateTime
+
+A data civil é uma peça de um conjunto pequeno, e as outras se leem por
+combinação. `LocalTime` é a hora do dia sem data e sem lugar: o horário de
+abertura do mercadinho, `LocalTime.of(8, 0)`, ou a hora corrente,
+`LocalTime.now()`. Guarda até nanossegundos, tem a mesma aritmética
+imutável, `plusHours`, `minusMinutes`, `isBefore`, e é o tipo do
+expediente, do horário de entrega e da faixa de promoção do fim da tarde.
+
+`LocalDateTime` é a soma dos dois, data e hora sem lugar, e é o carimbo dos
+registros do dia a dia: a venda das `2026-08-23T14:32`. Monta-se com
+`LocalDateTime.of(data, hora)` ou a partir de uma das partes, com
+`data.atTime(14, 32)` e `hora.atDate(data)`, e se decompõe de volta com
+`toLocalDate()` e `toLocalTime()`.
+
+`ZonedDateTime` acrescenta a terceira dimensão, o lugar: data, hora e fuso
+juntos, o tipo do compromisso marcado num ponto do mundo, que sabe
+responder que horas são ali e a que momento físico aquilo corresponde. A
+próxima seção mostra por que registrar não é o trabalho dele.
+
+E `YearMonth` representa o mês inteiro, sem dia: é o tipo da competência de
+um relatório e da validade impressa num cartão. `YearMonth.of(2026, 2)`
+responde 28 a `lengthOfMonth()`, e `atEndOfMonth()` devolve o último dia
+como `LocalDate`.
+
 ## Period, Duration e as duas perguntas de distância
 
 Entre duas datas existem duas perguntas diferentes. "Quanto tempo civil?"
@@ -100,8 +153,9 @@ propósito, porque medem coisas diferentes, e relatório que mistura os dois
 mistura unidades. Para distâncias com relógio, horas, minutos, segundos, o
 tipo é `Duration`, com a mesma notação: `Duration.ofMinutes(90)` imprime
 `PT1H30M`, uma hora e meia depois do `T` que separa a parte de tempo.
-`LocalDateTime`, data e hora juntas, é o carimbo dos registros do dia a
-dia, a venda das `2026-08-23T14:32`, com a mesma aritmética imutável.
+As duas famílias não se misturam: `Period` mede em unidades de calendário e
+`Duration` em segundos e nanossegundos, e é por isso que a distância entre
+dois `LocalDate` não se pede em horas.
 
 ## Instant, ZoneId e o fuso horário
 
@@ -126,7 +180,9 @@ ZoneId saoPaulo = ZoneId.of("America/Sao_Paulo");
 IO.println(momentoDaVenda.atZone(saoPaulo).toLocalDateTime());
 ```
 
-O `atZone` aplica o fuso e revela o calendário local daquele instante. A
+O `atZone` aplica o fuso e devolve o `ZonedDateTime` da seção anterior, o
+momento físico já vestido de calendário local; o `toLocalDateTime` no fim
+tira a roupa do fuso para a exibição. A
 regra de arquitetura que essa distinção sustenta é curta e cai em
 entrevista: registra-se o momento como `Instant`, e converte-se para data e
 hora locais só na hora de mostrar a alguém, com o fuso de quem olha. Um
@@ -149,7 +205,11 @@ IO.println(validade.format(brasileiro));
 LocalDate lida = LocalDate.parse("30/09/2026", brasileiro);
 ```
 
-O padrão usa letras com papel fixo: `dd` dia, `MM` mês, `yyyy` ano. A caixa
+O padrão usa letras com papel fixo: `dd` dia, `MM` mês, `yyyy` ano, `HH`
+hora de 0 a 23 e `mm` minuto. Texto que não casa com o padrão lança
+`DateTimeParseException`, unchecked, com a posição exata do caractere que
+desmentiu o formato; é a irmã da `NumberFormatException` do capítulo 5, e o
+tratamento é o do capítulo 13. A caixa
 das letras importa, e a dupla `MM` maiúsculo mês contra `mm` minúsculo
 minuto é a confusão frequente; a do `YYYY`, logo adiante, é pior, porque
 passa meses sem sintoma:
@@ -214,14 +274,28 @@ capítulo 24 dá o nome geral dessa manobra.
 
 6. Calcule o vencimento do fiado: trinta dias corridos após a compra, e
    também "mesmo dia do mês seguinte", comparando as duas políticas para uma
-   compra feita em 31 de janeiro.
+   compra feita em 31 de janeiro. Acrescente uma terceira política, "último
+   dia do mês seguinte", com `TemporalAdjusters`.
+
+7. Modele o expediente do mercadinho com `LocalTime`: abertura às 8h,
+   fechamento às 20h, e um método que responda se um `LocalDateTime` de
+   venda caiu dentro do expediente. Trate o domingo à parte, decidindo com
+   `getDayOfWeek` num switch sem `default`.
+
+8. Escreva o relatório mensal a partir de um `YearMonth`: quantos dias o mês
+   tem, qual o primeiro e o último dia, e quantos deles são sábados ou
+   domingos. Depois interprete "02/2026" com um `DateTimeFormatter` e trate
+   a `DateTimeParseException` de um texto malformado.
 
 ## Ficha do capítulo
 
 | Tipo | Representa | Nasce de |
 | --- | --- | --- |
 | `LocalDate` | data civil, sem hora e sem lugar | `of(ano, mes, dia)`, `now()`, `parse` |
-| `LocalDateTime` | data e hora, sem lugar | `of(...)`, `now()` |
+| `LocalTime` | a hora do dia, sem data e sem lugar | `of(8, 0)`, `now()` |
+| `LocalDateTime` | data e hora, sem lugar | `of(data, hora)`, `data.atTime(...)` |
+| `ZonedDateTime` | data, hora e fuso juntos | `instante.atZone(fuso)` |
+| `YearMonth` | o mês inteiro, sem dia | `YearMonth.of(2026, 2)` |
 | `Instant` | o momento físico global | `Instant.now()` |
 | `Period` | distância em anos, meses e dias | `Period.between(a, b)` |
 | `Duration` | distância com relógio | `Duration.ofMinutes(90)` |
@@ -232,6 +306,10 @@ capítulo 24 dá o nome geral dessa manobra.
 | fuso horário | a regra regional que traduz momento físico em hora local |
 | `ChronoUnit` | distância total numa unidade só: `DAYS.between(a, b)` |
 | `DateTimeFormatter` | formata e interpreta datas: `ofPattern("dd/MM/yyyy")` |
+| `DateTimeParseException` | texto que não casa com o padrão; unchecked |
+| `DayOfWeek` / `Month` | enums do calendário; servem a switch exaustivo |
+| `TemporalAdjusters` | ajustes prontos: último dia do mês, próxima sexta |
+| `with` | troca uma parte da data e mantém o resto |
 | imutabilidade | todo cálculo devolve objeto novo; guardar o retorno é obrigatório |
 
 | Regra prática | |
