@@ -85,6 +85,36 @@ estoque.forEach(p -> IO.println(p.nome()));
 `Supplier<T>` é o espelho: não recebe nada e fornece um valor a cada
 chamada, pelo método `get`.
 
+As quatro cobrem o essencial e não esgotam o pacote. Quando a operação
+recebe dois valores em vez de um, cada família tem a versão de dois
+argumentos, com o prefixo `Bi`: `BiFunction<T, U, R>` transforma dois
+valores num terceiro, `BiConsumer<T, U>` age sobre dois e
+`BiPredicate<T, U>` testa dois. E quando o valor sai do mesmo tipo que
+entrou, dois atalhos com nome próprio dizem isso na assinatura:
+`UnaryOperator<T>` é a `Function<T, T>`, e `BinaryOperator<T>` é a
+`BiFunction<T, T, T>`, a forma de toda soma e de todo "escolha um dos
+dois".
+
+```java
+UnaryOperator<BigDecimal> comDesconto = valor -> valor.multiply(new BigDecimal("0.95"));
+BinaryOperator<BigDecimal> soma = BigDecimal::add;
+BiFunction<Produto, Integer, BigDecimal> subtotal = (produto, quantidade) -> produto.precoPara(quantidade);
+```
+
+Os nomes valem ser reconhecidos: é `BinaryOperator` que o capítulo 19 pede
+para somar uma coleção inteira, e ler o nome na assinatura poupa a consulta
+à documentação.
+
+Uma última trilha existe por causa do autoboxing do capítulo 17.
+`Predicate<Integer>` recebe um `Integer`, o que significa criar um objeto
+por valor testado; `IntPredicate` recebe `int` direto, e a família tem uma
+variante por primitivo, com `IntFunction`, `ToIntFunction`,
+`IntUnaryOperator` e as demais. O nome diz onde o primitivo está: como
+prefixo, ele é o que entra; depois de `To`, é o que sai. Em código de
+domínio, feito de objetos, elas quase não aparecem; em processamento de
+muitos números, poupam um objeto por elemento, e é por isso que os streams
+do capítulo 19 têm uma trilha inteira dedicada a elas.
+
 <div class="previsao">
 
 Um fornecedor de produto padrão, declarado e depois usado:
@@ -141,7 +171,16 @@ de `Integer::parseInt` e também de `IO::println`, e é por isso que
 `estoque.forEach(IO::println)` compila; e a referência a método de um
 objeto já existente, como `relatorio::append` com um `StringBuilder` em
 mãos. E quando a ordem desejada é a natural do `Comparable`,
-`Comparator.naturalOrder()` a entrega como comparador.
+`Comparator.naturalOrder()` a entrega como comparador, com
+`Comparator.reverseOrder()` fazendo o inverso.
+
+Três parentes fecham a família. `Comparator.comparingInt`, `comparingLong`
+e `comparingDouble` são as versões para chave primitiva: evitam embrulhar a
+chave num wrapper a cada comparação e, no caso do `int`, comparam sem o
+risco que a armadilha abaixo mostra. `nullsFirst(comparador)` e
+`nullsLast(comparador)` embrulham um comparador para ele aceitar `null` em
+vez de derrubar, decidindo em qual ponta os ausentes ficam, que é a
+resposta pronta para a coluna opcional de um relatório.
 
 Parente visual dessa sintaxe, e coisa completamente diferente, é o literal
 de classe: `Produto.class`, o objeto que representa o próprio tipo em
@@ -229,16 +268,68 @@ void recusaEstoqueNegativo() {
 }
 ```
 
-<div class="aprofundamento">
+## Compor comportamento
 
-**A forma longa.** Antes das lambdas, versão 8, o mesmo comparador se
-escrevia criando no ato uma classe sem nome que implementa a interface, a
-classe anônima: `new Comparator<Produto>() { public int compare(...) {...} }`,
-cinco linhas de moldura para uma de conteúdo. Código anterior a 2014 está
-cheio delas, e o apêndice de legado ensina a lê-las de relance; a lambda não
-mudou o mecanismo, mudou a grafia.
+As interfaces funcionais da biblioteca trazem métodos default, no sentido
+do capítulo 9, que combinam duas lambdas numa terceira. `Predicate` traz
+três: `negate` inverte o critério, `and` exige os dois, `or` aceita
+qualquer um.
 
-</div>
+```java
+Predicate<Produto> semEstoque = p -> p.estoque() == 0;
+Predicate<Produto> daMercearia = p -> p.categoria() == Categoria.MERCEARIA;
+
+Predicate<Produto> reporNaMercearia = semEstoque.and(daMercearia);
+Predicate<Produto> disponivel = semEstoque.negate();
+```
+
+Cada critério é escrito uma vez, com nome, e os compostos nascem da
+combinação, em vez de repetir a condição inteira em cada uso; o critério
+com nome também é testável sozinho. `Function` traz o par `andThen` e
+`compose`:
+
+```java
+Function<Produto, BigDecimal> preco = Produto::preco;
+Function<BigDecimal, String> naEtiqueta = valor -> "R$ " + valor;
+
+Function<Produto, String> precoNaEtiqueta = preco.andThen(naEtiqueta);
+```
+
+`andThen` executa na ordem em que se lê: primeiro `preco`, depois
+`naEtiqueta`. `compose` inverte a leitura, e `naEtiqueta.compose(preco)`
+produz exatamente a mesma função, escrita de fora para dentro. `Consumer`
+tem o próprio `andThen`, que encadeia duas ações sobre o mesmo valor.
+
+## A forma longa: classe anônima
+
+Antes das lambdas, na versão 8 da linguagem, o comparador da abertura se
+escrevia assim:
+
+```java
+estoque.sort(new Comparator<Produto>() {
+    @Override
+    public int compare(Produto a, Produto b) {
+        return a.preco().compareTo(b.preco());
+    }
+});
+```
+
+Isso é uma classe anônima: a classe declarada e instanciada na mesma
+expressão, sem nome próprio, escrita como um `new` de uma interface ou de
+uma classe seguido do corpo entre chaves. O compilador gera para ela uma
+classe de verdade, de nome numerado, `Relatorio$1.class`, que aparece na
+pasta de saída e nos stack traces, e é assim que se reconhece uma delas
+num rastro de erro.
+
+Código anterior a 2014 está cheio dessas cinco linhas de moldura para uma
+de conteúdo, e ler a forma longa de relance é o que esta seção compra.
+Duas diferenças em relação à lambda sobrevivem e decidem os poucos casos em
+que a classe anônima continua sendo a escolha: ela pode implementar uma
+interface de mais de um método abstrato, ou estender uma classe, o que a
+lambda não faz; e ela tem `this` próprio, referindo o objeto anônimo,
+enquanto dentro de uma lambda o `this` continua sendo o do objeto em volta.
+Fora esses dois casos, código novo escreve lambda: a mecânica é a mesma, a
+grafia é que encolheu.
 
 ## Prática
 
@@ -260,7 +351,18 @@ mudou o mecanismo, mudou a grafia.
 
 5. Fabrique com lambda um `MeioDePagamento` de teste que cobre o dobro, use-o
    no `Caixa` sem criar classe nenhuma, e explique por escrito por que isso
-   funciona à luz da definição de interface funcional.
+   funciona à luz da definição de interface funcional. Depois reescreva o
+   mesmo dublê como classe anônima e compare as duas versões linha a linha.
+
+6. Declare três `Predicate<Produto>` com nome, um por critério, e monte
+   com `and`, `or` e `negate` os quatro filtros que o relatório do
+   mercadinho pede. Escreva um teste para cada critério isolado e explique
+   em uma frase por que testar os compostos passa a ser desnecessário.
+
+7. Escreva `UnaryOperator<BigDecimal>` para o desconto de 5% e
+   `BinaryOperator<BigDecimal>` para a soma, e use os dois num laço que
+   fecha o dia. Depois monte com `andThen` a função que vai de `Produto`
+   até a linha da etiqueta e imprima o cartaz inteiro com `forEach`.
 
 ## Ficha do capítulo
 
@@ -271,6 +373,9 @@ mudou o mecanismo, mudou a grafia.
 | `Consumer<T>` | `accept`: T → nada | ação sobre o valor; `forEach` |
 | `Supplier<T>` | `get`: nada → T | fornecimento sob demanda |
 | `Comparator<T>` | `compare`: T, T → `int` | ordem; `comparing`, `thenComparing`, `reversed` |
+| `BiFunction<T, U, R>` | `apply`: T, U → R | transformação de dois valores |
+| `UnaryOperator<T>` | `apply`: T → T | transformação que devolve o mesmo tipo |
+| `BinaryOperator<T>` | `apply`: T, T → T | combinação de dois do mesmo tipo; toda soma |
 
 | Termo | Definição |
 | --- | --- |
@@ -280,3 +385,8 @@ mudou o mecanismo, mudou a grafia.
 | literal de classe | `Tipo.class`: o objeto que representa o tipo; reina no capítulo 23 |
 | captura de variável | a lambda usando variáveis do escopo onde nasceu |
 | efetivamente final | variável nunca reatribuída; condição para ser capturada |
+| `negate` / `and` / `or` | combinam critérios num `Predicate` composto |
+| `andThen` / `compose` | encadeiam funções; a ordem de leitura é a diferença |
+| `comparingInt` / `nullsFirst` | chave primitiva sem embrulho / comparador que aceita `null` |
+| variantes primitivas | `IntPredicate` e família: o primitivo sem virar objeto |
+| classe anônima | classe declarada e instanciada na mesma expressão, sem nome |
