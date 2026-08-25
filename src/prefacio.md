@@ -28,6 +28,36 @@ de leitura do Java legado: as grafias antigas, como `System.out.println` e a
 data da era anterior, que continuam por toda parte no código existente e que
 o leitor precisa reconhecer sem estranhar.
 
+## Para quem é este livro
+
+Começar do zero e ser fácil são coisas diferentes, e só a primeira está
+prometida aqui. Nada neste livro pressupõe conhecimento anterior: todo termo
+técnico é definido antes de ser usado, e a definição vem por extenso. O que o
+livro não faz é encurtar a explicação para que ela caiba num primeiro contato.
+O capítulo 1 chega à notação binária e à hexadecimal nas primeiras páginas e
+define as duas ali mesmo, porque a resposta à pergunta "o que o computador
+executa" passa por elas; um livro que desviasse do assunto daria uma resposta
+mais curta e errada. O critério vale para o resto: onde há escolha entre a
+versão simples e a versão correta, este livro fica com a correta e gasta o
+espaço de que ela precisa.
+
+Isso muda o ritmo de leitura. Há capítulos que se leem numa sentada e
+capítulos que pedem duas ou três, com a máquina ligada e o código rodando ao
+lado. Parte do material, como o que o capítulo 5 diz sobre referências e o que
+o capítulo 16 diz sobre tipos genéricos, costuma exigir uma segunda passada
+até de quem já programa em outra linguagem. Isso não é sinal de leitura mal feita: é o
+tamanho real do assunto, e um texto que o fizesse parecer menor estaria
+cobrando a diferença mais adiante, na forma de código que funciona sem que
+ninguém saiba por quê.
+
+Nada disso separa quem pode aprender de quem não pode. Programar não depende
+de talento anterior nem de vocação declarada cedo, e a dificuldade que este
+livro não esconde é a do assunto, não a de uma barreira na entrada. O que ele
+pede é ordem e insistência: ler na sequência, escrever na máquina o código que
+aparece na página, errar ali e ler as mensagens de erro até elas fazerem
+sentido. Feito isso, o capítulo 25 termina com um sistema funcionando, e o
+ponto de partida do leitor não altera esse resultado.
+
 ## O mercadinho
 
 Este livro tem um fio condutor: um mercadinho de bairro, com produtos e
@@ -153,12 +183,11 @@ Terminal é o programa de conversa em texto com o sistema: comandos
 digitados, respostas impressas, e é nele que tudo neste livro compila e
 roda. No macOS ele vem instalado com o nome Terminal; no Linux, com Terminal
 em algum lugar do nome, variando por distribuição; no Windows, esse papel é do
-PowerShell, que vem instalado e basta para começar. O capítulo 1 usa o próprio
-PowerShell para instalar o WSL, sigla de Windows Subsystem for Linux: não é um
-terminal, e sim um Linux completo rodando dentro do Windows, com os mesmos
-comandos e as mesmas saídas que o livro mostra. Instalado o WSL, os comandos
-passam a ser digitados nele, dentro do Windows Terminal, o programa que já vem
-instalado no Windows 11 para abrir sessões de terminal.
+PowerShell, que já vem instalado e serve para o livro inteiro. Fora os comandos
+do próprio Java, o livro usa três comandos de terminal: listar arquivos, criar
+pasta e mover arquivo. Os três existem com o mesmo nome nos três sistemas, e a
+única diferença visível é a aparência da listagem no PowerShell, que o capítulo
+1 registra.
 
 Um ambiente integrado de desenvolvimento vai ser útil mais adiante, mas os
 primeiros capítulos são feitos deliberadamente no terminal. IDE, de

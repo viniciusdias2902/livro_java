@@ -212,22 +212,36 @@ Quando houver mais de um JDK na máquina, o SDKMAN também faz a troca:
 `sdk default java`, seguido de um identificador, passa a apontar o comando
 `java` para a instalação escolhida.
 
-No Windows, a recomendação é instalar o WSL (Windows Subsystem for Linux), que
-põe um Linux completo dentro do Windows, e seguir o caminho acima dentro dele.
-Um comando faz a instalação, em um PowerShell aberto como administrador (o `>`
-faz as vezes do `$` no PowerShell):
+O SDKMAN não existe para Windows, e lá o caminho é outro. Cada distribuição
+publica um instalador próprio, um arquivo com nome terminado em `.msi`:
+baixá-lo, executá-lo e seguir as telas deixa o comando `java` disponível no
+PowerShell. O Windows 11 também traz um gerenciador de pacotes de linha de
+comando, o `winget`, que faz a mesma instalação sem sair do terminal;
+`winget search corretto` lista os identificadores publicados pela Amazon, e
+`winget install`, seguido de um deles, instala o JDK. Os dois caminhos levam ao
+mesmo lugar, e depois de qualquer um o `java -version` responde as mesmas
+linhas mostradas mais acima.
+
+Há um segundo caminho no Windows, o WSL, sigla de Windows Subsystem for Linux:
+um Linux completo rodando dentro do Windows, instalado por um comando em um
+PowerShell aberto como administrador (o `>` faz as vezes do `$` no PowerShell):
 
 ```
 > wsl --install
 ```
 
-Depois de reiniciar a máquina, o terminal do WSL é um terminal Linux comum. A
-recomendação tem um motivo que vai além deste capítulo: os comandos de
-terminal deste livro, como os de listar arquivos, mover e criar pastas que o
-capítulo 2 já usa, são os do mundo Unix, e as saídas mostradas vêm de um
-sistema assim. Nada disso é obrigatório: o JDK existe para Windows puro e o
-Java é o mesmo lá. Mas quem estiver em Linux, WSL ou macOS verá na tela
-exatamente o que o livro mostra.
+Depois de reiniciar a máquina, o terminal do WSL é um terminal Linux comum, e
+dentro dele vale o caminho do SDKMAN descrito acima. A escolha entre os dois
+muda pouco no que vem pela frente. O Java é o mesmo nos dois, e as sessões de
+terminal com `java`, `javac` e `mvn` saem iguais. Fora esses, este livro usa
+três comandos do sistema: `ls`, que lista os arquivos da pasta atual; `mkdir`,
+que cria pasta; e `mv`, que move ou renomeia arquivo. Os três funcionam no
+PowerShell com esses mesmos nomes, e a diferença fica no formato da listagem
+que o `ls` imprime, uma tabela com data e tamanho no PowerShell, uma sequência
+de nomes no Linux e no macOS. Para quem está começando, o instalador do
+Windows é o caminho mais curto e atende ao livro inteiro. O WSL interessa a
+quem pretende mexer com servidores adiante, onde as ferramentas em geral
+assumem um sistema da família Unix, à qual o Linux e o macOS pertencem.
 
 ## Como as versões funcionam
 
@@ -339,6 +353,7 @@ máquinas antigas e em material antigo. 1.8 e 8 são a mesma versão.
 | OpenJDK | projeto de código aberto onde o JDK é desenvolvido; a implementação-padrão (*reference implementation*) da plataforma |
 | distribuição | empacotamento do OpenJDK publicado e mantido por uma empresa |
 | SDKMAN | gerenciador que instala, lista e troca versões de JDK pelo terminal |
+| winget | gerenciador de pacotes de linha de comando que vem no Windows 11 |
 | WSL | Windows Subsystem for Linux: um Linux completo dentro do Windows |
 | prévia (*preview*) | novidade disponível para teste, sujeita a mudança, desligada a menos que se peça |
 | LTS | versão com correções por anos; as demais recebem correções por seis meses |
