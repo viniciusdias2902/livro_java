@@ -37,9 +37,11 @@ livro não faz é encurtar a explicação para que ela caiba num primeiro contat
 O capítulo 1 chega à notação binária e à hexadecimal nas primeiras páginas e
 define as duas ali mesmo, porque a resposta à pergunta "o que o computador
 executa" passa por elas; um livro que desviasse do assunto daria uma resposta
-mais curta e errada. O critério vale para o resto: onde há escolha entre a
-versão simples e a versão correta, este livro fica com a correta e gasta o
-espaço de que ela precisa.
+mais curta e errada. O critério vale para o resto, e vale também para as
+ferramentas: onde há escolha entre a versão simples e a versão correta, este
+livro fica com a correta e gasta o espaço de que ela precisa; onde o caminho
+mais curto ensina menos, ele indica o mais longo e diz por quê. A instalação
+do capítulo 1 é o primeiro caso disso.
 
 Isso muda o ritmo de leitura. Há capítulos que se leem numa sentada e
 capítulos que pedem duas ou três, com a máquina ligada e o código rodando ao
@@ -183,11 +185,13 @@ Terminal é o programa de conversa em texto com o sistema: comandos
 digitados, respostas impressas, e é nele que tudo neste livro compila e
 roda. No macOS ele vem instalado com o nome Terminal; no Linux, com Terminal
 em algum lugar do nome, variando por distribuição; no Windows, esse papel é do
-PowerShell, que já vem instalado e serve para o livro inteiro. Fora os comandos
-do próprio Java, o livro usa três comandos de terminal: listar arquivos, criar
-pasta e mover arquivo. Os três existem com o mesmo nome nos três sistemas, e a
-única diferença visível é a aparência da listagem no PowerShell, que o capítulo
-1 registra.
+PowerShell, que já vem instalado. O capítulo 1 usa o próprio PowerShell para
+instalar o WSL, sigla de Windows Subsystem for Linux: não é um terminal, e sim
+um Linux completo rodando dentro do Windows, com os mesmos comandos e as mesmas
+saídas que o livro mostra. É uma etapa a mais para quem está no Windows, e o
+capítulo 1 diz por que ela compensa. Instalado o WSL, os comandos passam a ser
+digitados nele, dentro do Windows Terminal, o programa que já vem instalado no
+Windows 11 para abrir sessões de terminal.
 
 Um ambiente integrado de desenvolvimento vai ser útil mais adiante, mas os
 primeiros capítulos são feitos deliberadamente no terminal. IDE, de

@@ -212,36 +212,38 @@ Quando houver mais de um JDK na máquina, o SDKMAN também faz a troca:
 `sdk default java`, seguido de um identificador, passa a apontar o comando
 `java` para a instalação escolhida.
 
-O SDKMAN não existe para Windows, e lá o caminho é outro. Cada distribuição
-publica um instalador próprio, um arquivo com nome terminado em `.msi`:
-baixá-lo, executá-lo e seguir as telas deixa o comando `java` disponível no
-PowerShell. O Windows 11 também traz um gerenciador de pacotes de linha de
-comando, o `winget`, que faz a mesma instalação sem sair do terminal;
-`winget search corretto` lista os identificadores publicados pela Amazon, e
-`winget install`, seguido de um deles, instala o JDK. Os dois caminhos levam ao
-mesmo lugar, e depois de qualquer um o `java -version` responde as mesmas
-linhas mostradas mais acima.
-
-Há um segundo caminho no Windows, o WSL, sigla de Windows Subsystem for Linux:
-um Linux completo rodando dentro do Windows, instalado por um comando em um
-PowerShell aberto como administrador (o `>` faz as vezes do `$` no PowerShell):
+O SDKMAN não existe para Windows, e lá a recomendação é instalar antes o WSL,
+sigla de Windows Subsystem for Linux: um Linux completo rodando dentro do
+Windows, lado a lado com ele, sem particionar disco nem reiniciar para trocar
+de sistema. Um comando faz a instalação, em um PowerShell aberto como
+administrador (o `>` faz as vezes do `$` no PowerShell):
 
 ```
 > wsl --install
 ```
 
 Depois de reiniciar a máquina, o terminal do WSL é um terminal Linux comum, e
-dentro dele vale o caminho do SDKMAN descrito acima. A escolha entre os dois
-muda pouco no que vem pela frente. O Java é o mesmo nos dois, e as sessões de
-terminal com `java`, `javac` e `mvn` saem iguais. Fora esses, este livro usa
-três comandos do sistema: `ls`, que lista os arquivos da pasta atual; `mkdir`,
-que cria pasta; e `mv`, que move ou renomeia arquivo. Os três funcionam no
-PowerShell com esses mesmos nomes, e a diferença fica no formato da listagem
-que o `ls` imprime, uma tabela com data e tamanho no PowerShell, uma sequência
-de nomes no Linux e no macOS. Para quem está começando, o instalador do
-Windows é o caminho mais curto e atende ao livro inteiro. O WSL interessa a
-quem pretende mexer com servidores adiante, onde as ferramentas em geral
-assumem um sistema da família Unix, à qual o Linux e o macOS pertencem.
+dentro dele valem os três comandos do SDKMAN mostrados acima, sem alteração
+nenhuma.
+
+São dois passos a mais antes do primeiro programa, e a escolha é deliberada.
+Java se escreve em qualquer sistema, mas as máquinas onde ele roda depois de
+pronto são quase todas Linux: o servidor que atende os usuários, a máquina que
+compila e publica o projeto a cada mudança, o ambiente onde a bateria de testes
+roda antes de uma versão sair. As ferramentas do ecossistema seguem esse fato.
+Instrução de instalação, roteiro de publicação e documentação de projeto vêm
+escritos como comandos de terminal Unix, a família de sistemas a que Linux e
+macOS pertencem, e quem programa em Java lê e escreve esses comandos com
+frequência, mais cedo do que costuma esperar. O WSL põe esse sistema à mão
+desde o primeiro dia, no mesmo computador que já existe. Há ainda a razão
+imediata: os comandos de terminal e as saídas impressas neste livro vêm de um
+sistema assim, e no WSL a tela do leitor é a mesma da página.
+
+Nada disso é imposto. Cada distribuição publica também um instalador para
+Windows, e a linguagem, a biblioteca padrão e o comportamento dos programas
+são idênticos lá; a diferença aparece nos comandos do sistema operacional que
+cercam o Java, não nos comandos do Java. O que este livro afirma é que o
+caminho mais curto, nesse ponto, ensina menos.
 
 ## Como as versões funcionam
 
@@ -353,7 +355,6 @@ máquinas antigas e em material antigo. 1.8 e 8 são a mesma versão.
 | OpenJDK | projeto de código aberto onde o JDK é desenvolvido; a implementação-padrão (*reference implementation*) da plataforma |
 | distribuição | empacotamento do OpenJDK publicado e mantido por uma empresa |
 | SDKMAN | gerenciador que instala, lista e troca versões de JDK pelo terminal |
-| winget | gerenciador de pacotes de linha de comando que vem no Windows 11 |
 | WSL | Windows Subsystem for Linux: um Linux completo dentro do Windows |
 | prévia (*preview*) | novidade disponível para teste, sujeita a mudança, desligada a menos que se peça |
 | LTS | versão com correções por anos; as demais recebem correções por seis meses |
