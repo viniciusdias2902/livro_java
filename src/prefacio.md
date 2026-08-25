@@ -53,11 +53,40 @@ O livro fala com o leitor em notações fixas, e vale conhecê-las antes do
 primeiro capítulo.
 
 Blocos de código aparecem de dois tipos. Os de fonte Java mostram o conteúdo
-de um arquivo, e são sempre completos ou têm a omissão marcada. Os de terminal
-mostram uma sessão real: as linhas que começam com `$` são o que se digita
-(sem o `$`), e as linhas sem `$` são a resposta da máquina, copiada sem
-edição. Mensagens de erro, em particular, aparecem por extenso, porque
-aprender a lê-las é conteúdo do livro, não ruído.
+de um arquivo. Em geral o arquivo aparece inteiro, e o bloco pode ser copiado
+como está. Quando o arquivo já é longo e só uma parte dele interessa naquele
+ponto, o resto é substituído por três pontos, que marcam o trecho omitido:
+
+```java
+class Produto {
+    ...
+
+    double precoComDesconto(double taxa) {
+        return preco * (1 - taxa);
+    }
+}
+```
+
+Os três pontos não são código: ocupam o lugar de linhas que continuam
+existindo no arquivo e que o bloco deixou de mostrar. Bloco de fonte Java sem
+esse sinal é o arquivo completo.
+
+Os de terminal mostram uma sessão real, com o que foi digitado e o que a
+máquina respondeu na mesma tela, na ordem em que aconteceu. O `$` no começo da
+linha é impresso pela máquina, para avisar que ela está pronta para receber um
+comando; o comando é o que vem depois dele. As linhas sem `$` são a resposta,
+copiada sem edição:
+
+```console
+$ java -version
+openjdk version "25.0.4" 2026-07-15 LTS
+OpenJDK Runtime Environment Corretto-25.0.4.7.1 (build 25.0.4+7-LTS)
+OpenJDK 64-Bit Server VM Corretto-25.0.4.7.1 (build 25.0.4+7-LTS, mixed mode, sharing)
+```
+
+Ali se digita `java -version` e se aperta Enter; as três linhas seguintes são
+o que a máquina imprimiu. Mensagens de erro, em particular, aparecem por
+extenso, porque aprender a lê-las é conteúdo do livro, não ruído.
 
 Em pontos escolhidos aparecem diagramas: caixas ligadas por setas com
 rótulos, lidas na direção das setas. Um diagrama resume o que a prosa acabou
@@ -108,8 +137,8 @@ exceção, o limite vem junto.
 
 Cada capítulo abre com um problema concreto e fecha com duas seções fixas. A
 **Prática** traz exercícios sem resposta publicada, de propósito: o critério
-de acerto (o programa compila? imprime o que a previsão dizia?) está na
-máquina do leitor, e exercício com gabarito ao lado treina conferência, não
+de acerto está na máquina do leitor, que compila o programa e mostra o que ele
+imprime, e exercício com gabarito ao lado treina conferência, não
 construção. A **Ficha** resume em tabelas os comandos e termos do capítulo,
 para consulta rápida quando um capítulo posterior os reutilizar.
 
@@ -123,9 +152,13 @@ outro programa é necessário.
 Terminal é o programa de conversa em texto com o sistema: comandos
 digitados, respostas impressas, e é nele que tudo neste livro compila e
 roda. No macOS ele vem instalado com o nome Terminal; no Linux, com Terminal
-em algum lugar do nome, variando por distribuição; no Windows, o PowerShell
-faz esse papel até o capítulo 1 recomendar o WSL, que traz o terminal Linux
-para dentro do Windows.
+em algum lugar do nome, variando por distribuição; no Windows, esse papel é do
+PowerShell, que vem instalado e basta para começar. O capítulo 1 usa o próprio
+PowerShell para instalar o WSL, sigla de Windows Subsystem for Linux: não é um
+terminal, e sim um Linux completo rodando dentro do Windows, com os mesmos
+comandos e as mesmas saídas que o livro mostra. Instalado o WSL, os comandos
+passam a ser digitados nele, dentro do Windows Terminal, o programa que já vem
+instalado no Windows 11 para abrir sessões de terminal.
 
 Um ambiente integrado de desenvolvimento vai ser útil mais adiante, mas os
 primeiros capítulos são feitos deliberadamente no terminal. IDE, de
